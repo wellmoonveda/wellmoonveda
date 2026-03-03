@@ -8,8 +8,10 @@ import AdminUIController from "../layouts/admin/AdminUIController";
 import AdminEditorsPage from "../pages/admin/users/AdminEditorsPage";
 import AdminMediaPage from "../pages/admin/media/AdminMediaPage";
 import AdminSubscribersPage from "../pages/admin/users/AdminSubscribersPage";
-import AdminSystemAlertsPage from "../pages/admin/system/AdminSystemAlertsPage";
+import AdminAuditLogPage from "../pages/admin/system/AdminAuditLogPage";
 import AdminPendingSubmissionsPage from "../pages/admin/review/AdminPendingSubmissionsPage";
+import AdminCreateEditorPage from "../pages/admin/users/AdminCreateEditorPage";
+import AdminAddMediaPage from "../pages/admin/media/AdminAddMediaPage";
 
 //Editor Routes
 
@@ -48,12 +50,17 @@ export function DashboardRoutes() {
               element={<AdminSubscribersPage />}
             />
             <Route path="users/editors" element={<AdminEditorsPage />} />
+            <Route
+              path="users/editors/create"
+              element={<AdminCreateEditorPage />}
+            />
 
             {/* Media */}
-            <Route path="media/library" element={<AdminMediaPage />} />
+            <Route path="media" element={<AdminMediaPage />} />
+            <Route path="media/add" element={<AdminAddMediaPage />} />
 
             {/* System */}
-            <Route path="system/alerts" element={<AdminSystemAlertsPage />} />
+            <Route path="system/audits" element={<AdminAuditLogPage />} />
           </Route>
         </Route>
 

@@ -94,7 +94,7 @@ export default function AdminSidebar() {
             Media
           </p>
           <NavLink
-            to="/dashboard/admin/media/library"
+            to="/dashboard/admin/media"
             className={({ isActive }) =>
               `${baseLink} ${isActive ? active : inactive}`
             }
@@ -112,7 +112,7 @@ export default function AdminSidebar() {
             System
           </p>
           <NavLink
-            to="/dashboard/admin/system/alerts"
+            to="/dashboard/admin/system/audits"
             className={({ isActive }) =>
               `${baseLink} ${isActive ? active : inactive}`
             }
@@ -120,7 +120,7 @@ export default function AdminSidebar() {
             <span className="lg:hidden md:h-5 md:w-5 rounded bg-neutral-300 flex ">
               <p className="lg:hidden text-center w-full">A</p>
             </span>
-            <span className="hidden lg:inline">Alerts</span>
+            <span className="hidden lg:inline">Audit Log</span>
           </NavLink>
         </section>
       </nav>

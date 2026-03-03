@@ -41,22 +41,12 @@ export default function AdminMobileNavPanel({ open, onClose }: Props) {
             </li>
             <li>
               <NavLink
-                to="/dashboard/admin/moderation/report"
+                to="/dashboard/admin/review"
                 className={({ isActive }) =>
                   `${baseLink} ${isActive ? active : inactive}`
                 }
               >
                 Reports
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/dashboard/admin/moderation/flags"
-                className={({ isActive }) =>
-                  `${baseLink} ${isActive ? active : inactive}`
-                }
-              >
-                Flags
               </NavLink>
             </li>
             <li>
@@ -81,7 +71,7 @@ export default function AdminMobileNavPanel({ open, onClose }: Props) {
             </li>
             <li>
               <NavLink
-                to="/dashboard/admin/media/library"
+                to="/dashboard/admin/media"
                 className={({ isActive }) =>
                   `${baseLink} ${isActive ? active : inactive}`
                 }
@@ -91,12 +81,12 @@ export default function AdminMobileNavPanel({ open, onClose }: Props) {
             </li>
             <li>
               <NavLink
-                to="/dashboard/admin/system/alerts"
+                to="/dashboard/admin/system/audits"
                 className={({ isActive }) =>
                   `${baseLink} ${isActive ? active : inactive}`
                 }
               >
-                System Alerts
+                System Audit Log
               </NavLink>
             </li>
           </ul>
