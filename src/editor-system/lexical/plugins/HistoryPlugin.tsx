@@ -1,7 +1,7 @@
-import React from "react";
+import { HistoryPlugin as LexicalHistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 
-function HistoryPlugin() {
-  return <div>HistoryPlugin</div>;
-}
+const HistoryPlugin = () => {
+  return <LexicalHistoryPlugin />;
+};
 
 export default HistoryPlugin;

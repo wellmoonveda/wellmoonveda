@@ -8,6 +8,7 @@
 
   --primary: #9a7b4f;
   --button-primary: #d4af37;
+  --button-primary-hover: #e5c663;
 
   --button-secondary: #708090;
   --button-secondary-hover: #8a99a8;
@@ -41,6 +42,9 @@
 }
 .dashboard-theme .btn-prime {
   background-color: var(--button-primary);
+}
+.dashboard-theme .btn-prime:hover {
+  background-color: var(--button-primary-hover);
 }
 .dashboard-theme .btn-secondary {
   background-color: var(--button-secondary);

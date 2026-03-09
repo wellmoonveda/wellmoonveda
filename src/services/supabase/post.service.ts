@@ -55,6 +55,13 @@ export const createPost = async (
   content: any,
   authorId: string,
   slug: string,
+  metadata?: {
+    featured_image?: string;
+    tags?: string[];
+    meta_title?: string;
+    meta_description?: string;
+    category_id?: string;
+  },
 ) => {
   const { data, error } = await supabase
     .from("posts")
@@ -64,6 +71,12 @@ export const createPost = async (
       content,
       author_id: authorId,
       status: "draft",
+
+      featured_image: metadata?.featured_image,
+      tags: metadata?.tags,
+      meta_title: metadata?.meta_title,
+      meta_description: metadata?.meta_description,
+      category_id: metadata?.category_id, // ✅ THIS LINE WAS MISSING
     })
     .select()
     .single();
@@ -95,4 +108,83 @@ export const publishPost = async (postId: string) => {
     .eq("id", postId);
 
   if (error) throw error;
+};
+
+// EDITOR WORKFLOW FUNCTIONS
+
+export const submitPostForReview = async (postId: string) => {
+  const { error } = await supabase
+    .from("posts")
+    .update({
+      status: "review_requested",
+      updated_at: new Date(),
+    })
+    .eq("id", postId);
+
+  if (error) throw error;
+};
+
+export const getEditorPosts = async (authorId: string) => {
+  const { data, error } = await supabase
+    .from("posts")
+    .select("*")
+    .eq("author_id", authorId)
+    .is("deleted_at", null)
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+
+  return data ?? [];
+};
+
+export const getPostById = async (postId: string) => {
+  const { data, error } = await supabase
+    .from("posts")
+    .select("*")
+    .eq("id", postId)
+    .single();
+
+  if (error) throw error;
+
+  return data;
+};
+
+// SOFT DELETE FOUNDATION
+
+export const requestPostDeletion = async (
+  postId: string,
+  reason: string,
+  authorId: string,
+) => {
+  const { error } = await supabase.from("deletion_requests").insert({
+    post_id: postId,
+    author_id: authorId,
+    reason,
+    status: "pending",
+  });
+
+  if (error) throw error;
+};
+
+export const getDeletionRequests = async (authorId: string) => {
+  const { data, error } = await supabase
+    .from("deletion_requests")
+    .select(
+      `
+      id,
+      reason,
+      status,
+      created_at,
+      posts (
+        id,
+        title
+      )
+    `,
+    )
+    .eq("author_id", authorId)
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+
+  return data ?? [];
 };

@@ -1,63 +1,60 @@
 import { useState } from "react";
-import { createPost, updatePost } from "@/services/supabase/post.service";
+import {
+  createPost,
+  updatePost,
+  publishPost,
+} from "@/services/supabase/post.service";
 
-export const usePostEditor = (authorId: string) => {
-  const [title, setTitle] = useState("");
-  const [slug, setSlug] = useState("");
-  const [content, setContent] = useState<any>(null);
+export const usePostEditor = () => {
+  const [loading, setLoading] = useState(false);
 
-  const [saving, setSaving] = useState(false);
-
-  const generateSlug = (value: string) => {
-    return value
-      .toLowerCase()
-      .replace(/[^\w\s]/gi, "")
-      .replace(/\s+/g, "-");
-  };
-
-  const handleTitleChange = (value: string) => {
-    setTitle(value);
-    setSlug(generateSlug(value));
-  };
-
-  const saveDraft = async () => {
-    setSaving(true);
-
-    try {
-      await createPost(title, content, authorId, slug);
-    } catch (error) {
-      console.error(error);
-    }
-
-    setSaving(false);
-  };
-
-  const updateDraft = async (postId: string) => {
-    setSaving(true);
+  const saveDraft = async (
+    title: string,
+    content: any,
+    authorId: string,
+    slug: string,
+    metadata?: {
+      featured_image?: string;
+      tags?: string[];
+      meta_title?: string;
+      meta_description?: string;
+      category_id?: string;
+    },
+  ) => {
+    setLoading(true);
 
     try {
-      await updatePost(postId, {
-        title,
-        slug,
-        content,
-      });
-    } catch (error) {
-      console.error(error);
-    }
+      const post = await createPost(title, content, authorId, slug, metadata);
 
-    setSaving(false);
+      return post;
+    } finally {
+      setLoading(false);
+    }
+  };
+  const updateDraft = async (postId: string, updates: any) => {
+    setLoading(true);
+
+    try {
+      await updatePost(postId, updates);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const publish = async (postId: string) => {
+    setLoading(true);
+
+    try {
+      await publishPost(postId);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return {
-    title,
-    slug,
-    content,
-    saving,
-
-    setContent,
-    handleTitleChange,
-
     saveDraft,
     updateDraft,
+    publish,
+    loading,
   };
 };

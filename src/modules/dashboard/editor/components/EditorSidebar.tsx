@@ -1,10 +1,9 @@
 import { NavLink } from "react-router-dom";
 
 const navItems = [
-  { name: "Dashboard", path: "/editor" },
+  { name: "Dashboard", path: "/editor/dashboard" },
   { name: "My Posts", path: "/editor/posts" },
   { name: "Create Post", path: "/editor/create" },
-  { name: "Rejected Posts", path: "/editor/rejected" },
   { name: "Deletion Requests", path: "/editor/deletion-requests" },
   { name: "Settings", path: "/editor/settings" },
 ];
