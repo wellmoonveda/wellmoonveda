@@ -2,45 +2,62 @@ import { FORMAT_TEXT_COMMAND, FORMAT_ELEMENT_COMMAND } from "lexical";
 import {
   INSERT_ORDERED_LIST_COMMAND,
   INSERT_UNORDERED_LIST_COMMAND,
-  REMOVE_LIST_COMMAND,
 } from "@lexical/list";
+import { $isListNode } from "@lexical/list";
 import { $getSelection, $isRangeSelection } from "lexical";
 import { $createParagraphNode } from "lexical";
 import { $setBlocksType } from "@lexical/selection";
 import { $createHeadingNode, $createQuoteNode } from "@lexical/rich-text";
+
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+
 import ImagePlugin from "./plugins/ImagePlugin";
+
 import { useState, useEffect } from "react";
 import { AlignLeft, AlignCenter, AlignRight, AlignJustify } from "lucide-react";
+import { List, ListOrdered } from "lucide-react";
+
 import { SELECTION_CHANGE_COMMAND } from "lexical";
 
 const Toolbar = () => {
   const [editor] = useLexicalComposerContext();
+
   const [blockTypeOpen, setBlockTypeOpen] = useState(false);
   const [alignOpen, setAlignOpen] = useState(false);
 
   const [isBold, setBold] = useState(false);
   const [isItalic, setItalic] = useState(false);
   const [isUnderline, setUnderline] = useState(false);
+  const [isBulletList, setBulletList] = useState(false);
+  const [isNumberList, setNumberList] = useState(false);
+
+  const updateToolbar = () => {
+    editor.getEditorState().read(() => {
+      const selection = $getSelection();
+
+      if ($isRangeSelection(selection)) {
+        setBold(selection.hasFormat("bold"));
+        setItalic(selection.hasFormat("italic"));
+        setUnderline(selection.hasFormat("underline"));
+
+        const element = selection.anchor.getNode().getTopLevelElementOrThrow();
+
+        if ($isListNode(element)) {
+          const type = element.getListType();
+          setBulletList(type === "bullet");
+          setNumberList(type === "number");
+        } else {
+          setBulletList(false);
+          setNumberList(false);
+        }
+      }
+    });
+  };
 
   useEffect(() => {
-    return editor.registerCommand(
-      SELECTION_CHANGE_COMMAND,
-      () => {
-        editor.getEditorState().read(() => {
-          const selection = $getSelection();
-
-          if ($isRangeSelection(selection)) {
-            setBold(selection.hasFormat("bold"));
-            setItalic(selection.hasFormat("italic"));
-            setUnderline(selection.hasFormat("underline"));
-          }
-        });
-
-        return false;
-      },
-      1,
-    );
+    return editor.registerUpdateListener(() => {
+      updateToolbar();
+    });
   }, [editor]);
 
   const formatBlock = (
@@ -48,6 +65,7 @@ const Toolbar = () => {
   ) => {
     editor.update(() => {
       const selection = $getSelection();
+
       if ($isRangeSelection(selection)) {
         if (type === "paragraph") {
           $setBlocksType(selection, () => $createParagraphNode());
@@ -58,23 +76,36 @@ const Toolbar = () => {
         }
       }
     });
+
     setBlockTypeOpen(false);
   };
 
+  const buttonBase =
+    "h-9 px-3 flex items-center justify-center border rounded text-sm hover:btn-secondary btn-secondary text-white cursor-pointer";
+
+  const activeStyle = "!bg-white !text-black !border-black";
+
+  const applyFormat = (command: any, value?: any) => {
+    editor.dispatchCommand(command, value);
+    editor.focus();
+  };
+
   return (
-    <div className="flex flex-wrap gap-2 p-2 border-b border-main">
+    <div className="flex flex-wrap gap-2 p-2 border-b border-main bg-soft">
+      {/* Bold */}
       <button
         type="button"
-        onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold")}
-        className={`px-2 py-1 border rounded hover:bg-amber-100 cursor-pointer ${isBold ? "bg-soft" : ""}`}
+        onClick={() => applyFormat(FORMAT_TEXT_COMMAND, "bold")}
+        className={`${buttonBase} ${isBold ? activeStyle : ""}`}
       >
         B
       </button>
 
+      {/* Italic */}
       <button
         type="button"
-        onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic")}
-        className={`px-2 py-1 border rounded ${isItalic ? "bg-soft" : ""}`}
+        onClick={() => applyFormat(FORMAT_TEXT_COMMAND, "italic")}
+        className={`${buttonBase} ${isItalic ? activeStyle : ""}`}
       >
         I
       </button>
@@ -82,102 +113,98 @@ const Toolbar = () => {
       {/* Underline */}
       <button
         type="button"
-        onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline")}
-        className={`px-2 py-1 border rounded ${isUnderline ? "bg-soft" : ""}`}
+        onClick={() => applyFormat(FORMAT_TEXT_COMMAND, "underline")}
+        className={`${buttonBase} ${isUnderline ? activeStyle : ""}`}
       >
         U
       </button>
 
-      {/* Heading 1 */}
+      {/* Block dropdown */}
       <div className="relative">
         <button
           onClick={() => setBlockTypeOpen(!blockTypeOpen)}
-          className="px-3 py-1 border rounded text-sm"
+          className={`${buttonBase} min-w-[90px]`}
         >
           Block
         </button>
 
         {blockTypeOpen && (
-          <div className="absolute bg-card border border-main rounded shadow-md mt-1">
+          <div className="absolute flex flex-col flex-1 text-left z-20 bg-card border border-main rounded shadow-md mt-1 w-[140px]">
             <button
-              className="block w-full text-left px-3 py-1 hover:bg-amber-100 cursor-pointer"
+              className="dropdown-item"
               onClick={() => {
-                editor.focus();
                 formatBlock("paragraph");
+                editor.focus();
               }}
             >
               Paragraph
             </button>
 
             <button
+              className="dropdown-item"
               onClick={() => {
-                editor.update(() => {
-                  const selection = $getSelection();
-                  console.log("Selection object:", selection); // CHECK THIS
-                  if ($isRangeSelection(selection)) {
-                    console.log("Applying H1 to:", selection.getTextContent());
-                    $setBlocksType(selection, () => $createHeadingNode("h1"));
-                  } else {
-                    console.warn("No RangeSelection found!");
-                  }
-                });
+                formatBlock("h1");
+                editor.focus();
               }}
             >
               H1
             </button>
 
             <button
-              className="block w-full text-left px-3 py-1 hover:bg-amber-100 cursor-pointer"
+              className="dropdown-item"
               onClick={() => {
-                editor.focus();
                 formatBlock("h2");
+                editor.focus();
               }}
             >
               H2
             </button>
 
             <button
-              className="block w-full text-left px-3 py-1 hover:bg-amber-100 cursor-pointer"
+              className="dropdown-item"
               onClick={() => {
-                editor.focus();
                 formatBlock("h3");
+                editor.focus();
               }}
             >
               H3
             </button>
+
             <button
-              className="block w-full text-left px-3 py-1 hover:bg-amber-100 cursor-pointer"
+              className="dropdown-item"
               onClick={() => {
-                editor.focus();
                 formatBlock("h4");
+                editor.focus();
               }}
             >
               H4
             </button>
+
             <button
-              className="block w-full text-left px-3 py-1 hover:bg-amber-100 cursor-pointer"
+              className="dropdown-item"
               onClick={() => {
-                editor.focus();
                 formatBlock("h5");
+                editor.focus();
               }}
             >
               H5
             </button>
+
             <button
-              className="block w-full text-left px-3 py-1 hover:bg-amber-100 cursor-pointer"
+              className="dropdown-item"
               onClick={() => {
-                editor.focus();
                 formatBlock("h6");
+                editor.focus();
               }}
             >
               H6
             </button>
 
             <button
-              className="block w-full text-left px-3 py-1 hover:bg-amber-100 cursor-pointer"
+              className="dropdown-item"
               onClick={() => {
-                editor.focus();
                 formatBlock("quote");
+                editor.focus();
               }}
             >
               Quote
@@ -188,74 +215,75 @@ const Toolbar = () => {
 
       {/* Bullet List */}
       <button
-        onClick={() =>
-          editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined)
-        }
-        className="px-2 py-1 border rounded text-sm"
+        onClick={() => applyFormat(INSERT_UNORDERED_LIST_COMMAND)}
+        className={`${buttonBase} ${isBulletList ? activeStyle : ""}`}
       >
-        • List
+        <List size={16} />
       </button>
 
       {/* Numbered List */}
       <button
-        onClick={() =>
-          editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND, undefined)
-        }
-        className="px-2 py-1 border rounded text-sm"
+        onClick={() => applyFormat(INSERT_ORDERED_LIST_COMMAND)}
+        className={`${buttonBase} ${isNumberList ? activeStyle : ""}`}
       >
-        1. List
+        <ListOrdered size={16} />
       </button>
 
-      {/*Alignment */}
+      {/* Alignment */}
       <div className="relative">
         <button
           onClick={() => setAlignOpen(!alignOpen)}
-          className="px-3 py-1 border rounded text-sm"
+          className={`${buttonBase} min-w-[90px]`}
         >
           Align
         </button>
 
         {alignOpen && (
-          <div className="absolute bg-card border border-main rounded shadow-md mt-1">
+          <div className="absolute z-20 bg-card border border-main rounded shadow-md mt-1 w-[120px]">
             <button
-              onClick={() =>
-                editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "left")
-              }
-              className="block w-full text-left px-3 py-1"
+              onClick={() => {
+                editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "left");
+                setAlignOpen(false);
+              }}
+              className="dropdown-item flex items-center gap-2"
             >
-              <AlignLeft size={16} />
+              <AlignLeft size={16} /> Left
             </button>
 
             <button
-              onClick={() =>
-                editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "center")
-              }
-              className="block w-full text-left px-3 py-1"
+              onClick={() => {
+                editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "center");
+                setAlignOpen(false);
+              }}
+              className="dropdown-item flex items-center gap-2"
             >
-              <AlignCenter size={16} />
+              <AlignCenter size={16} /> Center
             </button>
 
             <button
-              onClick={() =>
-                editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "right")
-              }
-              className="block w-full text-left px-3 py-1"
+              onClick={() => {
+                editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "right");
+                setAlignOpen(false);
+              }}
+              className="dropdown-item flex items-center gap-2"
             >
-              <AlignRight size={16} />
+              <AlignRight size={16} /> Right
             </button>
 
             <button
-              onClick={() =>
-                editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "justify")
-              }
-              className="block w-full text-left px-3 py-1"
+              onClick={() => {
+                editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "justify");
+                setAlignOpen(false);
+              }}
+              className="dropdown-item flex items-center gap-2"
             >
-              <AlignJustify size={16} />
+              <AlignJustify size={16} /> Justify
             </button>
           </div>
         )}
       </div>
 
+      {/* Image */}
       <ImagePlugin />
     </div>
   );

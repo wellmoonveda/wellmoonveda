@@ -1,24 +1,48 @@
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import { useState } from "react";
 import { $insertNodes } from "lexical";
-import { ImageNode } from "../nodes/ImageNode";
+
+import MediaLibraryModal from "@/modules/dashboard/media/components/MediaLibraryModal";
+import { $createImageNode } from "../nodes/ImageNode";
 
 const ImagePlugin = () => {
   const [editor] = useLexicalComposerContext();
+  const [open, setOpen] = useState(false);
 
-  const insertImage = (src: string) => {
+  const insertImage = (url: string) => {
     editor.update(() => {
-      const imageNode = new ImageNode(src);
+      const imageNode = $createImageNode({
+        src: url,
+        alt: "",
+        width: 600,
+        caption: "",
+        alignment: "center",
+      });
+
       $insertNodes([imageNode]);
     });
+
+    editor.focus();
   };
 
   return (
-    <button
-      onClick={() => insertImage("https://placehold.co/600x400")}
-      className="px-2 py-1 text-sm border-main border rounded"
-    >
-      Insert Image
-    </button>
+    <>
+      <button
+        onClick={() => setOpen(true)}
+        className="h-9 px-3 border border-main rounded text-sm hover-soft"
+      >
+        Image
+      </button>
+
+      <MediaLibraryModal
+        open={open}
+        onClose={() => setOpen(false)}
+        onSelect={(url) => {
+          insertImage(url);
+          setOpen(false);
+        }}
+      />
+    </>
   );
 };
 

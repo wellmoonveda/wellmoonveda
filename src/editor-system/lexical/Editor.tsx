@@ -10,12 +10,11 @@ import { LinkNode } from "@lexical/link";
 import SlashPlugin from "./plugins/SlashPlugin";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
+import FloatingToolbarPlugin from "./plugins/FloatingToolbarPlugin";
 import { editorTheme } from "./theme/editorTheme";
-
+import DragDropImagePlugin from "./plugins/DragDropImagePlugin";
 import Toolbar from "./Toolbar";
 import HistoryPlugin from "./plugins/HistoryPlugin";
-import { generateHtmlFromEditorState } from "./utils/generateHtml";
-import { $generateHtmlFromNodes } from "@lexical/html";
 import { serializeEditorState } from "./utils/serializeEditorState";
 
 interface Props {
@@ -58,6 +57,9 @@ const Editor = ({ onChange, initialContent }: Props) => {
           placeholder={<div className="p-4 text-muted">Start writing...</div>}
           ErrorBoundary={LexicalErrorBoundary}
         />
+
+        <FloatingToolbarPlugin />
+        <DragDropImagePlugin />
 
         <ListPlugin />
         <LinkPlugin />

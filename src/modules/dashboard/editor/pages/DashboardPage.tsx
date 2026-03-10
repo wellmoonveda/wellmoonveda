@@ -1,7 +1,10 @@
+import { useAuthUser } from "@/modules/auth/hooks/useAuthUser";
 import { useEditorPosts } from "../hooks/useEditorPosts";
 
 const DashboardPage = () => {
-  const authorId = "TEMP_USER_ID";
+  const { user } = useAuthUser();
+
+  const authorId = user?.id;
 
   const { posts, loading } = useEditorPosts(authorId);
 
