@@ -1,25 +1,32 @@
 import { useState } from "react";
-
 import { AuthCard } from "../components/AuthCard";
 import { AuthInput } from "../components/AuthInput";
 import { AuthButton } from "../components/AuthButton";
 import { AuthFooterLink } from "../components/AuthFooterLink";
-import { useAuth } from "../hooks/useAuth";
+import { resetPasswordEmail } from "@/services/supabase/auth.service";
 
 export default function ForgotPasswordPage() {
-  const { resetPassword, isLoading } = useAuth();
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await resetPassword({ email });
+
+    try {
+      setLoading(true);
+
+      await resetPasswordEmail(email);
+
+      alert("Password reset link sent to your email.");
+    } catch (error: any) {
+      alert(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <AuthCard
-      title="Reset your password"
-      subtitle="We’ll send you a reset link"
-    >
+    <AuthCard title="Forgot Password" subtitle="Reset your password">
       <form onSubmit={handleSubmit} className="space-y-4">
         <AuthInput
           label="Email"
@@ -29,14 +36,14 @@ export default function ForgotPasswordPage() {
           onChange={(e) => setEmail(e.target.value)}
         />
 
-        <AuthButton type="submit" disabled={isLoading}>
-          Send reset link
+        <AuthButton type="submit" disabled={loading}>
+          Send Reset Link
         </AuthButton>
       </form>
 
       <AuthFooterLink
-        text="Remembered your password?"
-        linkText="Back to login"
+        text="Remember your password?"
+        linkText="Sign in"
         to="/auth/login"
       />
     </AuthCard>

@@ -20,6 +20,7 @@ import { AuthRoutes } from "@/modules/auth/routes/auth.routes";
 //Dashboard Routes
 import { AdminRoutes } from "./AdminRoutes";
 import { EditorRoutes } from "./EditorRoutes";
+import { UserRoutes } from "./UserRoutes";
 
 function AppRoutes() {
   return (
@@ -49,6 +50,7 @@ function AppRoutes() {
       {/*Dashoard Routes */}
       {AdminRoutes()}
       {EditorRoutes()}
+      {UserRoutes()}
     </Routes>
   );
 }

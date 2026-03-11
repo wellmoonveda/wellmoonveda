@@ -4,11 +4,10 @@
 export { AuthRoutes } from "./routes/auth.routes";
 
 // Provider & Hook
-export { AuthProvider } from "./context/AuthContext";
-export { useAuth } from "./hooks/useAuth";
+export { AuthProvider, useAuth } from "./providers/AuthProvider";
 
 // Guards
-export { ProtectedRoute } from "./guards/ProtectedRoute";
+export { default as ProtectedRoute } from "./guards/ProtectedRoute";
 
 // Types
 export type {

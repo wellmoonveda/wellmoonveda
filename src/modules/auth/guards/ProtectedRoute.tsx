@@ -1,27 +1,20 @@
-import { Navigate, Outlet } from "react-router-dom";
-import type { AuthRole } from "../types/auth.types";
-import { useAuth } from "../hooks/useAuth";
+import { Navigate } from "react-router-dom";
+import { useAuthUser } from "../hooks/useAuthUser";
 
-type ProtectedRouteProps = {
-  requiredRole?: AuthRole;
+type Props = {
+  children: React.ReactNode;
 };
 
-export function ProtectedRoute({ requiredRole }: ProtectedRouteProps) {
-  const { isAuthenticated, isLoading, user } = useAuth();
+export default function ProtectedRoute({ children }: Props) {
+  const { user, loading } = useAuthUser();
 
-  if (isLoading) {
-    // Later replace with a proper loader component
-    return null;
+  if (loading) {
+    return <div className="p-6">Checking authentication...</div>;
   }
 
-  if (!isAuthenticated) {
+  if (!user) {
     return <Navigate to="/auth/login" replace />;
   }
 
-  if (requiredRole && user?.role !== requiredRole) {
-    // Later: replace with 403 page
-    return <Navigate to="/" replace />;
-  }
-
-  return <Outlet />;
+  return <>{children}</>;
 }

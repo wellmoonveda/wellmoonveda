@@ -1,0 +1,101 @@
+/* USER DASHBOARD THEME (Healing Platform UI) */
+
+.user-theme {
+  --bg-page: #ffffff;
+  --bg-sidebar: #f2efe8;
+
+  --card-bg: #ffffff;
+  --card-soft: #f6f3ed;
+
+  --primary: #d4af37;
+  --secondary: #a5bfa4;
+
+  --border-color: #82817f;
+
+  --text-primary: #2f2f2f;
+  --text-secondary: #5a5a5a;
+  --text-muted: #7a7a7a;
+
+  --btn-primary: #d4af37;
+  --btn-primary-hover: #e6c96a;
+
+  --btn-secondary: #a5bfa4;
+  --btn-secondary-hover: #bdd3bc;
+
+  font-family: "Inter", sans-serif;
+
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+}
+
+/* BACKGROUND UTILITIES */
+
+.user-theme .bg-page {
+  background-color: var(--bg-page);
+}
+
+.user-theme .bg-sidebar {
+  background-color: var(--bg-sidebar);
+}
+
+.user-theme .bg-card {
+  background-color: var(--card-bg);
+}
+
+.user-theme .bg-soft {
+  background-color: var(--card-soft);
+}
+
+/* TEXT UTILITIES*/
+
+.user-theme .text-main {
+  color: var(--text-primary);
+}
+
+.user-theme .text-sub {
+  color: var(--text-secondary);
+}
+
+.user-theme .text-muted {
+  color: var(--text-muted);
+}
+
+/* BORDER UTILITIES*/
+
+.user-theme .border-main {
+  border: 1px solid var(--border-color);
+}
+
+/* CARD SYSTEM*/
+
+.user-theme .card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+/* BUTTON SYSTEM*/
+
+.user-theme .btn-primary {
+  background-color: var(--btn-primary);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.user-theme .btn-primary:hover {
+  background-color: var(--btn-primary-hover);
+}
+
+.user-theme .btn-secondary {
+  background-color: var(--btn-secondary);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+
+.user-theme .btn-secondary:hover {
+  background-color: var(--btn-secondary-hover);
+}

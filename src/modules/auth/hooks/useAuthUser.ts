@@ -1,27 +1,5 @@
-import { useEffect, useState } from "react";
-import { getCurrentUser } from "@/services/supabase/auth.service";
+import { useAuthContext } from "../context/AuthContext";
 
 export const useAuthUser = () => {
-  const [user, setUser] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-
-  const fetchUser = async () => {
-    try {
-      const currentUser = await getCurrentUser();
-      setUser(currentUser);
-    } catch (error) {
-      console.error("Failed to get user", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchUser();
-  }, []);
-
-  return {
-    user,
-    loading,
-  };
+  return useAuthContext();
 };

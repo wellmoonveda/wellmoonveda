@@ -5,19 +5,35 @@ import { AuthInput } from "../components/AuthInput";
 import { PasswordField } from "../components/PasswordField";
 import { AuthButton } from "../components/AuthButton";
 import { AuthFooterLink } from "../components/AuthFooterLink";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../providers/AuthProvider";
+import { getUserRole } from "@/services/supabase/role.service";
 
 export default function LoginPage() {
   const { login, signInWithGoogle, isLoading } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const user = await login({ email, password });
-    navigate(`/${user.role}/dashboard`);
+
+    try {
+      const user = await login({ email, password });
+
+      const role = await getUserRole(user.id);
+
+      if (role === "admin") {
+        navigate("/admin/dashboard");
+      } else if (role === "editor") {
+        navigate("/editor/dashboard");
+      } else {
+        navigate("/user/dashboard");
+      }
+    } catch (error: any) {
+      alert(error.message);
+    }
   };
 
   return (
