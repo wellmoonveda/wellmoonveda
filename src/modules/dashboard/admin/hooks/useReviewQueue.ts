@@ -4,9 +4,10 @@ import {
   approvePost,
   rejectPost,
 } from "@/services/supabase/post.service";
+import type { ReviewPost } from "@/shared/types/post.types";
 
 export const useReviewQueue = () => {
-  const [posts, setPosts] = useState<any[]>([]);
+  const [posts, setPosts] = useState<ReviewPost[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchQueue = async () => {

@@ -4,15 +4,15 @@ import MediaUploadDropzone from "../../media/components/MediaUploadDropzone";
 import { useAuthUser } from "@/modules/auth/hooks/useAuthUser";
 
 const MediaLibraryPage = () => {
-  const { media, loading, upload, remove } = useMediaLibrary();
+  const { media, loading, upload, remove, uploading, uploadFileName } =
+    useMediaLibrary();
+
+  const { user } = useAuthUser() ?? {};
 
   const handleUpload = async (file: File) => {
-    const { user } = useAuthUser();
-    const userId = user?.id;
+    if (!user) return;
 
-    await upload(file, file.name, "general", userId);
-
-    if (!user?.is_admin) return null;
+    await upload(file, file.name, "general", user.id);
   };
 
   return (
@@ -21,7 +21,11 @@ const MediaLibraryPage = () => {
 
       {/* Drag & Drop Upload */}
 
-      <MediaUploadDropzone onUpload={handleUpload} />
+      <MediaUploadDropzone
+        onUpload={handleUpload}
+        uploading={uploading}
+        fileName={uploadFileName}
+      />
 
       {/* Media Grid */}
 

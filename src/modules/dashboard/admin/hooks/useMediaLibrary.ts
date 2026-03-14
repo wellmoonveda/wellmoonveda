@@ -4,10 +4,13 @@ import {
   uploadMedia,
   deleteMedia,
 } from "@/services/supabase/media.service";
+import toast from "react-hot-toast";
 
 export const useMediaLibrary = () => {
   const [media, setMedia] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
+  const [uploadFileName, setUploadFileName] = useState<string | null>(null);
 
   const fetchMedia = async () => {
     try {
@@ -29,15 +32,38 @@ export const useMediaLibrary = () => {
     category: string,
     userId: string,
   ) => {
-    await uploadMedia(file, title, category, userId);
+    setUploading(true);
+    setUploadFileName(file.name);
 
-    await fetchMedia();
+    const loading = toast.loading("Uploading image...");
+
+    try {
+      await uploadMedia(file, title, category, userId);
+
+      toast.success("Image uploaded successfully");
+      await fetchMedia();
+    } catch (error: any) {
+      toast.error(error.message || "Upload failed");
+    } finally {
+      toast.dismiss(loading);
+      setUploading(false);
+      setUploadFileName(null);
+    }
   };
 
   const remove = async (id: string, url: string) => {
-    await deleteMedia(id, url);
+    const loading = toast.loading("Deleting image...");
 
-    await fetchMedia();
+    try {
+      await deleteMedia(id, url);
+
+      toast.success("Image deleted");
+      await fetchMedia();
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      toast.dismiss(loading);
+    }
   };
 
   useEffect(() => {
@@ -49,5 +75,7 @@ export const useMediaLibrary = () => {
     loading,
     upload,
     remove,
+    uploading,
+    uploadFileName,
   };
 };

@@ -3,7 +3,8 @@ import { useUserDashboard } from "../hooks/useUserDashboard";
 import { useAuthUser } from "@/modules/auth/hooks/useAuthUser";
 
 export default function DashboardPage() {
-  const { user } = useAuthUser();
+  const auth = useAuthUser();
+  const user = auth?.user;
   const { stats, loading } = useUserDashboard(user?.id);
 
   if (!user) {

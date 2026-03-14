@@ -1,8 +1,9 @@
 import { supabase } from "./supabaseClient";
+import type { ReviewPost } from "@/shared/types/post.types";
 
 // REVIEW QUEUE FUNCTIONS
 
-export const getPostsForReview = async () => {
+export const getPostsForReview = async (): Promise<ReviewPost[]> => {
   const { data, error } = await supabase
     .from("posts")
     .select(
@@ -20,7 +21,7 @@ export const getPostsForReview = async () => {
 
   if (error) throw error;
 
-  return data ?? [];
+  return (data ?? []) as ReviewPost[];
 };
 
 export const approvePost = async (postId: string) => {
@@ -183,6 +184,19 @@ export const getDeletionRequests = async (authorId: string) => {
     )
     .eq("author_id", authorId)
     .order("created_at", { ascending: false });
+
+  if (error) throw error;
+
+  return data ?? [];
+};
+export const getRecentPosts = async (limit: number = 3) => {
+  const { data, error } = await supabase
+    .from("posts")
+    .select("id,title,slug,featured_image,created_at")
+    .eq("status", "published")
+    .is("deleted_at", null)
+    .order("created_at", { ascending: false })
+    .limit(limit);
 
   if (error) throw error;
 

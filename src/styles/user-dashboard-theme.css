@@ -33,6 +33,12 @@
 .user-theme .bg-page {
   background-color: var(--bg-page);
 }
+.user-theme .bg-primary {
+  background-color: var(--primary);
+}
+.user-theme .bg-secondary {
+  background-color: var(--secondary);
+}
 
 .user-theme .bg-sidebar {
   background-color: var(--bg-sidebar);
@@ -63,6 +69,9 @@
 /* BORDER UTILITIES*/
 
 .user-theme .border-main {
+  border: 1px solid var(--border-color);
+}
+.user-theme .hover-border-main:hover {
   border: 1px solid var(--border-color);
 }
 

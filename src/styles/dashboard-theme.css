@@ -37,6 +37,7 @@
 .dashboard-theme .text-main {
   color: var(--text-primary);
 }
+
 .dashboard-theme .text-sub {
   color: var(--text-secondary);
 }

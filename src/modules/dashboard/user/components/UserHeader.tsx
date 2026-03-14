@@ -38,7 +38,7 @@ export default function UserHeader() {
   };
 
   return (
-    <header className="h-16 border-main flex items-center justify-between px-6 bg-card">
+    <header className="h-16 border-b flex items-center justify-between px-6 bg-card">
       {/* Greeting */}
       <h1 className="text-lg font-semibold text-main">Hello, {name} 👋</h1>
 
@@ -46,7 +46,7 @@ export default function UserHeader() {
       <div className="relative">
         <button
           onClick={() => setOpen(!open)}
-          className="flex items-center gap-2 hover-soft px-2 py-1 rounded cursor-pointer"
+          className="flex items-center gap-2 px-2 py-1 rounded cursor-pointer border border-transparent hover-border-main transition-colors duration-150"
         >
           <div className="w-8 h-8 rounded-full bg-soft flex items-center justify-center text-sm font-semibold">
             {name.charAt(0).toUpperCase()}

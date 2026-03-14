@@ -27,5 +27,7 @@ export function useUserRole(userId?: string) {
     fetchRole();
   }, [userId]);
 
+  console.log("Fetched role:", role);
+
   return { role, loading };
 }

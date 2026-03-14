@@ -1,38 +1,31 @@
 import { NavLink } from "react-router-dom";
 
 export default function UserSidebar() {
+  const navItems = [
+    { name: "Dashboard", path: "/user/dashboard" },
+    { name: "My Content", path: "/user/my-content" },
+    { name: "Healing Paths", path: "/user/healing-paths" },
+    { name: "Account Settings", path: "/user/account" },
+  ];
+
   return (
-    <aside className="w-64 bg-sidebar border-main p-4">
+    <aside className="w-64 bg-sidebar  p-4">
       <h2 className="text-lg font-semibold mb-6 text-main">Wellmoon Veda</h2>
 
       <nav className="flex flex-col gap-2">
-        <NavLink
-          to="/user/dashboard"
-          className="px-3 py-2 rounded hover-soft text-main"
-        >
-          Dashboard
-        </NavLink>
-
-        <NavLink
-          to="/user/content"
-          className="px-3 py-2 rounded hover-soft text-main"
-        >
-          My Content
-        </NavLink>
-
-        <NavLink
-          to="/user/healing-paths"
-          className="px-3 py-2 rounded hover-soft text-main"
-        >
-          Healing Paths
-        </NavLink>
-
-        <NavLink
-          to="/user/account"
-          className="px-3 py-2 rounded hover-soft text-main"
-        >
-          Account Settings
-        </NavLink>
+        {navItems.map((item) => (
+          <NavLink
+            key={item.path}
+            to={item.path}
+            end
+            className={({ isActive }) =>
+              `px-4 py-2 rounded-md transition 
+                    ${isActive ? "bg-secondary text-main" : "text-sub hover:bg-[#bdd3bc]"}`
+            }
+          >
+            {item.name}
+          </NavLink>
+        ))}
       </nav>
     </aside>
   );

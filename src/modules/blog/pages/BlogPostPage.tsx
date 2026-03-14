@@ -2,6 +2,8 @@ import { useParams } from "react-router-dom";
 import { blogService } from "@/modules/blog/api/blog.service";
 import { useEffect, useState } from "react";
 import type { BlogPost } from "@/modules/blog/types/blog.types";
+import { useAuthUser } from "@/modules/auth/hooks/useAuthUser";
+import { useUserActivity } from "@/modules/dashboard/user/hooks/useUserActivity";
 
 export default function BlogPostPage() {
   const { categorySlug, slug } = useParams();
@@ -27,6 +29,11 @@ export default function BlogPostPage() {
       </div>
     );
   }
+
+  const auth = useAuthUser();
+  const user = auth?.user;
+
+  useUserActivity(user?.id, "blog_post", post?.id);
 
   return (
     <main className="bg-background pt-30">

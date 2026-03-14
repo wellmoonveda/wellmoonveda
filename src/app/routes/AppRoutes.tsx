@@ -8,7 +8,7 @@ import { AboutPage } from "@/modules/marketing/about";
 import BlogPage from "@/modules/blog/pages/BlogPage";
 import BlogPostPage from "@/modules/blog/pages/BlogPostPage";
 //healing paths
-import HealingDetailPage from "../../modules/healing-paths/pages/HealingDetailPage";
+import HealingPathPage from "@/modules/healing-paths/pages/HealingPathPage";
 //layouts
 import MainLayout from "../layouts/MainLayout";
 import SecondaryLayout from "../layouts/SecondaryLayout";
@@ -39,7 +39,7 @@ function AppRoutes() {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/plan-and-pricing" element={<PricingPage />} />
         {/*Healing Paths */}
-        <Route path="/healing-path/:slug" element={<HealingDetailPage />} />
+        <Route path="/healing-path/:slug" element={<HealingPathPage />} />
         {/*Legal Page Route */}
         <Route path="/legal/:slug" element={<LegalDynamicPage />} />
       </Route>
