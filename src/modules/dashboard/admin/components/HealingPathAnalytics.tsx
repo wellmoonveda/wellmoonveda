@@ -1,7 +1,7 @@
-import { useAdminAnalytics } from "../hooks/useAdminAnalytics";
+import { useAdminAnalyticsContext } from "../providers/AdminAnalyticsProvider";
 
 const HealingPathAnalytics = () => {
-  const { healingPaths, loading } = useAdminAnalytics();
+  const { healingPaths, loading } = useAdminAnalyticsContext();
 
   if (loading) {
     return (

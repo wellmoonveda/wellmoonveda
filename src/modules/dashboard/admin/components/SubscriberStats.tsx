@@ -1,7 +1,7 @@
-import { useAdminAnalytics } from "../hooks/useAdminAnalytics";
+import { useAdminAnalyticsContext } from "../providers/AdminAnalyticsProvider";
 
 const SubscriberStats = () => {
-  const { subscriberCount, loading } = useAdminAnalytics();
+  const { subscriberCount, loading } = useAdminAnalyticsContext();
 
   if (loading) {
     return (
@@ -14,7 +14,9 @@ const SubscriberStats = () => {
 
   return (
     <div className="card p-6">
-      <h3 className="text-lg font-semibold text-main mb-2">Subscribers</h3>
+      <h3 className="text-lg font-semibold text-main mb-2">
+        Total Subscribers
+      </h3>
 
       <p className="text-3xl font-bold text-main">{subscriberCount}</p>
     </div>
