@@ -27,72 +27,18 @@ export const getEditors = async () => {
 
   return { active, disabled };
 };
-// export const createEditor = async (
-//   name: string,
-//   email: string,
-//   tempPassword: string,
-// ) => {
-//   // create auth user
-//   const { data: authUser, error: authError } = await supabase.auth.signUp({
-//     email,
-//     password: tempPassword,
-//   });
-
-//   if (authError) throw authError;
-
-//   const userId = authUser.user?.id;
-
-//   if (!userId) throw new Error("User creation failed");
-
-//   // create user profile
-//   const { error: userError } = await supabase.from("users").insert({
-//     id: userId,
-//     name,
-//     email,
-//     password_set: false,
-//     is_active: true,
-//   });
-
-//   if (userError) throw userError;
-
-//   // assign editor role
-//   const { error: roleError } = await supabase.from("user_roles").insert({
-//     user_id: userId,
-//     role: "editor",
-//   });
-
-//   if (roleError) throw roleError;
-
-//   return userId;
-// };
 
 export const createEditor = async (
   name: string,
   email: string,
   tempPassword: string,
 ) => {
-  const userId = crypto.randomUUID();
-
-  // create profile
-  const { error: userError } = await supabase.from("users").insert({
-    id: userId,
-    name,
-    email,
-    password_set: false,
-    is_active: true,
+  console.log("Calling create-editor:", {name, email, tempPassword});
+  const {data, error} = await supabase.functions.invoke("create-editor", {
+    body: {name, email, tempPassword}
   });
-
-  if (userError) throw userError;
-
-  // assign role
-  const { error: roleError } = await supabase.from("user_roles").insert({
-    user_id: userId,
-    role: "editor",
-  });
-
-  if (roleError) throw roleError;
-
-  return userId;
+  if (error) throw error; 
+  return data;
 };
 
 export const disableEditor = async (editorId: string) => {
@@ -117,4 +63,39 @@ export const activateEditor = async (editorId: string) => {
   if (error) throw error;
 
   return data;
+};
+
+// Get User Role
+export const getUserRole = async (userId: string): Promise<string | null> => {
+  const { data, error } = await supabase
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", userId)
+    .single();
+
+  if (error) throw error;
+
+  return data?.role ?? null;
+};
+
+// Get Current User Profile (for auth flow)
+export const getUserProfile = async (userId: string) => {
+  const { data, error } = await supabase
+    .from("users")
+    .select("id, name, email, password_set, is_active")
+    .eq("id", userId)
+    .single();
+
+  if (error) throw error;
+
+  return data;
+};
+
+export const markPasswordAsSet = async (userId: string) => {
+  const { error } = await supabase
+    .from("users")
+    .update({ password_set: true })
+    .eq("id", userId);
+
+  if (error) throw error;
 };

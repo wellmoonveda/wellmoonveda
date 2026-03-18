@@ -1,10 +1,10 @@
-import { useAuthUser } from "@/modules/auth/hooks/useAuthUser";
+import { useAuth } from "@/modules/auth";
 import { useMyContent } from "../hooks/useMyContent";
 import ResumePathCard from "../components/ResumePathCard";
 import RecentBlogActivity from "../components/RecentBlogActivity";
 
 export default function MyContentPage() {
-  const auth = useAuthUser();
+  const auth = useAuth();
   const user = auth?.user;
 
   const { healingPaths, blogPosts, loading } = useMyContent(user?.id);

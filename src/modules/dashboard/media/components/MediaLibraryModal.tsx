@@ -14,14 +14,20 @@ const MediaLibraryModal = ({ open, onClose, onSelect }: Props) => {
   const [page, setPage] = useState(1);
 
   const loadMedia = async () => {
-    const res = await getMedia({
-      search,
-      category,
-      page,
-      limit: 12,
-    });
+    const res = await getMedia();
+    let filtered = res;
 
-    setMedia(res.media);
+    if (search) {
+      filtered = filtered.filter((item: any) => {
+        item.title?.toLowerCase().includes(search.toLocaleLowerCase());
+      });
+    }
+
+    if (category) {
+      filtered = filtered.filter((item: any) => item.category === category);
+    }
+
+    setMedia(res);
   };
 
   useEffect(() => {

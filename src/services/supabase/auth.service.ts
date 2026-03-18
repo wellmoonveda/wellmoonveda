@@ -123,3 +123,22 @@ export async function deleteUserAccount() {
 
   if (error) throw error;
 }
+
+// Auth-specific profile (used for guards & onboarding)
+export async function getAuthUserProfile() {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) throw new Error("User not found");
+
+  const { data, error } = await supabase
+    .from("users")
+    .select("id, name, email, password_set, is_active")
+    .eq("id", user.id)
+    .single();
+
+  if (error) throw error;
+
+  return data;
+}

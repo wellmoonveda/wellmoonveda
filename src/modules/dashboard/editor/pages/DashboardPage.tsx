@@ -1,8 +1,11 @@
-import { useAuthUser } from "@/modules/auth/hooks/useAuthUser";
+import { useAuth } from "@/modules/auth";
 import { useEditorPosts } from "../hooks/useEditorPosts";
 
 const DashboardPage = () => {
-  const { user } = useAuthUser();
+  const { user } = useAuth();
+  if (!user?.id) {
+    return <div className="p-6">Loading user...</div>;
+  }
 
   const authorId = user?.id;
 

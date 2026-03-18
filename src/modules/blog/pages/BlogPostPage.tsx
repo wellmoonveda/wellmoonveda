@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { blogService } from "@/modules/blog/api/blog.service";
 import { useEffect, useState } from "react";
 import type { BlogPost } from "@/modules/blog/types/blog.types";
-import { useAuthUser } from "@/modules/auth/hooks/useAuthUser";
+import { useAuth } from "@/modules/auth";
 import { useUserActivity } from "@/modules/dashboard/user/hooks/useUserActivity";
 
 export default function BlogPostPage() {
@@ -30,7 +30,7 @@ export default function BlogPostPage() {
     );
   }
 
-  const auth = useAuthUser();
+  const auth = useAuth();
   const user = auth?.user;
 
   useUserActivity(user?.id, "blog_post", post?.id);

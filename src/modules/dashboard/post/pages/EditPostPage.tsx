@@ -1,14 +1,11 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import Editor from "@/editor-system/lexical/Editor";
-
-import {
-  getPostById,
-  submitPostForReview,
-} from "@/services/supabase/post.service";
+import { getPostById } from "@/services/supabase/post.service";
 import { usePostEditor } from "../hooks/usePostEditor";
-import { useAuthUser } from "@/modules/auth/hooks/useAuthUser";
+import { useAuth } from "@/modules/auth";
+import { useUserRole } from "@/modules/auth/hooks/useUserRole";
 
 import PostFeaturedImage from "../components/PostFeaturedImage";
 import PostTagsInput from "../components/PostTagsInput";
@@ -18,12 +15,18 @@ import PostPreviewModal from "../components/PostPreviewModal";
 
 const EditPostPage = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
 
-  const { updateDraft, loading } = usePostEditor();
-  const { user } = useAuthUser();
+  const { updateDraft, loading, submitForReview, publish } = usePostEditor();
+
+  const auth = useAuth();
+  const user = auth?.user;
+  const { role, loading: roleLoading } = useUserRole();
+  if (roleLoading) return null;
 
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
+  const [status, setStatus] = useState<String>("draft");
 
   const [contentState, setContentState] = useState<any>(null);
   const [previewHtml, setPreviewHtml] = useState("");
@@ -38,7 +41,9 @@ const EditPostPage = () => {
   const [previewOpen, setPreviewOpen] = useState(false);
 
   const [initialContent, setInitialContent] = useState<any>(null);
+  const [postType, setPostType] = useState<"normal" | "featured">("normal");
 
+  // ---------------- FETCH POST ----------------
   useEffect(() => {
     const fetchPost = async () => {
       if (!id) return;
@@ -48,6 +53,7 @@ const EditPostPage = () => {
 
         setTitle(post.title);
         setSlug(post.slug);
+        setStatus(post.status);
 
         setInitialContent(post.content);
 
@@ -58,6 +64,7 @@ const EditPostPage = () => {
 
         setMetaTitle(post.meta_title ?? "");
         setMetaDescription(post.meta_description ?? "");
+        setPostType(post.post_type ?? "normal");
       } catch (error) {
         console.error("Failed to load post", error);
       }
@@ -65,6 +72,8 @@ const EditPostPage = () => {
 
     fetchPost();
   }, [id]);
+
+  // ---------------- UPDATE ----------------
 
   const handleUpdate = async () => {
     if (!id) return;
@@ -78,17 +87,65 @@ const EditPostPage = () => {
       category_id: categoryId,
       meta_title: metaTitle,
       meta_description: metaDescription,
+      post_type: postType,
     });
+  };
+
+  // ---------------- SMART ACTION ----------------
+  const handleSmartAction = async () => {
+    if (!id) return;
+
+    // EDITOR FLOW
+    if (role !== "admin") {
+      if (status === "draft") {
+        await submitForReview(id);
+        setStatus("review_requested");
+      }
+      return;
+    }
+
+    // ADMIN FLOW
+    if (role === "admin") {
+      if (status === "approved") {
+        await publish(id);
+        setStatus("published");
+
+        //optional redirect
+        navigate("/dashboard/posts");
+      } else if (status === "review_requested") {
+        navigate("/dashboard/review");
+      }
+    }
+  };
+
+  // ---------------- BUTTON LABEL ----------------
+
+  const getActionLabel = () => {
+    if (role !== "admin") {
+      if (status === "draft") return "Submit for Review";
+      if (status === "review_requested") return "Under Review";
+      if (status === "approved") return "Approved";
+      if (status === "published") return "Published";
+    }
+    if (role === "admin") {
+      if (status === "review_requested") return "Review Post";
+      if (status === "approved") return "Publish";
+      if (status === "published") return "Published";
+    }
+    return "No Action";
+  };
+  const isActionDisabled = () => {
+    if (role !== "admin") {
+      return status !== "draft";
+    }
+    if (role === "admin") {
+      return status === "published";
+    }
+    return true;
   };
 
   const handlePreview = () => {
     setPreviewOpen(true);
-  };
-
-  const handleSubmitReview = async () => {
-    if (!id) return;
-
-    await submitPostForReview(id);
   };
 
   return (
@@ -96,7 +153,13 @@ const EditPostPage = () => {
       {/* Header */}
 
       <div className="flex justify-between items-center">
-        <h1 className="text-xl font-semibold text-main">Edit Post</h1>
+        <h1 className="text-xl font-semibold text-main">
+          Edit Post
+          <span className="ml-3 text-xs px-2 py-1 rounded bg-muted">
+            {" "}
+            {status}{" "}
+          </span>
+        </h1>
 
         <div className="flex gap-3">
           <button
@@ -113,11 +176,14 @@ const EditPostPage = () => {
             {loading ? "Saving..." : "Update Draft"}
           </button>
 
+          {/* SMART ACTION BUTTON */}
           <button
-            onClick={handleSubmitReview}
-            className="btn-prime px-4 py-2 rounded text-white"
+            onClick={handleSmartAction}
+            disabled={isActionDisabled()}
+            className={`px-4 py-2 rounded text-white ${isActionDisabled() ? "btn-secondary opacity-50 cursor-not-allowed" : "btn-prime"}`}
           >
-            Submit for Review
+            {" "}
+            {getActionLabel()}{" "}
           </button>
         </div>
       </div>
@@ -133,7 +199,7 @@ const EditPostPage = () => {
             value={title}
             placeholder="Post title..."
             onChange={(e) => setTitle(e.target.value)}
-            className="text-xl font-semibold outline-none"
+            className="text-xl font-semibold outline-none w-full resize-none leading-tight"
           />
 
           {initialContent !== null && (

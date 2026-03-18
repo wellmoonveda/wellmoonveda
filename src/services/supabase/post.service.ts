@@ -1,5 +1,5 @@
 import { supabase } from "./supabaseClient";
-import type { ReviewPost } from "@/shared/types/post.types";
+import type { ReviewPost, PostType } from "@/shared/types/post.types";
 
 // REVIEW QUEUE FUNCTIONS
 
@@ -62,6 +62,7 @@ export const createPost = async (
     meta_title?: string;
     meta_description?: string;
     category_id?: string;
+    post_type?: PostType;
   },
 ) => {
   const { data, error } = await supabase
@@ -77,7 +78,8 @@ export const createPost = async (
       tags: metadata?.tags,
       meta_title: metadata?.meta_title,
       meta_description: metadata?.meta_description,
-      category_id: metadata?.category_id, // ✅ THIS LINE WAS MISSING
+      category_id: metadata?.category_id,
+      post_type: metadata?.post_type ?? "normal",
     })
     .select()
     .single();

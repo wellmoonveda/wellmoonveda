@@ -6,6 +6,7 @@ import HealingPathsPage from "@/modules/dashboard/user/pages/UserHealingPathsPag
 import MyContentPage from "@/modules/dashboard/user/pages/MyContentPage";
 
 import ProtectedRoute from "@/modules/auth/guards/ProtectedRoute";
+import RoleGuard from "@/modules/auth/guards/RoleGuard";
 
 export function UserRoutes() {
   return (
@@ -13,7 +14,9 @@ export function UserRoutes() {
       path="/user"
       element={
         <ProtectedRoute>
-          <UserLayout />
+          <RoleGuard allowedRole="user">
+            <UserLayout />
+          </RoleGuard>
         </ProtectedRoute>
       }
     >

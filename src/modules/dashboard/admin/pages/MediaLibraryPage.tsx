@@ -1,13 +1,13 @@
 import MediaGrid from "../components/MediaGrid";
 import { useMediaLibrary } from "../hooks/useMediaLibrary";
 import MediaUploadDropzone from "../../media/components/MediaUploadDropzone";
-import { useAuthUser } from "@/modules/auth/hooks/useAuthUser";
+import { useAuth } from "@/modules/auth";
 
 const MediaLibraryPage = () => {
   const { media, loading, upload, remove, uploading, uploadFileName } =
     useMediaLibrary();
 
-  const { user } = useAuthUser() ?? {};
+  const { user } = useAuth() ?? {};
 
   const handleUpload = async (file: File) => {
     if (!user) return;

@@ -42,21 +42,25 @@ const Editor = ({ onChange, initialContent }: Props) => {
 
   return (
     <LexicalComposer initialConfig={initialConfig}>
-      <div className="border-main border rounded-md">
-        <Toolbar />
+      <div className="border-main border rounded-md flex flex-col h-[650px] overflow-hidden">
+        <div className="sticky top-0 z-20 bg-soft border-b border-main">
+          <Toolbar />
+        </div>
 
-        <RichTextPlugin
-          contentEditable={
-            <ContentEditable
-              className="p-4 min-h-[300px] outline-none"
-              data-gramm="false"
-              data-gramm_editor="false"
-              data-enable-grammarly="false"
-            />
-          }
-          placeholder={<div className="p-4 text-muted">Start writing...</div>}
-          ErrorBoundary={LexicalErrorBoundary}
-        />
+        <div className="flex-1 overflow-y-auto">
+          <RichTextPlugin
+            contentEditable={
+              <ContentEditable
+                className="p-4 min-h-[500px] outline-none"
+                data-gramm="false"
+                data-gramm_editor="false"
+                data-enable-grammarly="false"
+              />
+            }
+            placeholder={<div className="p-4 text-muted">Start writing...</div>}
+            ErrorBoundary={LexicalErrorBoundary}
+          />
+        </div>
 
         <FloatingToolbarPlugin />
         <DragDropImagePlugin />

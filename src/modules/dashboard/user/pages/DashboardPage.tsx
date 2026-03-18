@@ -1,9 +1,9 @@
 import SubscriptionStatusCard from "../components/SubscriptionStatusCard";
 import { useUserDashboard } from "../hooks/useUserDashboard";
-import { useAuthUser } from "@/modules/auth/hooks/useAuthUser";
+import { useAuth } from "@/modules/auth";
 
 export default function DashboardPage() {
-  const auth = useAuthUser();
+  const auth = useAuth();
   const user = auth?.user;
   const { stats, loading } = useUserDashboard(user?.id);
 

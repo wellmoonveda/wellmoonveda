@@ -8,7 +8,7 @@ import MudraGrid from "../components/MudraGrid";
 import VideoSessionList from "../components/VideoSessionList";
 import LockedContentGate from "../components/LockedContentGate";
 import HealingSkeleton from "../components/HealingSkeleton";
-import { useAuthUser } from "@/modules/auth/hooks/useAuthUser";
+import { useAuth } from "@/modules/auth";
 import { useUserActivity } from "@/modules/dashboard/user/hooks/useUserActivity";
 
 export default function HealingPathPage() {
@@ -44,7 +44,7 @@ export default function HealingPathPage() {
 
   const contentLoading = sessionsLoading || mudrasLoading;
 
-  const auth = useAuthUser();
+  const auth = useAuth();
   const user = auth?.user;
 
   useUserActivity(user?.id, "healing_path", path?.id);

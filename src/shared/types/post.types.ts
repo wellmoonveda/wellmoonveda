@@ -9,3 +9,5 @@ export type ReviewPost = {
     email: string;
   }[];
 };
+
+export type PostType = "normal" | "featured";

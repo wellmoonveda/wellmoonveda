@@ -7,19 +7,26 @@ import PostTagsInput from "../components/PostTagsInput";
 import PostSEOFields from "../components/PostSEOFields";
 import PostCategorySelect from "../components/PostCategorySelect";
 import PostPreviewModal from "../components/PostPreviewModal";
-import { useAuthUser } from "@/modules/auth/hooks/useAuthUser";
+import { useAuth } from "@/modules/auth";
 import { useAutosaveDraft } from "../hooks/useAutosaveDraft";
 import { loadDraftBackup, clearDraftBackup } from "../utils/draftRecovery";
+import { useUserRole } from "@/modules/auth/hooks/useUserRole";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const CreatePostPage = () => {
-  const { saveDraft, updateDraft, loading } = usePostEditor();
-  const { user, loading: userLoading } = useAuthUser();
+  const navigate = useNavigate();
+  const { saveDraft, updateDraft, loading, publish, submitForReview } =
+    usePostEditor();
 
+  const auth = useAuth();
+  const user = auth?.user;
   const authorId = user?.id;
+  const { role, loading: roleLoading } = useUserRole();
 
   const [title, setTitle] = useState("");
   const [postId, setPostId] = useState<string | null>(null);
+  const [postType, setPostType] = useState<"normal" | "featured">("normal");
 
   const [previewOpen, setPreviewOpen] = useState(false);
 
@@ -27,14 +34,11 @@ const CreatePostPage = () => {
   const [previewHtml, setPreviewHtml] = useState("");
 
   const [featuredImage, setFeaturedImage] = useState<string | null>(null);
-
   const [categoryId, setCategoryId] = useState<string | undefined>();
-
   const [tags, setTags] = useState<string[]>([]);
 
   const [metaTitle, setMetaTitle] = useState("");
   const [metaDescription, setMetaDescription] = useState("");
-
   const [slug, setSlug] = useState("");
 
   const generateSlug = (value: string) => {
@@ -59,6 +63,8 @@ const CreatePostPage = () => {
     triggerSave();
   };
 
+  // ---------------- SAVE DRAFT ----------------
+
   const handleSave = async () => {
     if (!authorId) {
       console.error("User not loaded yet");
@@ -67,6 +73,7 @@ const CreatePostPage = () => {
 
     if (!postId) {
       const post = await saveDraft(title, contentState, authorId, slug, {
+        post_type: postType,
         featured_image: featuredImage || undefined,
         tags,
         meta_title: metaTitle,
@@ -80,6 +87,7 @@ const CreatePostPage = () => {
         title,
         content: contentState,
         slug,
+        post_type: postType,
         featured_image: featuredImage || undefined,
         tags,
         meta_title: metaTitle,
@@ -89,6 +97,58 @@ const CreatePostPage = () => {
     }
   };
 
+  // ---------------- PUBLISH ----------------
+  const handlePublish = async () => {
+    if (!authorId) return;
+    let currentPostId = postId;
+    // Ensure draft exists before publishing
+    if (!currentPostId) {
+      const post = await saveDraft(title, contentState, authorId, slug, {
+        post_type: postType,
+        featured_image: featuredImage || undefined,
+        tags,
+        meta_title: metaTitle,
+        meta_description: metaDescription,
+        category_id: categoryId,
+      });
+      if (post?.id) {
+        setPostId(post.id);
+        currentPostId = post.id;
+      }
+    }
+    if (!currentPostId) return;
+    await publish(currentPostId);
+
+    // Optional UX improvement
+    navigate("/dashboard/posts/create");
+  };
+
+  // ---------------- SUBMIT FOR REVIEW ----------------
+  const handleSubmitReview = async () => {
+    if (!authorId) return;
+
+    let currentPostId = postId;
+
+    if (!currentPostId) {
+      const post = await saveDraft(title, contentState, authorId, slug, {
+        post_type: postType,
+        featured_image: featuredImage || undefined,
+        tags,
+        meta_title: metaTitle,
+        meta_description: metaDescription,
+        category_id: categoryId,
+      });
+      if (post?.id) {
+        setPostId(post.id);
+        currentPostId = post.id;
+      }
+    }
+    if (!currentPostId) return;
+    await submitForReview(currentPostId);
+  };
+
+  // ---------------- AUTOSAVE ----------------
+
   const autosave = async () => {
     if (!authorId) return;
     if (!title && !contentState) return;
@@ -97,6 +157,7 @@ const CreatePostPage = () => {
     try {
       if (!postId) {
         const post = await saveDraft(title, contentState, authorId, slug, {
+          post_type: postType,
           featured_image: featuredImage || undefined,
           tags,
           meta_title: metaTitle,
@@ -128,6 +189,8 @@ const CreatePostPage = () => {
   const handlePreview = () => {
     setPreviewOpen(true);
   };
+
+  // ---------------- DRAFT RECOVERY ----------------
 
   useEffect(() => {
     const backup = loadDraftBackup();
@@ -181,6 +244,34 @@ const CreatePostPage = () => {
           >
             {loading ? "Saving..." : "Save Draft"}
           </button>
+
+          {/* ROLE BASED BUTTONS */}
+
+          {roleLoading ? (
+            <div className="text-sm text-muted">Loading role...</div>
+          ) : (
+            <>
+              {role === "admin" && (
+                <button
+                  onClick={handlePublish}
+                  className="btn-prime px-4 py-2 rounded text-white"
+                >
+                  {" "}
+                  Publish{" "}
+                </button>
+              )}
+
+              {role !== "admin" && (
+                <button
+                  onClick={handleSubmitReview}
+                  className="btn-prime px-4 py-2 rounded text-white"
+                >
+                  {" "}
+                  Submit for Review{" "}
+                </button>
+              )}
+            </>
+          )}
         </div>
       </div>
 
@@ -192,7 +283,7 @@ const CreatePostPage = () => {
             value={title}
             onChange={(e) => handleTitleChange(e.target.value)}
             placeholder="Post title..."
-            className="text-xl font-semibold outline-none"
+            className="text-xl font-semibold outline-none w-full resize-none leading-tight line-clamp-2"
           />
 
           <Editor
@@ -220,6 +311,18 @@ const CreatePostPage = () => {
         {/* RIGHT SIDEBAR */}
 
         <div className="space-y-4">
+          <div className="card p-4">
+            <label className="block text-sm font-medium mb-2">Post Type</label>
+
+            <select
+              value={postType}
+              onChange={(e) => setPostType(e.target.value as any)}
+              className="w-full border-main rounded px-3 py-2"
+            >
+              <option value="normal">Normal Post</option>
+              <option value="featured">Featured Post</option>
+            </select>
+          </div>
           <PostFeaturedImage
             value={featuredImage || undefined}
             onChange={handleFeaturedImageChange}

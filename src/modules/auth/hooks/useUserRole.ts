@@ -1,33 +1,28 @@
 import { useEffect, useState } from "react";
 import { getUserRole } from "@/services/supabase/role.service";
+import { useAuth } from "@/modules/auth";
 
-export function useUserRole(userId?: string) {
+export const useUserRole = () => {
+  const auth = useAuth();
+  const user = auth?.user;
+
   const [role, setRole] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!userId) {
-      setLoading(false);
-      return;
-    }
-
-    async function fetchRole() {
+    const fetchRole = async () => {
+      if (!user?.id) return;
       try {
-        const role = await getUserRole(userId!);
-        console.log("Fetched role:", role);
-
-        setRole(role ?? null);
+        const roleData = await getUserRole(user.id);
+        setRole(roleData);
       } catch (err) {
-        console.error(err);
+        console.error("Failed to fetch role", err);
       } finally {
         setLoading(false);
       }
-    }
-
+    };
     fetchRole();
-  }, [userId]);
-
-  console.log("Fetched role:", role);
+  }, [user?.id]);
 
   return { role, loading };
-}
+};

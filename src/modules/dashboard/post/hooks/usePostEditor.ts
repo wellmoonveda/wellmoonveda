@@ -4,9 +4,21 @@ import {
   updatePost,
   publishPost,
 } from "@/services/supabase/post.service";
+import type { PostType } from "@/shared/types/post.types";
+import { submitPostForReview } from "@/services/supabase/post.service";
 
 export const usePostEditor = () => {
   const [loading, setLoading] = useState(false);
+
+  const submitForReview = async (postId: string) => {
+    setLoading(true);
+
+    try {
+      await submitPostForReview(postId);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const saveDraft = async (
     title: string,
@@ -19,6 +31,7 @@ export const usePostEditor = () => {
       meta_title?: string;
       meta_description?: string;
       category_id?: string;
+      post_type?: PostType;
     },
   ) => {
     setLoading(true);
@@ -56,5 +69,6 @@ export const usePostEditor = () => {
     updateDraft,
     publish,
     loading,
+    submitForReview,
   };
 };

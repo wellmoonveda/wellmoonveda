@@ -11,10 +11,7 @@ export { default as ProtectedRoute } from "./guards/ProtectedRoute";
 
 // Types
 export type {
-  AuthUser,
   AuthRole,
-  AuthAuthProvider,
-  AuthState,
   AuthContextValue,
   LoginCredentials,
   SignupCredentials,

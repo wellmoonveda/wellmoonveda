@@ -2,13 +2,14 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import { useEffect } from "react";
 import { $insertNodes } from "lexical";
 import { $createImageNode } from "../nodes/ImageNode";
-import { useAuthUser } from "@/modules/auth/hooks/useAuthUser";
+import { useAuth } from "@/modules/auth";
 import { uploadMedia } from "@/services/supabase/media.service";
 
 const DragDropImagePlugin = () => {
   const [editor] = useLexicalComposerContext();
 
-  const { user } = useAuthUser();
+  const auth = useAuth();
+  const user = auth?.user;
 
   useEffect(() => {
     const root = editor.getRootElement();

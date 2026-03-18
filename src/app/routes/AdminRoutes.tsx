@@ -1,4 +1,6 @@
 import { Route } from "react-router-dom";
+import { ProtectedRoute } from "@/modules/auth";
+import RoleGuard from "@/modules/auth/guards/RoleGuard";
 //Admin Pages
 import DashboardPage from "@/modules/dashboard/admin/pages/DashboardPage";
 import EditorsPage from "@/modules/dashboard/admin/pages/EditorsPage";
@@ -13,7 +15,16 @@ import MessagesPage from "@/modules/dashboard/admin/pages/MessagesPage";
 export function AdminRoutes() {
   return (
     <>
-      <Route path="/admin" element={<AdminLayout />}>
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute>
+            <RoleGuard allowedRole="admin">
+              <AdminLayout />
+            </RoleGuard>
+          </ProtectedRoute>
+        }
+      >
         <Route path="dashboard" element={<DashboardPage />} />
         <Route path="editors" element={<EditorsPage />} />
         <Route path="review" element={<ReviewQueuePage />} />
