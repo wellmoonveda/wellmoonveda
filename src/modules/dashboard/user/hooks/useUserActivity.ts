@@ -26,10 +26,6 @@ export function useUserActivity(
       }
     };
 
-    console.log("ACTIVITY PAYLOAD:", {
-      user_id: userId,
-    });
-
     trackActivity();
   }, [userId, contentType, contentId]);
 }

@@ -35,10 +35,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           .maybeSingle(),
       ]);
 
-      console.log("LoadUserData called for:", userId);
-
       const rawRole = roleRes?.data?.role;
-      console.log("Role fetched:", rawRole);
       if (rawRole === "admin" || rawRole === "editor" || rawRole === "user") {
         setRole(rawRole);
       } else {
@@ -48,7 +45,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (profileRes?.data) {
         setProfile(profileRes.data as UserProfile);
-        console.log("Profile fetched:", profileRes.data);
       } else {
         setProfile(null);
       }
@@ -93,12 +89,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           setRole(null);
         }
 
-        console.log("Auth state changed:", event);
-        console.log("Session user:", session?.user);
-
         setUser(currentUser);
-
-        console.log("Setting user AFTER role load:", currentUser?.id);
       },
     );
 

@@ -1,3 +1,4 @@
+import MudraCard from "@/modules/healing-paths/components/MudraCard";
 import { supabase } from "./supabaseClient";
 
 export const getHealingSessions = async (pathId: string) => {
@@ -21,5 +22,16 @@ export const getMudras = async (pathId: string) => {
 
   if (error) throw error;
 
-  return data ?? [];
+  const mappedData = data?.map((mudra) => {
+    const publicUrl = supabase.storage
+      .from("mudras")
+      .getPublicUrl(mudra.image).data.publicUrl;
+
+    return {
+      ...mudra,
+      image: publicUrl,
+    };
+  }) ?? [];
+
+  return mappedData;
 };
