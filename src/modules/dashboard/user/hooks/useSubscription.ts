@@ -1,12 +1,23 @@
 import { useEffect, useState } from "react";
 import { getUserSubscription } from "@/services/supabase/subscription.service";
 
+interface Subscription {
+  id: string;
+  user_id: string;
+  status: string;
+  plan: string;
+}
+
 export function useSubscription(userId?: string) {
-  const [subscription, setSubscription] = useState<any>(null);
+  const [subscription, setSubscription] = useState<Subscription | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!userId) return;
+    if (!userId) {
+      setSubscription(null);
+      setLoading(false);
+      return;
+    }
 
     async function fetchSubscription() {
       try {
@@ -14,6 +25,7 @@ export function useSubscription(userId?: string) {
         setSubscription(data);
       } catch (err) {
         console.error(err);
+        setSubscription(null);
       } finally {
         setLoading(false);
       }
@@ -22,5 +34,7 @@ export function useSubscription(userId?: string) {
     fetchSubscription();
   }, [userId]);
 
-  return { subscription, loading };
+  const isSubscribed = subscription?.status === "active";
+
+  return { subscription, loading, isSubscribed };
 }

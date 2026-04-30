@@ -7,9 +7,15 @@ interface Props {
   healingPaths: HealingPath[];
   blogPosts: SearchPostResult[];
   loading: boolean;
+  isSubscribed: boolean;
 }
 
-const SearchResults = ({ healingPaths, blogPosts, loading }: Props) => {
+const SearchResults = ({
+  healingPaths,
+  blogPosts,
+  loading,
+  isSubscribed,
+}: Props) => {
   if (loading) {
     return <p className="mt-4">Loading...</p>;
   }
@@ -22,7 +28,10 @@ const SearchResults = ({ healingPaths, blogPosts, loading }: Props) => {
 
   return (
     <div className="mt-6 space-y-8">
-      <HealingPathResults healingPaths={healingPaths} />
+      <HealingPathResults
+        healingPaths={healingPaths}
+        isSubscribed={isSubscribed}
+      />
       <BlogResults blogPosts={blogPosts} />
     </div>
   );

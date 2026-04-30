@@ -1,11 +1,8 @@
 import { useParams } from "react-router-dom";
-import { useEffect } from "react";
 import { useHealingPath } from "../hooks/useHealingPath";
 import { useHealingSessions } from "../hooks/useHealingSessions";
 import { useMudras } from "../hooks/useMudras";
 import { useSubscription } from "@/modules/dashboard/user/hooks/useSubscription";
-import { getMudrasByCondition } from "@/services/supabase/healingContent.service";
-
 import MudraGrid from "../components/MudraGrid";
 import VideoSessionList from "../components/VideoSessionList";
 import LockedContentGate from "../components/LockedContentGate";
@@ -15,7 +12,6 @@ import { useUserActivity } from "@/modules/dashboard/user/hooks/useUserActivity"
 
 export default function HealingPathPage() {
   const { slug } = useParams();
-
   const { path, loading } = useHealingPath(slug!);
 
   const isMudraPath = slug === "mudra-healing";
@@ -47,9 +43,13 @@ export default function HealingPathPage() {
     );
   }
 
-  const isSubscribed = subscription?.active === true;
+  const isSubscribed = subscription?.status === "active";
 
   const contentLoading = sessionsLoading || mudrasLoading;
+
+  const hasMudras = isMudraPath && mudras.length > 0;
+  const hasSessions = !isMudraPath && sessions.length > 0;
+  const hasLockedContent = hasMudras || hasSessions;
 
   return (
     <div className="max-w-5xl mx-auto space-y-10 py-36 ">
@@ -71,14 +71,18 @@ export default function HealingPathPage() {
       <section>
         {contentLoading ? (
           <HealingSkeleton />
-        ) : (
-          <LockedContentGate isUnlocked={false}>
+        ) : hasLockedContent ? (
+          <LockedContentGate isUnlocked={isSubscribed}>
             {isMudraPath ? (
               <MudraGrid mudras={mudras} />
             ) : (
               <VideoSessionList sessions={sessions} />
             )}
           </LockedContentGate>
+        ) : (
+          <p className="mt-4 text-base italic text-muted text-center rounded-lg border border-2 border-accent bg-white p-4">
+            Content for {path.title} coming soon...
+          </p>
         )}
       </section>
     </div>
