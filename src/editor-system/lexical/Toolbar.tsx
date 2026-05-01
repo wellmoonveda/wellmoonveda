@@ -1,4 +1,5 @@
 import { FORMAT_TEXT_COMMAND, FORMAT_ELEMENT_COMMAND } from "lexical";
+import type { LexicalCommand } from "lexical";
 import {
   INSERT_ORDERED_LIST_COMMAND,
   INSERT_UNORDERED_LIST_COMMAND,
@@ -94,10 +95,10 @@ const Toolbar = () => {
 
   const activeStyle = "!bg-white !text-black !border-black";
 
-  const applyFormat = (command: any, value?: any) => {
-    editor.dispatchCommand(command, value);
+  function applyFormat<T>(command: LexicalCommand<T>, value?: T) {
+    editor.dispatchCommand(command, value as T);
     editor.focus();
-  };
+  }
 
   const insertTable = (rows: number, cols: number) => {
     editor.update(() => {

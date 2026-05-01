@@ -29,8 +29,10 @@ export default function AccountSettingsPage() {
     try {
       await updateProfile({ name, bio });
       toast.success("Profile updated");
-    } catch (error: any) {
-      toast.error(error.message || "Failed to update profile");
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : "Failed to update profile";
+      toast.error(message);
     }
   };
 

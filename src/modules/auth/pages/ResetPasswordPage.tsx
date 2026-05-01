@@ -36,8 +36,11 @@ export default function ResetPasswordPage() {
       setTimeout(() => {
         navigate("/auth/login");
       }, 1500);
-    } catch (error: any) {
-      toast.error(error.message || "Failed to update password");
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : "Failed to update password";
+
+      toast.error(message);
     }
   };
 

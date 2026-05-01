@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import * as blogservice from "../api/blog.service";
+import type { Category } from "../types/blog.types";
 
 export const useCategories = () => {
-  const [categories, setCategories] = useState<any[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(false);
 
   const fetchCategories = async () => {
@@ -10,8 +11,8 @@ export const useCategories = () => {
 
     try {
       const data = await blogservice.fetchCategories();
-      setCategories(data || []);
-    } catch (error) {
+      setCategories((data ?? []) as Category[]);
+    } catch (error: unknown) {
       console.log("Failed to fetch categories", error);
     } finally {
       setLoading(false);
@@ -22,11 +23,13 @@ export const useCategories = () => {
     try {
       const newCategory = await blogservice.createCategory(name);
 
-      //Immediate UI update(no refetch needed)
-      setCategories((prev) => [newCategory, ...prev]);
+      setCategories((prev) => [
+        newCategory as Category,
+        ...prev,
+      ]);
 
-      return newCategory;
-    } catch (error) {
+      return newCategory as Category;
+    } catch (error: unknown) {
       throw error;
     }
   };

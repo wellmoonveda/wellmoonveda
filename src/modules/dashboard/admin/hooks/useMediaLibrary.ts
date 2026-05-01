@@ -5,8 +5,16 @@ import {
   uploadMedia,
 } from "@/services/supabase/media.service";
 
+type MediaItem = {
+  id: string;
+  title: string;
+  url: string;
+  category: string;
+  created_at: string;
+};
+
 export const useMediaLibrary = () => {
-  const [media, setMedia] = useState<any[]>([]);
+  const [media, setMedia] = useState<MediaItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [uploadFileName, setUploadFileName] = useState<string | null>(null);
@@ -23,7 +31,7 @@ export const useMediaLibrary = () => {
 
       const data = await getMedia();
 
-      setMedia(data.media ?? []);
+      setMedia((data.media ?? []) as unknown as MediaItem[]);
       setTotal(data.total ?? 0);
     } catch (error) {
       console.error("Media load error", error);
@@ -45,9 +53,7 @@ export const useMediaLibrary = () => {
     try {
       // DUPLICATE CHECK
       const isDuplicate = media.some(
-        (item) =>
-          item.name === file.name &&
-          item.size === file.size,
+        (item) => item.title === file.name,
       );
 
       if (isDuplicate) {
@@ -57,7 +63,7 @@ export const useMediaLibrary = () => {
       await fetchMedia();
 
       return url;
-    } catch (error: any) {
+    } catch (error: unknown) {
       throw error;
     } finally {
       setUploading(false);

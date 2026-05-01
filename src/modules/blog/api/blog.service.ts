@@ -1,11 +1,14 @@
 import type { BlogPost } from "../types/blog.types";
 import type { BlogPostQuery } from "../types/blog.query";
 import * as categorySupabase from "@/services/supabase/category.service";
+import type { RichTextBlock } from "../types/blog.types";
 
 import {
   getPostBySlug as getPostBySlugFromDB,
   getPublishedPostsRaw,
 } from "@/services/supabase/post.service";
+
+type UnknownRecord = Record<string, unknown>;
 
 export interface PaginatedResult<T> {
   data: T[];
@@ -18,7 +21,7 @@ export interface PaginatedResult<T> {
 /**
  * Normalize Supabase relation (array → object)
  */
-const normalizeCategory = (categories: any) => {
+const normalizeCategory = (categories: unknown) => {
   if (Array.isArray(categories)) return categories[0];
   return categories;
 };
@@ -26,26 +29,33 @@ const normalizeCategory = (categories: any) => {
 /**
  * Map DB → BlogPost (Single Source of Truth)
  */
-const mapToBlogPost = (post: any): BlogPost => {
-  const category = normalizeCategory(post.categories);
+const mapToBlogPost = (post: unknown): BlogPost => {
+  const p = post as UnknownRecord;
+  const category = normalizeCategory(p.categories);
 
   return {
-    id: post.id,
-    title: post.title,
-    slug: post.slug,
-    excerpt: extractExcerpt(post.content),
-    content: normalizeContent(post.content?.root?.children ?? post.content),
-    contentType: "blog" as const,
+    id: p.id as string,
+    title: p.title as string,
+    slug: p.slug as string,
+    excerpt: extractExcerpt(p.content),
+    content: normalizeContent(
+      typeof p.content === "object" &&
+        p.content !== null &&
+        "root" in p.content
+        ? ((p.content as UnknownRecord).root as UnknownRecord)?.children
+        : p.content,
+    ),
+    contentType: "blog",
     status: "published",
     category: {
-      id: post.category_id,
+      id: p.category_id as string,
       name: "",
       slug: "",
     },
-    readingTime: calculateReadingTime(post.content),
-    publishedAt: post.created_at,
-    createdAt: post.created_at,
-    featured_image: post.featured_image ?? null,
+    readingTime: calculateReadingTime(p.content),
+    publishedAt: p.created_at as string,
+    createdAt: p.created_at as string,
+    featured_image: (p.featured_image as string | null) ?? null,
   };
 };
 
@@ -74,7 +84,10 @@ export const blogService = {
     // --- FEATURED POSTS (FIXED) ---
     if (query.mode === "featured") {
       const featured = rawPosts
-        .filter((post: any) => post.post_type === "featured")
+        .filter((post: unknown) => {
+          const p = post as UnknownRecord;
+          return p.post_type === "featured";
+        })
         .map(mapToBlogPost);
 
       return {
@@ -133,39 +146,67 @@ export const blogService = {
 /**
  * Extract excerpt from Lexical content
  */
-const extractExcerpt = (content: any): string => {
-  if (!content || !Array.isArray(content)) return "";
+const extractExcerpt = (content: unknown): string => {
+  if (!Array.isArray(content)) return "";
 
-  const block = content.find((b: any) => b.type === "paragraph");
+  const block = content.find(
+    (b) =>
+      typeof b === "object" &&
+      b !== null &&
+      "type" in b &&
+      (b as UnknownRecord).type === "paragraph",
+  ) as UnknownRecord | undefined;
 
-  return block?.text?.slice(0, 120) || "";
+  const text = block?.text;
+
+  return typeof text === "string" ? text.slice(0, 120) : "";
 };
 
 /**
  * Calculate reading time
  */
-const calculateReadingTime = (content: any): number => {
-  if (!content || !Array.isArray(content)) return 1;
+const calculateReadingTime = (content: unknown): number => {
+  if (!Array.isArray(content)) return 1;
 
-  const text = content.map((b: any) => b.text || "").join(" ");
+  const text = content
+    .map((b) =>
+      typeof b === "object" && b !== null && "text" in b
+        ? String((b as UnknownRecord).text ?? "")
+        : ""
+    )
+    .join(" ");
 
   return Math.max(1, Math.ceil(text.split(" ").length / 200));
 };
 
-const normalizeContent = (content: any) => {
+const normalizeContent = (content: unknown) => {
   if (!content) return [];
 
-  let blocks: any[] = [];
+  let blocks: unknown[] = [];
 
-  // Extract blocks
-  if (content?.root?.children) {
-    blocks = content.root.children;
+  if (
+    typeof content === "object" &&
+    content !== null &&
+    "root" in content
+  ) {
+    const root = (content as UnknownRecord).root as UnknownRecord;
+    blocks = (root?.children as unknown[]) ?? [];
   } else if (Array.isArray(content)) {
     blocks = content;
   } else if (typeof content === "string") {
     try {
-      const parsed = JSON.parse(content);
-      blocks = parsed?.root?.children ?? parsed ?? [];
+      const parsed = JSON.parse(content) as unknown;
+
+      if (
+        typeof parsed === "object" &&
+        parsed !== null &&
+        "root" in parsed
+      ) {
+        const root = (parsed as UnknownRecord).root as UnknownRecord;
+        blocks = (root?.children as unknown[]) ?? [];
+      } else if (Array.isArray(parsed)) {
+        blocks = parsed;
+      }
     } catch {
       return [];
     }
@@ -173,46 +214,72 @@ const normalizeContent = (content: any) => {
     return [];
   }
 
-  return blocks.map((block: any) => {
-    // Image
-    if (block.type === "image") {
-      return {
-        type: "image",
-        url: block.src,
-        caption: block.caption || "",
-      };
-    }
+  return blocks.map((block) => {
+    if (
+      typeof block === "object" &&
+      block !== null &&
+      "type" in block
+    ) {
+      const b = block as UnknownRecord;
 
-    // Table
-    if (block.type === "table") {
-      const rows: string[][] = [];
+      if (b.type === "image") {
+        return {
+          type: "image",
+          url: b.src as string,
+          caption: (b.caption as string) || "",
+        };
+      }
 
-      block.children?.forEach((row: any) => {
-        if (row.type === "tablerow") {
-          const rowData: string[] = [];
+      if (b.type === "table") {
+        const rows: string[][] = [];
 
-          row.children?.forEach((cell: any) => {
-            if (cell.type === "tablecell") {
-              const text = cell.children
-                ?.map((child: any) => child.text || "")
-                .join(" ") || "";
+        (b.children as unknown[])?.forEach((row) => {
+          if (
+            typeof row === "object" &&
+            row !== null &&
+            "type" in row &&
+            (row as UnknownRecord).type === "tablerow"
+          ) {
+            const rowData: string[] = [];
 
-              rowData.push(text);
-            }
-          });
+            ((row as UnknownRecord).children as unknown[])?.forEach(
+              (cell) => {
+                if (
+                  typeof cell === "object" &&
+                  cell !== null &&
+                  "type" in cell &&
+                  (cell as UnknownRecord).type === "tablecell"
+                ) {
+                  const text = ((cell as UnknownRecord).children as unknown[])
+                    ?.map((child) =>
+                      typeof child === "object" &&
+                        child !== null &&
+                        "text" in child
+                        ? String(
+                          (child as UnknownRecord).text ?? "",
+                        )
+                        : ""
+                    )
+                    .join(" ") || "";
 
-          rows.push(rowData);
-        }
-      });
+                  rowData.push(text);
+                }
+              },
+            );
 
-      return {
-        type: "table",
-        rows,
-      };
+            rows.push(rowData);
+          }
+        });
+
+        return {
+          type: "table",
+          rows,
+        };
+      }
     }
 
     return block;
-  });
+  }) as RichTextBlock[];
 };
 
 export const createCategory = async (name: string) => {

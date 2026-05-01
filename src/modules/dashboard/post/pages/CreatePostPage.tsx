@@ -115,8 +115,10 @@ const CreatePostPage = () => {
       }
 
       toast.success("Draft saved");
-    } catch (error: any) {
-      toast.error(error.message || "Failed to save draft");
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : "Failed to save draft";
+      toast.error(message);
     }
   };
 
@@ -159,8 +161,10 @@ const CreatePostPage = () => {
       if (!redirectPath) return;
 
       navigate(redirectPath);
-    } catch (error: any) {
-      toast.error(error.message || "Failed to publish post");
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : "Failed to publish post";
+      toast.error(message);
     }
   };
 
@@ -194,8 +198,10 @@ const CreatePostPage = () => {
       if (!redirectPath) return;
 
       navigate(redirectPath);
-    } catch (error: any) {
-      toast.error(error.message || "Failed to submit for review");
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : "Failed to submit for review";
+      toast.error(message);
     }
   };
 

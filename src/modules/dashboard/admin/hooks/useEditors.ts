@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import {
-  getEditors,
+  activateEditor,
   createEditor,
   disableEditor,
-  activateEditor,
+  getEditors,
 } from "@/services/supabase/user.service";
+import type { EditorUser } from "../types/editor.types";
 
 export const useEditors = () => {
-  const [activeEditors, setActiveEditors] = useState<any[]>([]);
-  const [disabledEditors, setDisabledEditors] = useState<any[]>([]);
+  const [activeEditors, setActiveEditors] = useState<EditorUser[]>([]);
+  const [disabledEditors, setDisabledEditors] = useState<EditorUser[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchEditors = async () => {
@@ -25,15 +26,6 @@ export const useEditors = () => {
       setLoading(false);
     }
   };
-
-  // const addEditor = async (
-  //   name: string,
-  //   email: string,
-  //   tempPassword: string,
-  // ) => {
-  //   await createEditor(name, email, tempPassword);
-  //   await fetchEditors();
-  // };
 
   const removeEditor = async (editorId: string) => {
     console.log("removeEditor called with:", editorId);

@@ -21,7 +21,7 @@ export const useMessages = (): UseMessagesReturn => {
 
       const data = await fetchMessages();
       setMessages(data);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Failed to fetch messages:", err);
       setError("Failed to load messages");
     } finally {

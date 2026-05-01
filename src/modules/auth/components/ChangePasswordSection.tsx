@@ -33,8 +33,11 @@ export const ChangePasswordSection = () => {
 
       setPassword("");
       setConfirmPassword("");
-    } catch (error: any) {
-      toast.error(error.message || "Failed to update password");
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : "Failed to update password";
+
+      toast.error(message);
     }
   };
 

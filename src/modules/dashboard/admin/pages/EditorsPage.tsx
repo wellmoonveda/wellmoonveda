@@ -38,8 +38,10 @@ const EditorsPage = () => {
       setName("");
       setEmail("");
       setTempPassword("");
-    } catch (error: any) {
-      toast.error(error.message || "Failed to add editor");
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : "Failed to add editor";
+      toast.error(message);
     }
   };
 
@@ -171,8 +173,12 @@ const EditorsPage = () => {
                       toast.success("Editor successfully disabled");
                       setEditorToDisable(null);
                     }
-                  } catch (error: any) {
-                    toast.error(error.message || "Failed to diable editor");
+                  } catch (error: unknown) {
+                    const message =
+                      error instanceof Error
+                        ? error.message
+                        : "Failed to disable editor";
+                    toast.error(message);
                   }
                 }}
                 className="btn-primary px-3 py-2 rounded"
@@ -211,8 +217,12 @@ const EditorsPage = () => {
                       toast.success("Editor reactivated");
                       setEditorToActivate(null);
                     }
-                  } catch (error: any) {
-                    toast.error(error.message || "Failed to reactivate editor");
+                  } catch (error: unknown) {
+                    const message =
+                      error instanceof Error
+                        ? error.message
+                        : "Failed to reactivate editor";
+                    toast.error(message);
                   }
                 }}
                 className="btn-primary px-3 py-2 rounded"

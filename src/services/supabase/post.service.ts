@@ -1,6 +1,26 @@
 import { supabase } from "./supabaseClient";
 import type { PostType, ReviewPost } from "@/shared/types/post.types";
-import type { AdminPostListItem } from "@/modules/dashboard/post/types/post.types";
+import type {
+  AdminPostListItem,
+  PostStatus,
+} from "@/modules/dashboard/post/types/post.types";
+import type { RichTextBlock } from "@/modules/blog/types/blog.types";
+
+type RawPost = {
+  id: string;
+  title: string;
+  slug: string;
+  content: unknown;
+  created_at: string;
+  featured_image: string | null;
+  post_type: string | null;
+  category_id: string | null;
+  categories: {
+    id: string;
+    name: string;
+    slug: string;
+  }[] | null;
+};
 
 // REVIEW QUEUE FUNCTIONS
 
@@ -54,7 +74,7 @@ export const rejectPost = async (postId: string, feedback: string) => {
 
 export const createPost = async (
   title: string,
-  content: any,
+  content: RichTextBlock[],
   authorId: string,
   slug: string,
   metadata?: {
@@ -90,7 +110,20 @@ export const createPost = async (
   return data;
 };
 
-export const updatePost = async (postId: string, updates: any) => {
+export const updatePost = async (
+  postId: string,
+  updates: Partial<{
+    title: string;
+    content: RichTextBlock[];
+    featured_image: string | null;
+    tags: string[];
+    meta_title: string;
+    meta_description: string;
+    category_id: string;
+    post_type: PostType;
+    status: PostStatus;
+  }>,
+) => {
   const { data, error } = await supabase
     .from("posts")
     .update({
@@ -274,11 +307,11 @@ export const getPublishedPostsRaw = async () => {
     .is("deleted_at", null)
     .order("created_at", { ascending: false });
 
-  console.log("Blog Service Response: ", { data, error });
-
   if (error) throw error;
 
-  return data ?? [];
+  const typedData = (data ?? []) as RawPost[];
+
+  return typedData;
 };
 
 export const getPostBySlug = async (

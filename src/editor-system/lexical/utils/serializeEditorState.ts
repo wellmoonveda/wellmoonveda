@@ -1,9 +1,9 @@
 import { $generateHtmlFromNodes } from "@lexical/html";
-import type { EditorState } from "lexical";
+import type { EditorState, LexicalEditor } from "lexical";
 
 export const serializeEditorState = (
   editorState: EditorState,
-  editor: any,
+  editor: LexicalEditor,
 ): string => {
   let html = "";
 

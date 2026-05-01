@@ -17,8 +17,10 @@ const ReviewQueuePage = () => {
     try {
       await approve(id);
       toast.success("Post approved");
-    } catch (error: any) {
-      toast.error(error.message || "Failed to approve post");
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : "Failed to approve post";
+      toast.error(message);
     }
   };
 
@@ -34,8 +36,10 @@ const ReviewQueuePage = () => {
     try {
       await reject(selectedPostId, feedback);
       toast.success("Post rejected");
-    } catch (error: any) {
-      toast.error(error.message || "Failed to reject post");
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : "Failed to reject post";
+      toast.error(message);
     }
 
     setIsModalOpen(false);

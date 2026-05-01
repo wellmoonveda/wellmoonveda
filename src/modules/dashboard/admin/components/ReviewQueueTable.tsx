@@ -1,5 +1,14 @@
+type ReviewPost = {
+  id: string;
+  title: string;
+  created_at: string;
+  users?: {
+    name: string;
+  }[];
+};
+
 type Props = {
-  posts: any[];
+  posts: ReviewPost[];
   loading: boolean;
   onApprove: (id: string) => void;
   onReject: (id: string) => void;

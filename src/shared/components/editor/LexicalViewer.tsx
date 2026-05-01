@@ -19,7 +19,7 @@ export const LexicalViewer = ({ content }: Props) => {
   const initialConfig = {
     namespace: "Viewer",
     editable: false,
-    onError(error: any) {
+    onError(error: unknown) {
       console.error(error);
     },
 

@@ -1,6 +1,10 @@
 import { supabase } from "./supabaseClient";
+import type { EditorUser } from "@/modules/dashboard/admin/types/editor.types";
 
-export const getEditors = async () => {
+export const getEditors = async (): Promise<{
+  active: EditorUser[];
+  disabled: EditorUser[];
+}> => {
   const { data: roles, error: roleError } = await supabase
     .from("user_roles")
     .select("user_id")
@@ -22,8 +26,10 @@ export const getEditors = async () => {
 
   if (userError) throw userError;
 
-  const active = users?.filter((u) => u.is_active) ?? [];
-  const disabled = users?.filter((u) => !u.is_active) ?? [];
+  const typedUsers = (users ?? []) as EditorUser[];
+
+  const active = typedUsers.filter((u) => u.is_active);
+  const disabled = typedUsers.filter((u) => !u.is_active);
 
   return { active, disabled };
 };
@@ -33,11 +39,11 @@ export const createEditor = async (
   email: string,
   tempPassword: string,
 ) => {
-  console.log("Calling create-editor:", {name, email, tempPassword});
-  const {data, error} = await supabase.functions.invoke("create-editor", {
-    body: {name, email, tempPassword}
+  console.log("Calling create-editor:", { name, email, tempPassword });
+  const { data, error } = await supabase.functions.invoke("create-editor", {
+    body: { name, email, tempPassword },
   });
-  if (error) throw error; 
+  if (error) throw error;
   return data;
 };
 
@@ -79,16 +85,18 @@ export const getUserRole = async (userId: string): Promise<string | null> => {
 };
 
 // Get Current User Profile (for auth flow)
-export const getUserProfile = async (userId: string) => {
+export const getUserProfile = async (
+  userId: string,
+): Promise<EditorUser | null> => {
   const { data, error } = await supabase
     .from("users")
-    .select("id, name, email, password_set, is_active")
+    .select("id, name, email, password_set, is_active, created_at")
     .eq("id", userId)
     .single();
 
   if (error) throw error;
 
-  return data;
+  return data as EditorUser;
 };
 
 export const markPasswordAsSet = async (userId: string) => {

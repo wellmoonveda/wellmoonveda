@@ -18,8 +18,10 @@ export const DeleteAccountSection = () => {
     // Step 1: Delete account
     try {
       await handleDeleteAccount();
-    } catch (error: any) {
-      toast.error(error.message || "Failed to delete account");
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : "Failed to delete account";
+      toast.error(message);
       return;
     }
 

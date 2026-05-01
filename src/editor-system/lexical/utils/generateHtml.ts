@@ -1,13 +1,13 @@
 import { $generateHtmlFromNodes } from "@lexical/html";
-import type { EditorState } from "lexical";
+import type { EditorState, LexicalEditor } from "lexical";
 
 export const generateHtmlFromEditorState = (
   editorState: EditorState,
-  editor: any,
-) => {
+  editor: LexicalEditor,
+): string => {
   let html = "";
 
-  editor.update(() => {
+  editorState.read(() => {
     html = $generateHtmlFromNodes(editor, null);
   });
 

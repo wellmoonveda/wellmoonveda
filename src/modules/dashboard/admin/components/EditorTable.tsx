@@ -1,5 +1,12 @@
+type EditorUser = {
+  id: string;
+  name: string;
+  email: string;
+  password_set: boolean;
+};
+
 type Props = {
-  editors: any[];
+  editors: EditorUser[];
   loading: boolean;
   onDelete: (id: string) => void;
 };

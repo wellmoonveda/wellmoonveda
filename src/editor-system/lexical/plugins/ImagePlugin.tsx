@@ -2,7 +2,7 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import { useState } from "react";
 import { $getSelection, $isRangeSelection, $getRoot } from "lexical";
 import toast from "react-hot-toast";
-
+import type { RangeSelection } from "lexical";
 import MediaLibraryModal from "@/modules/dashboard/media/components/MediaLibraryModal";
 import { $createImageNode } from "../nodes/ImageNode";
 
@@ -11,7 +11,9 @@ const ImagePlugin = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [libraryOpen, setLibraryOpen] = useState(false);
   const [urlModalOpen, setUrlModalOpen] = useState(false);
-  const [selectionState, setSelectionState] = useState<any>(null);
+  const [selectionState, setSelectionState] = useState<RangeSelection | null>(
+    null,
+  );
 
   const [url, setUrl] = useState("");
 
@@ -59,7 +61,13 @@ const ImagePlugin = () => {
               className="dropdown-item"
               onClick={() => {
                 editor.getEditorState().read(() => {
-                  setSelectionState($getSelection());
+                  const selection = $getSelection();
+
+                  if ($isRangeSelection(selection)) {
+                    setSelectionState(selection);
+                  } else {
+                    setSelectionState(null);
+                  }
                 });
                 setLibraryOpen(true);
                 setDropdownOpen(false);
@@ -127,7 +135,7 @@ const ImagePlugin = () => {
                     toast.success("Image added", { id: toastId });
                     setUrl("");
                     setUrlModalOpen(false);
-                  } catch (err: any) {
+                  } catch (err: unknown) {
                     toast.error("Failed to add image", { id: toastId });
                   }
                 }}

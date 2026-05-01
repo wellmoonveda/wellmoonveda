@@ -19,19 +19,18 @@ import { serializeEditorState } from "./utils/serializeEditorState";
 import { TableNode, TableRowNode, TableCellNode } from "@lexical/table";
 import { TablePlugin } from "@lexical/react/LexicalTablePlugin";
 import TableActionMenuPlugin from "./plugins/TableActionMenuPlugin";
+import type { EditorState, SerializedEditorState } from "lexical";
 
 interface Props {
-  onChange: (editorState: any, html: string) => void;
-  initialContent?: any;
+  onChange: (editorState: EditorState, html: string) => void;
+  initialContent?: SerializedEditorState | null;
 }
 
 const Editor = ({ onChange, initialContent }: Props) => {
   const getInitialState = () => {
     if (!initialContent) return null;
 
-    return typeof initialContent === "string"
-      ? initialContent
-      : JSON.stringify(initialContent);
+    return JSON.stringify(initialContent);
   };
 
   const initialConfig = {
@@ -97,11 +96,7 @@ const Editor = ({ onChange, initialContent }: Props) => {
 
         <OnChangePlugin
           onChange={(editorState, editor) => {
-            let json;
-
-            editorState.read(() => {
-              json = editorState.toJSON();
-            });
+            const json = editorState.toJSON();
             const html = serializeEditorState(editorState, editor);
             onChange(editorState, html);
           }}

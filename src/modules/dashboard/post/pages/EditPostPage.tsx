@@ -65,8 +65,10 @@ const EditPostPage = () => {
         setMetaTitle(post.meta_title ?? "");
         setMetaDescription(post.meta_description ?? "");
         setPostType(post.post_type ?? "normal");
-      } catch (error: any) {
-        toast.error(error.message || "Failed to load post");
+      } catch (error: unknown) {
+        const message =
+          error instanceof Error ? error.message : "Failed to load post";
+        toast.error(message);
       }
     };
 
@@ -94,8 +96,10 @@ const EditPostPage = () => {
       });
 
       toast.success("Draft updated");
-    } catch (error: any) {
-      toast.error(error.messge || "failes to update draft");
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : "Failed to update draft";
+      toast.error(message);
     }
   };
 
@@ -127,8 +131,9 @@ const EditPostPage = () => {
           navigate("/dashboard/review");
         }
       }
-    } catch (error: any) {
-      toast.error(error.message || "Action Failed");
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Action Failed";
+      toast.error(message);
     }
   };
 

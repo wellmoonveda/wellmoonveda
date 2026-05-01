@@ -12,6 +12,11 @@ interface Props {
   nodeKey: string;
 }
 
+type ImageUpdateMap = {
+  width: number;
+  caption: string;
+};
+
 const ImageComponent = ({
   src,
   alt,
@@ -30,12 +35,15 @@ const ImageComponent = ({
     setCaption(caption);
   }, [width, caption]);
 
-  const updateNodeProperty = (type: "width" | "caption", value: any) => {
+  const updateNodeProperty = <K extends keyof ImageUpdateMap>(
+    type: K,
+    value: ImageUpdateMap[K],
+  ) => {
     editor.update(() => {
       const node = $getNodeByKey(nodeKey);
       if ($isImageNode(node)) {
-        if (type === "width") node.setWidth(value);
-        if (type === "caption") node.setCaption(value);
+        if (type === "width") node.setWidth(value as number);
+        if (type === "caption") node.setCaption(value as string);
       }
     });
   };
@@ -44,13 +52,15 @@ const ImageComponent = ({
     const startX = e.clientX;
     const startWidth = currentWidth;
 
+    let latestWidth = currentWidth;
+
     const onMove = (moveEvent: MouseEvent) => {
-      const newWidth = Math.max(150, startWidth + (moveEvent.clientX - startX));
-      setWidth(newWidth);
+      latestWidth = Math.max(150, startWidth + (moveEvent.clientX - startX));
+      setWidth(latestWidth);
     };
 
     const onStop = () => {
-      updateNodeProperty("width", currentWidth);
+      updateNodeProperty("width", latestWidth);
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseup", onStop);
     };
@@ -59,7 +69,7 @@ const ImageComponent = ({
     window.addEventListener("mouseup", onStop);
   };
 
-  const alignmentClass = {
+  const alignmentClass: Record<"left" | "center" | "right", string> = {
     left: "mr-auto",
     center: "mx-auto",
     right: "ml-auto",

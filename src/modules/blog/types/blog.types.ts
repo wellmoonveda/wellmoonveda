@@ -1,3 +1,5 @@
+import type { PostType } from "@/shared/types/post.types";
+
 export type ContentType = "blog" | "pillar";
 
 export type PostStatus = "draft" | "published" | "archived";
@@ -85,4 +87,13 @@ export interface BlogPost {
 export interface BlogPostFlags {
   featured?: boolean;
   homepage?: boolean;
+}
+
+export interface CreatePostMetadata {
+  featured_image?: string;
+  tags?: string[];
+  meta_title?: string;
+  meta_description?: string;
+  category_id?: string;
+  post_type?: PostType;
 }

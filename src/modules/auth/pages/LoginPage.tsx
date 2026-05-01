@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthCard } from "../components/AuthCard";
 import { AuthInput } from "../components/AuthInput";
 import { PasswordField } from "../components/PasswordField";
@@ -18,18 +18,11 @@ export default function LoginPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("🧠 useEffect triggered");
-
-    console.log("➡ loading:", loading);
-    console.log("➡ user:", user);
-    console.log("➡ role:", role);
     if (loading) return;
 
     if (!user) return;
 
     if (!role) return;
-
-    console.log("Navigating Now...");
 
     const redirectPath = getDashboardRouteByRole(role);
 
@@ -52,14 +45,15 @@ export default function LoginPage() {
       });
 
       toast.success("Login Successful");
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Login failed";
+
       toast.error(
-        error?.message?.includes("Invalid login")
+        message.includes("Invalid login")
           ? "Invalid email or password"
-          : error.message || "Login failed",
+          : message,
       );
     }
-    console.log("🟡 Login success, waiting for auth state...");
   };
 
   const hangleGoogleLogin = async () => {
@@ -71,48 +65,55 @@ export default function LoginPage() {
   };
 
   return (
-    <AuthCard title="Welcome back" subtitle="Sign in to your account">
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <AuthInput
-          label="Email"
-          type="email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+    <>
+      <div className="flex justify-center mb-2 cursor-pointer">
+        <Link to="/">
+          <img src="/images/site/Logo.png" alt="" className=" w-46" />
+        </Link>
+      </div>
+      <AuthCard title="Welcome back" subtitle="Sign in to your account">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <AuthInput
+            label="Email"
+            type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
-        <PasswordField
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+          <PasswordField
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-        <AuthButton type="submit" disabled={isLoading}>
-          {isLoading ? "Signing in..." : "Sign In"}
+          <AuthButton type="submit" disabled={isLoading}>
+            {isLoading ? "Signing in..." : "Sign In"}
+          </AuthButton>
+        </form>
+
+        <div className="my-4 text-center text-sm text-gray-500">or</div>
+
+        <AuthButton
+          type="button"
+          onClick={hangleGoogleLogin}
+          disabled={isLoading}
+        >
+          Continue with Google
         </AuthButton>
-      </form>
 
-      <div className="my-4 text-center text-sm text-gray-500">or</div>
+        <AuthFooterLink
+          text="Forgot your password?"
+          linkText="Reset it"
+          to="/auth/forgot-password"
+        />
 
-      <AuthButton
-        type="button"
-        onClick={hangleGoogleLogin}
-        disabled={isLoading}
-      >
-        Continue with Google
-      </AuthButton>
-
-      <AuthFooterLink
-        text="Forgot your password?"
-        linkText="Reset it"
-        to="/auth/forgot-password"
-      />
-
-      <AuthFooterLink
-        text="Don’t have an account?"
-        linkText="Sign up"
-        to="/auth/signup"
-      />
-    </AuthCard>
+        <AuthFooterLink
+          text="Don’t have an account?"
+          linkText="Sign up"
+          to="/auth/signup"
+        />
+      </AuthCard>
+    </>
   );
 }
