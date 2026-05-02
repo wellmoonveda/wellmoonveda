@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { getMedia } from "@/services/supabase/media.service";
+import type { MediaItem } from "@/services/supabase/media.service";
 
 export const useMedia = () => {
-  const [media, setMedia] = useState<any[]>([]);
+  const [media, setMedia] = useState<MediaItem[]>([]);
   const [loading, setLoading] = useState(false);
 
   const [search, setSearch] = useState("");
@@ -16,12 +17,7 @@ export const useMedia = () => {
     setLoading(true);
 
     try {
-      const res = await getMedia({
-        search: search || "",
-        category: category || "",
-        page: page || 1,
-        limit: limit || 12,
-      });
+      const res = await getMedia({ search, category, page, limit });
 
       setMedia(res.media);
     } catch (error) {

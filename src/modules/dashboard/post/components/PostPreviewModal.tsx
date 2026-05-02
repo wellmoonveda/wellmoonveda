@@ -6,7 +6,7 @@ interface Props {
   featuredImage?: string | null;
   categoryName?: string;
   tags?: string[];
-  content?: any;
+  content?: string;
 }
 
 const PostPreviewModal = ({
@@ -76,10 +76,14 @@ const PostPreviewModal = ({
           {/* Content */}
 
           <div className="prose max-w-none text-main">
-            <div
-              className="prose max-w-none"
-              dangerouslySetInnerHTML={{ __html: content }}
-            />
+            {content ? (
+              <div
+                className="prose max-w-none text-main"
+                dangerouslySetInnerHTML={{ __html: content }}
+              />
+            ) : (
+              <p className="text-muted">No content to preview</p>
+            )}
           </div>
         </div>
       </div>

@@ -4,8 +4,13 @@ import {
   updateSettings,
 } from "@/services/supabase/settings.service";
 
+type Settings = {
+  id: string;
+  maintenance_mode?: boolean;
+};
+
 export function useSettings() {
-  const [settings, setSettings] = useState<any>(null);
+  const [settings, setSettings] = useState<Settings | null>(null);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
 
@@ -25,7 +30,7 @@ export function useSettings() {
     }
   };
 
-  const saveSettings = async (updates: any) => {
+  const saveSettings = async (updates: Partial<Settings>) => {
     try {
       setUpdating(true);
       const updated = await updateSettings(updates);

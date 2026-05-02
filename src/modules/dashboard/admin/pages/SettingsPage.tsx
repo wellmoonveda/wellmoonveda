@@ -80,8 +80,11 @@ export default function SettingsPage() {
       });
 
       toast.success("Settings updated");
-    } catch (err: any) {
-      toast.error(err.message);
+    } catch (err: unknown) {
+      const message =
+        err instanceof Error ? err.message : "Something went wrong";
+
+      toast.error(message);
     } finally {
       setUpdating(false);
     }

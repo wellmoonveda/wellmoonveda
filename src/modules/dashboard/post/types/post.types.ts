@@ -64,3 +64,5 @@ export type AdminPostListItem = {
     email: string;
   }[];
 };
+
+export type AutosaveStatus = "idle" | "typing" | "saving" | "saved" | "error";

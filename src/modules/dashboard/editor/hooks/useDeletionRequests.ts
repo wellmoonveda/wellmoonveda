@@ -28,13 +28,23 @@ export const useDeletionRequests = (authorId?: string) => {
       const data = await getDeletionRequests(authorId);
 
       // Normalize + ensure correct structure
-      const formatted: DeletionRequest[] = (data ?? []).map((req: any) => ({
-        id: req.id,
-        reason: req.reason,
-        status: req.status,
-        created_at: req.created_at,
-        posts: req.posts ? [req.posts] : [],
-      }));
+      const formatted: DeletionRequest[] = (data ?? []).map((req: unknown) => {
+        const r = req as {
+          id: string;
+          reason: string;
+          status: "pending" | "approved" | "rejected";
+          created_at: string;
+          posts: { id: string; title: string } | null;
+        };
+
+        return {
+          id: r.id,
+          reason: r.reason,
+          status: r.status,
+          created_at: r.created_at,
+          posts: r.posts ? [r.posts] : [],
+        };
+      });
 
       setRequests(formatted);
     } catch (error) {

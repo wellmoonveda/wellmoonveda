@@ -1,23 +1,22 @@
 import { useEffect, useRef, useState } from "react";
+import type { AutosaveStatus } from "../types/post.types";
 
 export const useAutosaveDraft = (
   saveFunction: () => Promise<void>,
-  delay: number = 3000,
+  delay: number = 8000,
 ) => {
-  const timeout = useRef<any>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const [status, setStatus] = useState<
-    "idle" | "typing" | "saving" | "saved" | "error"
-  >("idle");
+  const [status, setStatus] = useState<AutosaveStatus>("idle");
 
   const triggerSave = () => {
     setStatus("typing");
 
-    if (timeout.current) {
-      clearTimeout(timeout.current);
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
     }
 
-    timeout.current = setTimeout(async () => {
+    timeoutRef.current = setTimeout(async () => {
       try {
         setStatus("saving");
 
@@ -35,8 +34,8 @@ export const useAutosaveDraft = (
 
   useEffect(() => {
     return () => {
-      if (timeout.current) {
-        clearTimeout(timeout.current);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
       }
     };
   }, []);

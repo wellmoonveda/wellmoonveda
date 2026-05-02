@@ -8,8 +8,16 @@ interface Props {
   onSelect: (url: string) => void;
 }
 
+type MediaItem = {
+  id: string;
+  title: string;
+  url: string;
+  category: string;
+  created_at: string;
+};
+
 const MediaLibraryModal = ({ open, onClose, onSelect }: Props) => {
-  const [media, setMedia] = useState<any[]>([]);
+  const [media, setMedia] = useState<MediaItem[]>([]);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
   const [page, setPage] = useState(1);
@@ -36,8 +44,10 @@ const MediaLibraryModal = ({ open, onClose, onSelect }: Props) => {
       });
 
       setMedia(fetchedMedia);
-    } catch (err: any) {
-      toast.error(err.message || "Failed to upload media");
+    } catch (err: unknown) {
+      const message =
+        err instanceof Error ? err.message : "Failed to upload media";
+      toast.error(message);
     }
   };
 

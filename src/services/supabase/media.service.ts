@@ -1,22 +1,22 @@
 import { supabase } from "./supabaseClient";
+import type {
+  GetMediaParams,
+  MediaItem,
+} from "@/modules/dashboard/media/types/media.types";
 
 const BUCKET = "media";
 
 /* FETCH MEDIA */
-
-type GetMediaParams = {
-  search?: string;
-  category?: string;
-  page?: number;
-  limit?: number;
-};
 
 export const getMedia = async ({
   search = "",
   category = "",
   page = 1,
   limit = 12,
-}: GetMediaParams = {}) => {
+}: GetMediaParams = {}): Promise<{
+  media: MediaItem[];
+  total: number;
+}> => {
   const from = (page - 1) * limit;
   const to = from + limit - 1;
 
