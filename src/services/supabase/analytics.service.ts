@@ -1,4 +1,9 @@
 import { supabase } from "./supabaseClient";
+import type {
+  EditorActivityRow,
+  HealingPathUsageRow,
+  SubscriptionRow,
+} from "@/modules/dashboard/admin/types/admin.types";
 
 export const getSubscriberCount = async () => {
   const { count, error } = await supabase
@@ -10,7 +15,9 @@ export const getSubscriberCount = async () => {
   return count ?? 0;
 };
 
-export const getHealingPathUsage = async (startDate?: string) => {
+export const getHealingPathUsage = async (
+  startDate?: string,
+): Promise<{ path_slug: string; views: number }[]> => {
   let query = supabase.from("healing_path_progress").select(`
       path_id,
       created_at,
@@ -28,8 +35,8 @@ export const getHealingPathUsage = async (startDate?: string) => {
 
   const usageMap: Record<string, number> = {};
 
-  data.forEach((item: any) => {
-    const title = item.healing_paths?.title ?? "Unknown Path";
+  data.forEach((item: HealingPathUsageRow) => {
+    const title = item.healing_paths?.[0]?.title ?? "Unknown Path";
 
     if (!usageMap[title]) usageMap[title] = 0;
 
@@ -42,7 +49,9 @@ export const getHealingPathUsage = async (startDate?: string) => {
   }));
 };
 
-export const getEditorActivity = async (startDate?: string) => {
+export const getEditorActivity = async (
+  startDate?: string,
+): Promise<number> => {
   let query = supabase
     .from("subscriptions")
     .select("*", { count: "exact", head: true })
@@ -52,11 +61,11 @@ export const getEditorActivity = async (startDate?: string) => {
     query = query.gte("created_at", startDate);
   }
 
-  const { data, error } = await query;
+  const { count, error } = await query;
 
   if (error) throw error;
 
-  if (!data) return [];
+  return count ?? 0;
 };
 
 export const getActiveSubscriptionsCount = async (startDate?: string) => {
@@ -76,7 +85,9 @@ export const getActiveSubscriptionsCount = async (startDate?: string) => {
   return count ?? 0;
 };
 
-export const getEditorPublishingActivity = async (startDate?: string) => {
+export const getEditorPublishingActivity = async (
+  startDate?: string,
+): Promise<{ name: string; posts: number }[]> => {
   let query = supabase
     .from("posts")
     .select(
@@ -99,9 +110,9 @@ export const getEditorPublishingActivity = async (startDate?: string) => {
 
   const activityMap: Record<string, { name: string; posts: number }> = {};
 
-  data.forEach((item: any) => {
+  data.forEach((item: EditorActivityRow) => {
     const authorId = item.author_id;
-    const name = item.users?.name ?? "Unknown Editor";
+    const name = item.users?.[0]?.name ?? "Unknown Editor";
 
     if (!activityMap[authorId]) {
       activityMap[authorId] = {
@@ -116,7 +127,16 @@ export const getEditorPublishingActivity = async (startDate?: string) => {
   return Object.values(activityMap);
 };
 
-export const getRecentPublishedPosts = async (limit = 5) => {
+type RecentPost = {
+  id: string;
+  title: string;
+  author_id: string;
+  created_at: string;
+};
+
+export const getRecentPublishedPosts = async (
+  limit = 5,
+): Promise<RecentPost[]> => {
   const { data, error } = await supabase
     .from("posts")
     .select("id,title,author_id,created_at")
@@ -165,7 +185,7 @@ export const getSubscriptionGrowth = async (startDate?: string) => {
 
   const growthMap: Record<string, number> = {};
 
-  data.forEach((item: any) => {
+  data.forEach((item: SubscriptionRow) => {
     const date = new Date(item.created_at).toISOString().split("T")[0];
 
     if (!growthMap[date]) {

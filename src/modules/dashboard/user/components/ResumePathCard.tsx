@@ -1,7 +1,12 @@
 import { Link } from "react-router-dom";
 
+type ResumePath = {
+  title: string;
+  slug: string;
+};
+
 interface Props {
-  path: any;
+  path: ResumePath;
   lastAccessed: string;
 }
 

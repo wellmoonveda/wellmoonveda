@@ -1,4 +1,4 @@
-export interface HealingPath {
+export interface HealingPathVideo {
   slug: string;
   title: string;
   shortDescription: string;
@@ -34,3 +34,19 @@ export interface Mudra {
   benefits?: string;
   conditions: string[];
 }
+
+export type VideoSession = {
+  id: string;
+  title: string;
+  description?: string | null;
+  video_url: string;
+};
+
+export type HealingPath = {
+  id: string;
+  title: string;
+  description: string;
+  thumbnail: string;
+  slug: string;
+  created_at: string;
+};

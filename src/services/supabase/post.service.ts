@@ -4,23 +4,6 @@ import type {
   AdminPostListItem,
   PostStatus,
 } from "@/modules/dashboard/post/types/post.types";
-import type { RichTextBlock } from "@/modules/blog/types/blog.types";
-
-type RawPost = {
-  id: string;
-  title: string;
-  slug: string;
-  content: unknown;
-  created_at: string;
-  featured_image: string | null;
-  post_type: string | null;
-  category_id: string | null;
-  categories: {
-    id: string;
-    name: string;
-    slug: string;
-  }[] | null;
-};
 
 // REVIEW QUEUE FUNCTIONS
 
@@ -42,7 +25,16 @@ export const getPostsForReview = async (): Promise<ReviewPost[]> => {
 
   if (error) throw error;
 
-  return (data ?? []) as ReviewPost[];
+  if (!data) return [];
+
+  return data.map((item) => ({
+    id: item.id,
+    title: item.title,
+    status: item.status,
+    created_at: item.created_at,
+    author_id: item.author_id,
+    users: item.users ?? [],
+  }));
 };
 
 export const approvePost = async (postId: string) => {
@@ -74,7 +66,7 @@ export const rejectPost = async (postId: string, feedback: string) => {
 
 export const createPost = async (
   title: string,
-  content: RichTextBlock[],
+  content: string,
   authorId: string,
   slug: string,
   metadata?: {
@@ -114,7 +106,8 @@ export const updatePost = async (
   postId: string,
   updates: Partial<{
     title: string;
-    content: RichTextBlock[];
+    slug: string;
+    content: string;
     featured_image: string | null;
     tags: string[];
     meta_title: string;
@@ -309,9 +302,19 @@ export const getPublishedPostsRaw = async () => {
 
   if (error) throw error;
 
-  const typedData = (data ?? []) as RawPost[];
+  if (!data) return [];
 
-  return typedData;
+  return data.map((item) => ({
+    id: item.id,
+    title: item.title,
+    slug: item.slug,
+    content: item.content,
+    created_at: item.created_at,
+    featured_image: item.featured_image,
+    post_type: item.post_type,
+    category_id: item.category_id,
+    categories: item.categories,
+  }));
 };
 
 export const getPostBySlug = async (

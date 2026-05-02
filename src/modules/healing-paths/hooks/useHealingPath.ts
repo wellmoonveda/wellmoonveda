@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { getHealingPathBySlug } from "@/services/supabase/healingPath.service";
+import type { HealingPath } from "../types/healing.types";
 
 export function useHealingPath(slug: string) {
-  const [path, setPath] = useState<any>(null);
+  const [path, setPath] = useState<HealingPath | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

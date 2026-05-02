@@ -1,34 +1,31 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-
+import { parseHtmlToEditorState } from "@/editor-system/lexical/utils/parseHtmlToEditorState";
 import Editor from "@/editor-system/lexical/Editor";
 import { getPostById } from "@/services/supabase/post.service";
 import { usePostEditor } from "../hooks/usePostEditor";
-import { useAuth } from "@/modules/auth";
 import { useUserRole } from "@/modules/auth/hooks/useUserRole";
-
+import type { PostStatus } from "../types/post.types";
 import PostFeaturedImage from "../components/PostFeaturedImage";
 import PostTagsInput from "../components/PostTagsInput";
 import PostSEOFields from "../components/PostSEOFields";
 import PostCategorySelect from "../components/PostCategorySelect";
 import PostPreviewModal from "../components/PostPreviewModal";
+import type { SerializedEditorState } from "lexical";
 
 const EditPostPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
   const { updateDraft, loading, submitForReview, publish } = usePostEditor();
-
-  const auth = useAuth();
-  const user = auth?.user;
   const { role, loading: roleLoading } = useUserRole();
 
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
-  const [status, setStatus] = useState<String>("draft");
+  const [status, setStatus] = useState<PostStatus>("draft");
 
-  const [contentState, setContentState] = useState<any>(null);
+  const [contentState, setContentState] = useState<string>("");
   const [previewHtml, setPreviewHtml] = useState("");
 
   const [featuredImage, setFeaturedImage] = useState<string | null>(null);
@@ -40,7 +37,8 @@ const EditPostPage = () => {
 
   const [previewOpen, setPreviewOpen] = useState(false);
 
-  const [initialContent, setInitialContent] = useState<any>(null);
+  const [initialContent, setInitialContent] =
+    useState<SerializedEditorState | null>(null);
   const [postType, setPostType] = useState<"normal" | "featured">("normal");
 
   // ---------------- FETCH POST ----------------
@@ -55,7 +53,7 @@ const EditPostPage = () => {
         setSlug(post.slug);
         setStatus(post.status);
 
-        setInitialContent(post.content);
+        setInitialContent(parseHtmlToEditorState(post.content).toJSON());
 
         setFeaturedImage(post.featured_image ?? null);
         setTags(post.tags ?? []);
@@ -224,8 +222,8 @@ const EditPostPage = () => {
           {initialContent !== null && (
             <Editor
               initialContent={initialContent}
-              onChange={(state, html) => {
-                setContentState(state);
+              onChange={(_, html) => {
+                setContentState(html);
                 setPreviewHtml(html);
               }}
             />

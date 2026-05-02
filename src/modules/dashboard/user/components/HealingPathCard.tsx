@@ -1,5 +1,11 @@
+type HealingPath = {
+  thumbnail: string;
+  title: string;
+  description: string;
+};
+
 interface Props {
-  path: any;
+  path: HealingPath;
 }
 
 export default function HealingPathCard({ path }: Props) {

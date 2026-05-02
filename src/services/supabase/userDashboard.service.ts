@@ -1,4 +1,5 @@
 import { supabase } from "./supabaseClient";
+import type { HealingPathProgress } from "@/shared/types/users.types";
 
 export async function getUserDashboardData(userId: string) {
   const { data: progress, error } = await supabase
@@ -8,9 +9,11 @@ export async function getUserDashboardData(userId: string) {
 
   if (error) throw error;
 
-  const startedPaths = progress?.length || 0;
+  const typedProgress: HealingPathProgress[] = progress ?? [];
 
-  const recentPath = progress?.sort(
+  const startedPaths = typedProgress.length;
+
+  const recentPath = typedProgress.sort(
     (a, b) =>
       new Date(b.last_accessed).getTime() - new Date(a.last_accessed).getTime(),
   )[0];

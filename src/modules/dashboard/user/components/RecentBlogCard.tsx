@@ -1,5 +1,11 @@
+type RecentBlogCardPost = {
+  title: string;
+  featured_image: string | null;
+  created_at: string;
+};
+
 interface Props {
-  post: any;
+  post: RecentBlogCardPost;
 }
 
 export default function RecentBlogCard({ post }: Props) {

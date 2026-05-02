@@ -1,8 +1,16 @@
 import { useEffect, useState } from "react";
 import { getHealingPaths } from "@/services/supabase/healingPath.service";
 
+type HealingPath = {
+  id: string;
+  title: string;
+  description: string;
+  thumbnail: string;
+  slug: string;
+};
+
 export const useHealingPaths = () => {
-  const [paths, setPaths] = useState<any[]>([]);
+  const [paths, setPaths] = useState<HealingPath[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

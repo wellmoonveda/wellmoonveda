@@ -5,10 +5,11 @@ import {
   getUserProfile,
   updateUserProfile,
 } from "@/services/supabase/auth.service";
+import type { UserProfile } from "@/modules/auth/types/user.types";
 
 export function useAccountSettings() {
   const [loading, setLoading] = useState(false);
-  const [profile, setProfile] = useState<any>(null);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
 
   useEffect(() => {
     async function fetchProfile() {

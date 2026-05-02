@@ -1,4 +1,5 @@
 import { supabase } from "./supabaseClient";
+import type { UserProfile } from "@/modules/auth/types/user.types";
 
 export const getCurrentUser = async () => {
   const {
@@ -94,7 +95,7 @@ export async function changeUserPassword(password: string) {
   if (error) throw error;
 }
 
-export async function getUserProfile() {
+export async function getUserProfile(): Promise<UserProfile | null> {
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -109,7 +110,7 @@ export async function getUserProfile() {
 
   if (error) throw error;
 
-  return data;
+  return data ?? null;
 }
 
 export async function deleteWebsiteUserAccount() {

@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { getMudras } from "@/services/supabase/healingContent.service";
+import type { Mudra } from "../types/healing.types";
 
 export function useMudras(pathId?: string) {
-  const [mudras, setMudras] = useState<any[]>([]);
+  const [mudras, setMudras] = useState<Mudra[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

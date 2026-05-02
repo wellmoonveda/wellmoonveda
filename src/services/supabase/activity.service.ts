@@ -1,4 +1,8 @@
 import { supabase } from "./supabaseClient";
+import type {
+  BlogActivity,
+  HealingPathActivity,
+} from "@/shared/types/users.types";
 
 export const recordActivity = async (
   userId: string,
@@ -24,7 +28,9 @@ export const recordActivity = async (
   }
 };
 
-export const getUserHealingActivity = async (userId: string) => {
+export const getUserHealingActivity = async (
+  userId: string,
+): Promise<HealingPathActivity[]> => {
   const { data: activity, error } = await supabase
     .from("user_activity")
     .select("*")
@@ -46,12 +52,17 @@ export const getUserHealingActivity = async (userId: string) => {
   const pathMap = Object.fromEntries(paths?.map((p) => [p.id, p]) ?? []);
 
   return activity.map((a) => ({
-    ...a,
-    path: pathMap[a.content_id],
+    user_id: a.user_id,
+    content_id: a.content_id,
+    content_type: "healing_path",
+    last_accessed: a.last_accessed,
+    path: pathMap[a.content_id] ?? null,
   }));
 };
 
-export const getRecentBlogActivity = async (userId: string) => {
+export const getRecentBlogActivity = async (
+  userId: string,
+): Promise<BlogActivity[]> => {
   const { data: activity, error } = await supabase
     .from("user_activity")
     .select("*")
@@ -74,7 +85,10 @@ export const getRecentBlogActivity = async (userId: string) => {
   const postMap = Object.fromEntries(posts?.map((p) => [p.id, p]) ?? []);
 
   return activity.map((a) => ({
-    ...a,
-    post: postMap[a.content_id],
+    user_id: a.user_id,
+    content_id: a.content_id,
+    content_type: "blog_post",
+    last_accessed: a.last_accessed,
+    post: postMap[a.content_id] ?? null,
   }));
 };

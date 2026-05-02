@@ -2,9 +2,12 @@ import { supabase } from "./supabaseClient";
 import type {
   Mudra,
   MudraFromDB,
+  VideoSession,
 } from "@/modules/healing-paths/types/healing.types";
 
-export const getHealingSessions = async (pathId: string) => {
+export const getHealingSessions = async (
+  pathId: string,
+): Promise<VideoSession[]> => {
   const { data, error } = await supabase
     .from("healing_sessions")
     .select("*")
@@ -13,7 +16,14 @@ export const getHealingSessions = async (pathId: string) => {
 
   if (error) throw error;
 
-  return data ?? [];
+  if (!data) return [];
+
+  return data.map((item) => ({
+    id: item.id,
+    title: item.title,
+    description: item.description,
+    video_url: item.video_url,
+  }));
 };
 
 export const getMudras = async (pathId: string): Promise<Mudra[]> => {
@@ -32,7 +42,7 @@ export const getMudras = async (pathId: string): Promise<Mudra[]> => {
 
   if (error) throw error;
 
-  const mappedData: Mudra[] = (data as MudraFromDB[])?.map((mudra) => {
+  const mappedData: Mudra[] = (data ?? [])?.map((mudra: MudraFromDB) => {
     const publicUrl = supabase.storage
       .from("mudras")
       .getPublicUrl(mudra.image).data.publicUrl;
@@ -52,6 +62,15 @@ export const getMudras = async (pathId: string): Promise<Mudra[]> => {
   return mappedData;
 };
 
+type MudraRelation = {
+  mudras: {
+    id: string;
+    title: string;
+    image: string;
+    instructions: string;
+    benefits: string;
+  }[];
+};
 export const getMudrasByCondition = async (conditionName: string) => {
   try {
     // STEP 1: Get condition ID (safe lookup)
@@ -87,18 +106,18 @@ export const getMudrasByCondition = async (conditionName: string) => {
     if (error) throw error;
 
     // STEP 3: Attach public image URLs
-    const mapped = data?.map((item: any) => {
-      const mudra = item.mudras;
+    const mapped = (data ?? []).flatMap((item: MudraRelation) => {
+      return item.mudras.map((mudra: MudraRelation["mudras"][number]) => {
+        const publicUrl = supabase.storage
+          .from("mudras")
+          .getPublicUrl(mudra.image).data.publicUrl;
 
-      const publicUrl = supabase.storage
-        .from("mudras")
-        .getPublicUrl(mudra.image).data.publicUrl;
-
-      return {
-        ...mudra,
-        image: publicUrl,
-      };
-    }) ?? [];
+        return {
+          ...mudra,
+          image: publicUrl,
+        };
+      });
+    });
 
     return mapped;
   } catch (err) {

@@ -47,11 +47,7 @@ const mapToBlogPost = (post: unknown): BlogPost => {
     ),
     contentType: "blog",
     status: "published",
-    category: {
-      id: p.category_id as string,
-      name: "",
-      slug: "",
-    },
+    category,
     readingTime: calculateReadingTime(p.content),
     publishedAt: p.created_at as string,
     createdAt: p.created_at as string,

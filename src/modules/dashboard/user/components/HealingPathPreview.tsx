@@ -1,5 +1,3 @@
-import React from "react";
-
 function HealingPathPreview() {
   return <div>HealingPathPreview</div>;
 }

@@ -48,8 +48,10 @@ export default function AccountSettingsPage() {
       await updatePassword(password);
       setPassword("");
       toast.success("Password updated successfully");
-    } catch (err: any) {
-      toast.error(err.message || "Failed to update password");
+    } catch (err: unknown) {
+      const message =
+        err instanceof Error ? err.message : "Failed to update password";
+      toast.error(message);
     }
   };
 

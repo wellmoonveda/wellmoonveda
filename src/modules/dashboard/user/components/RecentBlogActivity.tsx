@@ -1,7 +1,12 @@
 import { Link } from "react-router-dom";
 
+type RecentBlogPost = {
+  title: string;
+  slug: string;
+};
+
 interface Props {
-  post: any;
+  post: RecentBlogPost;
   lastAccessed: string;
 }
 

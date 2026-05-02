@@ -13,14 +13,14 @@ export interface Post {
   title: string;
   slug: string;
 
-  content: any;
+  content: string;
 
   status: PostStatus;
 
   author_id: string;
 
-  featured_image?: string;
-  category_id?: string;
+  featured_image?: string | null;
+  category_id?: string | null;
 
   tags?: string[];
 
@@ -28,7 +28,7 @@ export interface Post {
   meta_description?: string;
 
   created_at: string;
-  updated_at?: string;
+  updated_at?: string | null;
 
   feedback?: string;
 }
@@ -36,10 +36,10 @@ export interface Post {
 export interface CreatePostPayload {
   title: string;
   slug: string;
-  content: any;
+  content: string;
 
-  featured_image?: string;
-  category_id?: string;
+  featured_image?: string | null;
+  category_id?: string | null;
 
   tags?: string[];
 

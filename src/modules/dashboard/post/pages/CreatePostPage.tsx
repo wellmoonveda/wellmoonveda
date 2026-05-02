@@ -38,7 +38,7 @@ const CreatePostPage = () => {
 
   const [previewOpen, setPreviewOpen] = useState(false);
 
-  const [contentState, setContentState] = useState<any>(null);
+  const [contentState, setContentState] = useState<string>("");
   const [previewHtml, setPreviewHtml] = useState("");
 
   const [featuredImage, setFeaturedImage] = useState<string | null>(null);
@@ -353,13 +353,12 @@ const CreatePostPage = () => {
           />
 
           <Editor
-            onChange={(editorState, html) => {
-              const json = editorState.toJSON();
-              setContentState(json);
+            onChange={(_editorState, html) => {
+              setContentState(html);
               setPreviewHtml(html);
               saveDraftBackup({
                 title,
-                content: json,
+                content: html,
                 html,
                 featuredImage,
                 tags,
@@ -382,7 +381,13 @@ const CreatePostPage = () => {
 
             <select
               value={postType}
-              onChange={(e) => setPostType(e.target.value as any)}
+              onChange={(e) => {
+                const value = e.target.value;
+
+                if (value === "normal" || value === "featured") {
+                  setPostType(value);
+                }
+              }}
               className="w-full border-main rounded px-3 py-2"
             >
               <option value="normal">Normal Post</option>

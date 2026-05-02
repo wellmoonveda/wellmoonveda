@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { getHealingSessions } from "@/services/supabase/healingContent.service";
+import type { VideoSession } from "../types/healing.types";
 
 export function useHealingSessions(pathId?: string) {
-  const [sessions, setSessions] = useState<any[]>([]);
+  const [sessions, setSessions] = useState<VideoSession[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

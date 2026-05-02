@@ -6,6 +6,7 @@ import {
 } from "@/services/supabase/post.service";
 import type { PostType } from "@/shared/types/post.types";
 import { submitPostForReview } from "@/services/supabase/post.service";
+import type { PostStatus } from "../types/post.types";
 
 export const usePostEditor = () => {
   const [loading, setLoading] = useState(false);
@@ -24,7 +25,7 @@ export const usePostEditor = () => {
 
   const saveDraft = async (
     title: string,
-    content: any,
+    content: string,
     authorId: string,
     slug: string,
     metadata?: {
@@ -47,7 +48,21 @@ export const usePostEditor = () => {
       setLoading(false);
     }
   };
-  const updateDraft = async (postId: string, updates: any) => {
+  const updateDraft = async (
+    postId: string,
+    updates: Partial<{
+      title: string;
+      slug: string;
+      content: string;
+      featured_image: string | null;
+      tags: string[];
+      meta_title: string;
+      meta_description: string;
+      category_id: string;
+      post_type: PostType;
+      status: PostStatus;
+    }>,
+  ) => {
     setLoading(true);
 
     try {

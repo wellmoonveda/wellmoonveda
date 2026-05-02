@@ -1,12 +1,8 @@
 import { useEffect, useState } from "react";
 import { getUserDashboardData } from "@/services/supabase/userDashboard.service";
+import type { DashboardStats } from "@/shared/types/users.types";
 
 export function useUserDashboard(userId?: string) {
-  type DashboardStats = {
-    startedPaths: number;
-    recentPath?: any;
-  };
-
   const [stats, setStats] = useState<DashboardStats | null>(null);
 
   const [loading, setLoading] = useState(true);

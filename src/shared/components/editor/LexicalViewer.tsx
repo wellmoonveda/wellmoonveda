@@ -8,14 +8,13 @@ import { TablePlugin } from "@lexical/react/LexicalTablePlugin";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 
 type Props = {
-  content: any;
+  content: unknown;
 };
 
-function ReadOnlyPlugin({ content }: Props) {
-  return null;
-}
-
 export const LexicalViewer = ({ content }: Props) => {
+  const editorState =
+    typeof content === "string" ? content : JSON.stringify(content);
+
   const initialConfig = {
     namespace: "Viewer",
     editable: false,
@@ -25,7 +24,7 @@ export const LexicalViewer = ({ content }: Props) => {
 
     nodes: [ImageNode, TableNode, TableCellNode, TableRowNode],
 
-    editorState: JSON.stringify(content),
+    editorState,
   };
 
   return (

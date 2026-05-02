@@ -39,7 +39,7 @@ const PostsTable: React.FC<PostsTableProps> = ({
   if (!posts.length) {
     return (
       <div className="card p-10 text-center">
-        <p className="text-muted mb-4">You haven't created any posts yet.</p>
+        <p className="text-muted mb-4">You haven't created posts yet.</p>
 
         <button
           onClick={() => navigate("/editor/posts/create")}
