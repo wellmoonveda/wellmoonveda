@@ -18,7 +18,14 @@ let mutationQueue: Promise<unknown> = Promise.resolve();
  * Runs a mutation in sequence (never parallel)
  */
 const runMutation = async <T>(fn: () => Promise<T>): Promise<T> => {
-  mutationQueue = mutationQueue.then(fn, fn);
+  console.log("[QUEUE] Adding mutation");
+
+  mutationQueue = mutationQueue.then(async () => {
+    console.log("[QUEUE] Running mutation START");
+    const result = await fn();
+    console.log("[QUEUE] Running mutation END");
+    return result;
+  });
   return mutationQueue as Promise<T>;
 };
 
@@ -79,10 +86,14 @@ export const usePostEditor = () => {
       status: PostStatus;
     }>,
   ) => {
+    console.log("[DRAFT] updateDraft called");
     setLoading(true);
 
     try {
-      return await runMutation(() => updatePost(postId, updates));
+      return await runMutation(async () => {
+        console.log("[DRAFT] Executing updateDraft");
+        return updatePost(postId, updates);
+      });
     } catch (error) {
       throw error;
     } finally {
@@ -91,13 +102,19 @@ export const usePostEditor = () => {
   };
 
   const publish = async (postId: string) => {
+    console.log("[PUBLISH] Triggered", postId);
+
     setLoading(true);
 
     try {
-      return await runMutation(() => publishPost(postId));
+      return await runMutation(async () => {
+        console.log("[PUBLISH] Executing");
+        return publishPost(postId);
+      });
     } catch (error) {
       throw error;
     } finally {
+      console.log("[PUBLISH] Completed");
       setLoading(false);
     }
   };

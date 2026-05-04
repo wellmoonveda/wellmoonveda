@@ -1,40 +1,45 @@
-import { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
-
+import { useState, useRef } from "react";
 import Editor from "@/editor-system/lexical/Editor";
 import { usePostEditor } from "../hooks/usePostEditor";
-import { useAutosaveDraft } from "../hooks/useAutosaveDraft";
-import { loadDraftBackup, clearDraftBackup } from "../utils/draftRecovery";
-
+import { saveDraftBackup } from "../utils/draftRecovery";
 import PostFeaturedImage from "../components/PostFeaturedImage";
 import PostTagsInput from "../components/PostTagsInput";
 import PostSEOFields from "../components/PostSEOFields";
 import PostCategorySelect from "../components/PostCategorySelect";
 import PostPreviewModal from "../components/PostPreviewModal";
-
 import { useAuth } from "@/modules/auth";
+import { useAutosaveDraft } from "../hooks/useAutosaveDraft";
+import { loadDraftBackup, clearDraftBackup } from "../utils/draftRecovery";
 import { useUserRole } from "@/modules/auth/hooks/useUserRole";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import { useCategories } from "@/modules/blog/hooks/useCategories";
 import { getDashboardRouteByRole } from "@/modules/auth/utils/roleRedirect";
 
 const CreatePostPage = () => {
   const navigate = useNavigate();
-  const { saveDraft, updateDraft, publish, loading } = usePostEditor();
+  const { saveDraft, updateDraft, loading, publish, submitForReview } =
+    usePostEditor();
 
   const { categories } = useCategories();
+
   const auth = useAuth();
   const user = auth?.user;
   const authorId = user?.id;
-
   const { role, loading: roleLoading } = useUserRole();
 
   const [title, setTitle] = useState("");
+  const [postId, _setPostId] = useState<string | null>(null);
+  const postIdRef = useRef<string | null>(null);
+  const isSavingRef = useRef(false);
+
+  const [postType, setPostType] = useState<"normal" | "featured">("normal");
+
+  const [previewOpen, setPreviewOpen] = useState(false);
+
   const [contentState, setContentState] = useState<string>("");
   const [previewHtml, setPreviewHtml] = useState("");
-
-  const [, _setPostId] = useState<string | null>(null);
-  const postIdRef = useRef<string | null>(null);
 
   const [featuredImage, setFeaturedImage] = useState<string | null>(null);
   const [categoryId, setCategoryId] = useState<string | undefined>();
@@ -44,31 +49,47 @@ const CreatePostPage = () => {
   const [metaDescription, setMetaDescription] = useState("");
   const [slug, setSlug] = useState("");
 
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [postType] = useState<"normal" | "featured">("normal");
+  const categoryName = categories.find((cat) => cat.id === categoryId)?.name;
 
-  const isSavingRef = useRef(false);
-  const isPublishingRef = useRef(false);
+  const generateSlug = (value: string) => {
+    const baseSlug = value
+      .toLowerCase()
+      .replace(/[^\w\s]/gi, "")
+      .replace(/\s+/g, "-");
 
-  const categoryName = categories.find((c) => c.id === categoryId)?.name;
+    return `${baseSlug}-${Date.now()}`;
+  };
+
+  const handleTitleChange = (value: string) => {
+    setTitle(value);
+
+    if (!slug) {
+      setSlug(generateSlug(value));
+    }
+  };
+
+  const handleFeaturedImageChange = (url: string | null) => {
+    setFeaturedImage(url);
+  };
 
   const setPostId = (id: string | null) => {
     postIdRef.current = id;
     _setPostId(id);
   };
 
-  const generateSlug = (value: string) => {
-    return `${value
-      .toLowerCase()
-      .replace(/[^\w\s]/gi, "")
-      .replace(/\s+/g, "-")}-${Date.now()}`;
-  };
+  // ---------------- SAVE DRAFT ----------------
 
-  // ---------------- SAVE ----------------
   const handleSave = async () => {
-    if (!authorId) return;
+    if (!authorId) {
+      toast.error("User not loaded yet");
+      return;
+    }
 
-    if (isSavingRef.current || isPublishingRef.current) return;
+    if (contentState.length < 50) return;
+    if (isSavingRef.current) {
+      toast("Please wait, saving in progress...");
+      return;
+    }
 
     isSavingRef.current = true;
 
@@ -99,8 +120,10 @@ const CreatePostPage = () => {
       }
 
       toast.success("Draft saved");
-    } catch (err) {
-      toast.error("Save failed");
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : "Failed to save draft";
+      toast.error(message);
     } finally {
       isSavingRef.current = false;
     }
@@ -108,15 +131,12 @@ const CreatePostPage = () => {
 
   // ---------------- PUBLISH ----------------
   const handlePublish = async () => {
+    console.log("[UI] Publish clicked");
     if (!authorId) return;
+    let currentPostId = postId;
 
-    if (isPublishingRef.current) return;
-
-    isPublishingRef.current = true;
-
+    // Ensure draft exists before publishing
     try {
-      let currentPostId = postIdRef.current;
-
       if (!currentPostId) {
         const post = await saveDraft(title, contentState, authorId, slug, {
           post_type: postType,
@@ -139,114 +159,283 @@ const CreatePostPage = () => {
 
       toast.success("Post published");
 
-      if (!roleLoading && role) {
-        const redirect = getDashboardRouteByRole(role);
-        if (redirect) navigate(redirect);
+      if (roleLoading || !role) {
+        toast.error("User role not ready. Please try again.");
+        return;
       }
-    } catch {
-      toast.error("Publish failed");
-    } finally {
-      isPublishingRef.current = false;
+
+      const redirectPath = getDashboardRouteByRole(role);
+
+      if (!redirectPath) return;
+
+      navigate(redirectPath);
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : "Failed to publish post";
+      toast.error(message);
+    }
+  };
+
+  // ---------------- SUBMIT FOR REVIEW ----------------
+  const handleSubmitReview = async () => {
+    if (!authorId) return;
+
+    let currentPostId = postId;
+
+    try {
+      if (!currentPostId) {
+        const post = await saveDraft(title, contentState, authorId, slug, {
+          post_type: postType,
+          featured_image: featuredImage || undefined,
+          tags,
+          meta_title: metaTitle,
+          meta_description: metaDescription,
+          category_id: categoryId,
+        });
+        if (post?.id) {
+          setPostId(post.id);
+          currentPostId = post.id;
+        }
+      }
+      if (!currentPostId) return;
+      await submitForReview(currentPostId);
+
+      toast.success("Submitted for review");
+      const redirectPath = getDashboardRouteByRole(role);
+
+      if (!redirectPath) return;
+
+      navigate(redirectPath);
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : "Failed to submit for review";
+      toast.error(message);
     }
   };
 
   // ---------------- AUTOSAVE ----------------
+  // temp disables autosave to test manual save and draft recovery without interference
+
   const autosave = async () => {
+    console.log("[AUTOSAVE] Triggered");
     if (
       !authorId ||
       (!title && !contentState) ||
+      previewOpen ||
       isSavingRef.current ||
-      isPublishingRef.current ||
       loading
     )
       return;
 
-    try {
-      isSavingRef.current = true;
+    if (isSavingRef.current) return;
 
+    isSavingRef.current = true;
+
+    try {
+      console.log("[AUTOSAVE] Running");
       if (!postIdRef.current) {
-        const post = await saveDraft(title, contentState, authorId, slug);
-        if (post?.id) setPostId(post.id);
+        const post = await saveDraft(title, contentState, authorId, slug, {
+          post_type: postType,
+          featured_image: featuredImage || undefined,
+          tags,
+          meta_title: metaTitle,
+          meta_description: metaDescription,
+          category_id: categoryId,
+        });
+
+        if (post?.id) {
+          setPostId(post.id);
+        }
       } else {
         await updateDraft(postIdRef.current, {
           title,
           content: contentState,
+          slug,
+          featured_image: featuredImage || undefined,
+          tags,
+          meta_title: metaTitle,
+          meta_description: metaDescription,
+          category_id: categoryId,
         });
       }
-    } catch (err) {
-      console.error("Autosave failed:", err);
+    } catch (error) {
+      console.error("Autosave failed:", error);
     } finally {
+      console.log("[AUTOSAVE] Done");
       isSavingRef.current = false;
     }
   };
+  const { status } = useAutosaveDraft(autosave, 8000);
 
-  const { triggerSave, status } = useAutosaveDraft(autosave, 8000);
+  const handlePreview = () => {
+    setPreviewOpen(true);
+  };
 
-  // ---------------- RESTORE DRAFT ----------------
+  // ---------------- DRAFT RECOVERY ----------------
+
   useEffect(() => {
     const backup = loadDraftBackup();
+
     if (!backup) return;
 
-    const restore = confirm("Restore previous draft?");
+    const restore = confirm(
+      "We found unsaved content from your previous session. Restore draft?",
+    );
+
     if (restore) {
       setTitle(backup.title || "");
-      setContentState(backup.content || "");
+      setContentState(backup.content ?? "");
       setPreviewHtml(backup.html || "");
+      setFeaturedImage(backup.featuredImage || null);
+      setTags(backup.tags || []);
+      setCategoryId(backup.categoryId);
+      setMetaTitle(backup.metaTitle || "");
+      setMetaDescription(backup.metaDescription || "");
+      setSlug(backup.slug || "");
     }
 
     clearDraftBackup();
   }, []);
 
+  useEffect(() => {
+    console.log("ENV CHECK:", {
+      url: import.meta.env.VITE_SUPABASE_URL,
+      key: import.meta.env.VITE_SUPABASE_ANON_KEY,
+    });
+  }, []);
+
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between">
-        <h1>Create Post</h1>
+    <div className="dashboard-theme space-y-6">
+      <div className="flex justify-between items-center">
+        <h1 className="text-xl font-semibold text-main">Create Post</h1>
 
-        <div className="flex gap-3">
-          <span>{status}</span>
+        <div className="flex items-center gap-4">
+          {/* autosave indicator */}
 
-          <button onClick={handleSave} disabled={loading}>
-            Save Draft
+          <div className="text-sm text-muted min-w-[90px]">
+            {status === "typing" && "Typing..."}
+            {status === "saving" && "Saving..."}
+            {status === "saved" && "Saved ✓"}
+            {status === "error" && "Autosave failed"}
+          </div>
+
+          <button
+            onClick={handlePreview}
+            className="btn-secondary px-4 py-1 rounded text-white"
+          >
+            Preview
           </button>
 
-          <button onClick={handlePublish} disabled={loading}>
-            Publish
+          <button
+            onClick={handleSave}
+            className="btn-secondary px-4 py-1 rounded text-white"
+            disabled={isSavingRef.current || loading}
+          >
+            {loading ? "Saving..." : "Save Draft"}
           </button>
+
+          {/* ROLE BASED BUTTONS */}
+
+          {roleLoading ? (
+            <div className="text-sm text-muted">Loading role...</div>
+          ) : (
+            <>
+              {role === "admin" && (
+                <button
+                  onClick={handlePublish}
+                  className="btn-primary px-4 py-1 rounded text-white"
+                >
+                  {" "}
+                  Publish{" "}
+                </button>
+              )}
+
+              {role !== "admin" && (
+                <button
+                  onClick={handleSubmitReview}
+                  className="btn-prime px-4 py-2 rounded text-white"
+                >
+                  {" "}
+                  Submit for Review{" "}
+                </button>
+              )}
+            </>
+          )}
         </div>
       </div>
 
-      <input
-        value={title}
-        onChange={(e) => {
-          setTitle(e.target.value);
-          if (!slug) setSlug(generateSlug(e.target.value));
-        }}
-        placeholder="Title"
-      />
+      <div className="grid grid-cols-3 gap-6">
+        {/* LEFT EDITOR */}
 
-      <Editor
-        onChange={(_, html) => {
-          setContentState(html);
-          setPreviewHtml(html);
-          triggerSave();
-        }}
-      />
+        <div className="col-span-2 card p-6 space-y-4">
+          <input
+            value={title}
+            onChange={(e) => handleTitleChange(e.target.value)}
+            placeholder="Post title..."
+            className="text-xl font-semibold outline-none w-full resize-none leading-tight line-clamp-2"
+          />
 
-      <PostFeaturedImage
-        value={featuredImage || undefined}
-        onChange={setFeaturedImage}
-      />
-      <PostCategorySelect value={categoryId} onChange={setCategoryId} />
-      <PostTagsInput value={tags} onChange={setTags} />
+          <Editor
+            onChange={(_editorState, html) => {
+              setContentState(html);
+              setPreviewHtml(html);
+              saveDraftBackup({
+                title,
+                content: html,
+                html,
+                featuredImage,
+                tags,
+                categoryId,
+                metaTitle,
+                metaDescription,
+                slug,
+              });
 
-      <PostSEOFields
-        metaTitle={metaTitle}
-        metaDescription={metaDescription}
-        slug={slug}
-        onMetaTitleChange={setMetaTitle}
-        onMetaDescriptionChange={setMetaDescription}
-        onSlugChange={setSlug}
-      />
+              // triggerSave();
+            }}
+          />
+        </div>
+
+        {/* RIGHT SIDEBAR */}
+
+        <div className="space-y-4">
+          <div className="card p-4">
+            <label className="block text-sm font-medium mb-2">Post Type</label>
+
+            <select
+              value={postType}
+              onChange={(e) => {
+                const value = e.target.value;
+
+                if (value === "normal" || value === "featured") {
+                  setPostType(value);
+                }
+              }}
+              className="w-full border-main rounded px-3 py-2"
+            >
+              <option value="normal">Normal Post</option>
+              <option value="featured">Featured Post</option>
+            </select>
+          </div>
+          <PostFeaturedImage
+            value={featuredImage || undefined}
+            onChange={handleFeaturedImageChange}
+          />
+
+          <PostCategorySelect value={categoryId} onChange={setCategoryId} />
+
+          <PostTagsInput value={tags} onChange={setTags} />
+
+          <PostSEOFields
+            metaTitle={metaTitle}
+            metaDescription={metaDescription}
+            slug={slug}
+            onMetaTitleChange={setMetaTitle}
+            onMetaDescriptionChange={setMetaDescription}
+            onSlugChange={setSlug}
+          />
+        </div>
+      </div>
 
       <PostPreviewModal
         open={previewOpen}

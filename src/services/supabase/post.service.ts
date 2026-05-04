@@ -438,7 +438,7 @@ export const searchBlogPosts = async (
     return {
       title: item.title,
       slug: item.slug,
-      excerpt: extractExcerpt(item.content), // or use your extractExcerpt()
+      excerpt: extractExcerpt(item.content),
     };
   });
 };
