@@ -9,6 +9,14 @@ export const useAutosaveDraft = (
 
   const [status, setStatus] = useState<AutosaveStatus>("idle");
 
+  const cancelPendingSave = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+      setStatus("idle");
+    }
+  };
+
   const triggerSave = () => {
     setStatus("typing");
 
@@ -40,5 +48,5 @@ export const useAutosaveDraft = (
     };
   }, []);
 
-  return { triggerSave, status };
+  return { triggerSave, status, cancelPendingSave };
 };

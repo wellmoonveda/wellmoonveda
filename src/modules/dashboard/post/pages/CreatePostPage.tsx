@@ -19,6 +19,7 @@ import { getDashboardRouteByRole } from "@/modules/auth/utils/roleRedirect";
 
 const CreatePostPage = () => {
   const navigate = useNavigate();
+  const isPublishingRef = useRef(false);
   const { saveDraft, updateDraft, loading, publish, submitForReview } =
     usePostEditor();
 
@@ -131,7 +132,9 @@ const CreatePostPage = () => {
 
   // ---------------- PUBLISH ----------------
   const handlePublish = async () => {
-    console.log("[UI] Publish clicked");
+    isPublishingRef.current = true;
+    cancelPendingSave();
+
     if (!authorId) return;
     let currentPostId = postId;
 
@@ -173,6 +176,8 @@ const CreatePostPage = () => {
       const message =
         error instanceof Error ? error.message : "Failed to publish post";
       toast.error(message);
+    } finally {
+      isPublishingRef.current = false;
     }
   };
 
@@ -223,7 +228,8 @@ const CreatePostPage = () => {
       (!title && !contentState) ||
       previewOpen ||
       isSavingRef.current ||
-      loading
+      loading ||
+      isPublishingRef.current
     )
       return;
 
@@ -265,7 +271,10 @@ const CreatePostPage = () => {
       isSavingRef.current = false;
     }
   };
-  const { status } = useAutosaveDraft(autosave, 8000);
+  const { triggerSave, status, cancelPendingSave } = useAutosaveDraft(
+    autosave,
+    8000,
+  );
 
   const handlePreview = () => {
     setPreviewOpen(true);
@@ -391,7 +400,9 @@ const CreatePostPage = () => {
                 slug,
               });
 
-              // triggerSave();
+              if (html.length > 50 && html !== contentState) {
+                triggerSave();
+              }
             }}
           />
         </div>
