@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   createPost,
   publishPost,
@@ -8,28 +8,32 @@ import {
 import type { PostType } from "@/shared/types/post.types";
 import type { PostStatus } from "../types/post.types";
 
-/**
- * Global mutation queue
- * Ensures all write operations run ONE AFTER ANOTHER (no overlap)
- */
-let mutationQueue: Promise<unknown> = Promise.resolve();
-
-/**
- * Runs a mutation in sequence (never parallel)
- */
-const runMutation = async <T>(fn: () => Promise<T>): Promise<T> => {
-  console.log("[QUEUE] Adding mutation");
-
-  mutationQueue = mutationQueue.then(async () => {
-    console.log("[QUEUE] Running mutation START");
-    const result = await fn();
-    console.log("[QUEUE] Running mutation END");
-    return result;
-  });
-  return mutationQueue as Promise<T>;
-};
-
 export const usePostEditor = () => {
+  /**
+   * Global mutation queue
+   * Ensures all write operations run ONE AFTER ANOTHER (no overlap)
+   */
+  const mutationQueueRef = useRef<Promise<unknown>>(Promise.resolve());
+
+  /**
+   * Runs a mutation in sequence (never parallel)
+   */
+  const runMutation = async <T>(fn: () => Promise<T>): Promise<T> => {
+    const next = mutationQueueRef.current
+      .catch(() => {
+        // recover from previous failure so queue continues
+      })
+      .then(async () => {
+        return await fn();
+      });
+
+    mutationQueueRef.current = next.catch(() => {
+      // prevent queue from locking forever
+    });
+
+    return next;
+  };
+
   const [loading, setLoading] = useState(false);
 
   const submitForReview = async (postId: string) => {
