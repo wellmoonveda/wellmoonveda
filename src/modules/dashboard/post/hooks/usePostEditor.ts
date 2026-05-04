@@ -8,17 +8,31 @@ import type { PostType } from "@/shared/types/post.types";
 import { submitPostForReview } from "@/services/supabase/post.service";
 import type { PostStatus } from "../types/post.types";
 
+/**
+ *  Global mutation lock (shared across ALL hook instances)
+ * Prevents concurrent Supabase write operations
+ */
+let isPostMutationInProgress = false;
+
 export const usePostEditor = () => {
   const [loading, setLoading] = useState(false);
 
   const submitForReview = async (postId: string) => {
+    if (isPostMutationInProgress) {
+      console.warn("submitForReview skipped: mutation in progress");
+      return null;
+    }
+
+    isPostMutationInProgress = true;
     setLoading(true);
 
     try {
       await submitPostForReview(postId);
+      return true;
     } catch (error) {
       throw error;
     } finally {
+      isPostMutationInProgress = false;
       setLoading(false);
     }
   };
@@ -37,17 +51,31 @@ export const usePostEditor = () => {
       post_type?: PostType;
     },
   ) => {
+    if (isPostMutationInProgress) {
+      console.warn("saveDraft skipped: mutation in progress");
+      return null;
+    }
+
+    isPostMutationInProgress = true;
     setLoading(true);
 
     try {
-      const post = await createPost(title, content, authorId, slug, metadata);
+      const post = await createPost(
+        title,
+        content,
+        authorId,
+        slug,
+        metadata,
+      );
       return post;
     } catch (error) {
       throw error;
     } finally {
+      isPostMutationInProgress = false;
       setLoading(false);
     }
   };
+
   const updateDraft = async (
     postId: string,
     updates: Partial<{
@@ -63,25 +91,41 @@ export const usePostEditor = () => {
       status: PostStatus;
     }>,
   ) => {
+    if (isPostMutationInProgress) {
+      console.warn("updateDraft skipped: mutation in progress");
+      return null;
+    }
+
+    isPostMutationInProgress = true;
     setLoading(true);
 
     try {
       await updatePost(postId, updates);
+      return true;
     } catch (error) {
       throw error;
     } finally {
+      isPostMutationInProgress = false;
       setLoading(false);
     }
   };
 
   const publish = async (postId: string) => {
+    if (isPostMutationInProgress) {
+      console.warn("publish skipped: mutation in progress");
+      return null;
+    }
+
+    isPostMutationInProgress = true;
     setLoading(true);
 
     try {
       await publishPost(postId);
+      return true;
     } catch (error) {
       throw error;
     } finally {
+      isPostMutationInProgress = false;
       setLoading(false);
     }
   };
@@ -90,7 +134,7 @@ export const usePostEditor = () => {
     saveDraft,
     updateDraft,
     publish,
-    loading,
     submitForReview,
+    loading,
   };
 };

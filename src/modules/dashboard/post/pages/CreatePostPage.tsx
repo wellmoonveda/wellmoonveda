@@ -213,54 +213,55 @@ const CreatePostPage = () => {
   };
 
   // ---------------- AUTOSAVE ----------------
+  // temp disables autosave to test manual save and draft recovery without interference
 
-  const autosave = async () => {
-    if (
-      !authorId ||
-      (!title && !contentState) ||
-      previewOpen ||
-      isSavingRef.current ||
-      loading
-    )
-      return;
+  // const autosave = async () => {
+  //   if (
+  //     !authorId ||
+  //     (!title && !contentState) ||
+  //     previewOpen ||
+  //     isSavingRef.current ||
+  //     loading
+  //   )
+  //     return;
 
-    if (isSavingRef.current) return;
+  //   if (isSavingRef.current) return;
 
-    isSavingRef.current = true;
+  //   isSavingRef.current = true;
 
-    try {
-      if (!postIdRef.current) {
-        const post = await saveDraft(title, contentState, authorId, slug, {
-          post_type: postType,
-          featured_image: featuredImage || undefined,
-          tags,
-          meta_title: metaTitle,
-          meta_description: metaDescription,
-          category_id: categoryId,
-        });
+  //   try {
+  //     if (!postIdRef.current) {
+  //       const post = await saveDraft(title, contentState, authorId, slug, {
+  //         post_type: postType,
+  //         featured_image: featuredImage || undefined,
+  //         tags,
+  //         meta_title: metaTitle,
+  //         meta_description: metaDescription,
+  //         category_id: categoryId,
+  //       });
 
-        if (post?.id) {
-          setPostId(post.id);
-        }
-      } else {
-        await updateDraft(postIdRef.current, {
-          title,
-          content: contentState,
-          slug,
-          featured_image: featuredImage || undefined,
-          tags,
-          meta_title: metaTitle,
-          meta_description: metaDescription,
-          category_id: categoryId,
-        });
-      }
-    } catch (error) {
-      console.error("Autosave failed:", error);
-    } finally {
-      isSavingRef.current = false;
-    }
-  };
-  const { triggerSave, status } = useAutosaveDraft(autosave, 8000);
+  //       if (post?.id) {
+  //         setPostId(post.id);
+  //       }
+  //     } else {
+  //       await updateDraft(postIdRef.current, {
+  //         title,
+  //         content: contentState,
+  //         slug,
+  //         featured_image: featuredImage || undefined,
+  //         tags,
+  //         meta_title: metaTitle,
+  //         meta_description: metaDescription,
+  //         category_id: categoryId,
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.error("Autosave failed:", error);
+  //   } finally {
+  //     isSavingRef.current = false;
+  //   }
+  // };
+  // const { triggerSave, status } = useAutosaveDraft(autosave, 8000);
 
   const handlePreview = () => {
     setPreviewOpen(true);
@@ -386,7 +387,7 @@ const CreatePostPage = () => {
                 slug,
               });
 
-              triggerSave();
+              // triggerSave();
             }}
           />
         </div>
