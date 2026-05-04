@@ -212,7 +212,8 @@ const CreatePostPage = () => {
       !authorId ||
       (!title && !contentState) ||
       previewOpen ||
-      isSavingRef.current
+      isSavingRef.current ||
+      loading
     )
       return;
 
@@ -280,6 +281,13 @@ const CreatePostPage = () => {
     }
 
     clearDraftBackup();
+  }, []);
+
+  useEffect(() => {
+    console.log("ENV CHECK:", {
+      url: import.meta.env.VITE_SUPABASE_URL,
+      key: import.meta.env.VITE_SUPABASE_ANON_KEY,
+    });
   }, []);
 
   return (
