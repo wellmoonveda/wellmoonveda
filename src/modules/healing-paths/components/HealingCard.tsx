@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import type { HealingPath } from "../types/healing.types";
+import type { HealingPathVideo } from "../types/healing.types";
 
 interface HealingCardProps {
-  healing: HealingPath;
+  healing: HealingPathVideo;
 }
 
 export default function HealingCard({ healing }: HealingCardProps) {

@@ -11,9 +11,7 @@ const ImagePlugin = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [libraryOpen, setLibraryOpen] = useState(false);
   const [urlModalOpen, setUrlModalOpen] = useState(false);
-  const [selectionState, setSelectionState] = useState<RangeSelection | null>(
-    null,
-  );
+  const [, setSelectionState] = useState<RangeSelection | null>(null);
 
   const [url, setUrl] = useState("");
 

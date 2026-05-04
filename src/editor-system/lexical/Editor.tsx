@@ -96,7 +96,6 @@ const Editor = ({ onChange, initialContent }: Props) => {
 
         <OnChangePlugin
           onChange={(editorState, editor) => {
-            const json = editorState.toJSON();
             const html = serializeEditorState(editorState, editor);
             onChange(editorState, html);
           }}

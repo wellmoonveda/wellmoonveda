@@ -1,7 +1,7 @@
-import type { HealingPath } from "../types/healing.types";
+import type { HealingPathVideo } from "../types/healing.types";
 
 interface HealingHeroProps {
-  healing: HealingPath;
+  healing: HealingPathVideo;
 }
 
 export default function HealingHero({ healing }: HealingHeroProps) {

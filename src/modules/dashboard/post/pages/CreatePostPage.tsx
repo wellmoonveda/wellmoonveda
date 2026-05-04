@@ -269,7 +269,7 @@ const CreatePostPage = () => {
 
     if (restore) {
       setTitle(backup.title || "");
-      setContentState(backup.content || null);
+      setContentState(backup.content ?? "");
       setPreviewHtml(backup.html || "");
       setFeaturedImage(backup.featuredImage || null);
       setTags(backup.tags || []);

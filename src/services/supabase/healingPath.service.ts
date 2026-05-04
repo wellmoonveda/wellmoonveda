@@ -18,6 +18,7 @@ export const getHealingPaths = async (): Promise<HealingPath[]> => {
     thumbnail: item.thumbnail,
     slug: item.slug,
     created_at: item.created_at,
+    intro_content: item.intro_content ?? null,
   }));
 };
 
@@ -41,5 +42,6 @@ export const getHealingPathBySlug = async (
     thumbnail: data.thumbnail,
     slug: data.slug,
     created_at: data.created_at,
+    intro_content: data.intro_content ?? null,
   };
 };

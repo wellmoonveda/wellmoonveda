@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $getNodeByKey } from "lexical";
-import { ImageNode, $isImageNode } from "../nodes/ImageNode";
+import { $isImageNode } from "../nodes/ImageNode";
 
 interface Props {
   src: string;

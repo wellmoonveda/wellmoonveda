@@ -24,6 +24,7 @@ export type BlogActivity = {
 
 export type HealingPathProgress = {
   user_id: string;
+  path_id: string;
   last_accessed: string;
 };
 

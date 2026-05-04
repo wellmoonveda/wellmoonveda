@@ -19,7 +19,7 @@ export default function SettingsPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const [showConfirm, setShowConfirm] = useState(false);
-  const [pendingMaintenance, setPendingMaintenance] = useState(false);
+  const [, setPendingMaintenance] = useState(false);
 
   const [updating, setUpdating] = useState(false);
 

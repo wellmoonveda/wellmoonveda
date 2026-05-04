@@ -43,7 +43,6 @@ const Toolbar = () => {
         setItalic(selection.hasFormat("italic"));
         setUnderline(selection.hasFormat("underline"));
 
-        const node = selection.anchor.getNode();
         let element;
 
         try {

@@ -7,7 +7,6 @@ import type {
   LoginCredentials,
   AuthRole,
   UserProfile,
-  AuthContextValue,
 } from "../types/auth.types";
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -79,7 +78,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     initialize();
 
     const { data: listener } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      async (_event, session) => {
         const currentUser = session?.user ?? null;
 
         if (currentUser) {

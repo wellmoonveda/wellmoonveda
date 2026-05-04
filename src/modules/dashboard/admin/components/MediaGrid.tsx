@@ -1,12 +1,6 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
-
-type MediaItem = {
-  id: string;
-  title: string;
-  url: string;
-  category?: string;
-};
+import type { MediaItem } from "../../media/types/media.types";
 
 type Props = {
   media: MediaItem[];
@@ -16,11 +10,6 @@ type Props = {
 
 const MediaGrid = ({ media, loading, onDelete }: Props) => {
   const [preview, setPreview] = useState<string | null>(null);
-
-  const copyUrl = async (url: string) => {
-    await navigator.clipboard.writeText(url);
-    alert("Image URL copied");
-  };
 
   if (loading) {
     return <div className="card p-6 animate-pulse">Loading media...</div>;

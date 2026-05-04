@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getMedia } from "@/services/supabase/media.service";
-import type { MediaItem } from "@/services/supabase/media.service";
+import type { MediaItem } from "../types/media.types";
 
 export const useMedia = () => {
   const [media, setMedia] = useState<MediaItem[]>([]);

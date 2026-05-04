@@ -1,23 +1,22 @@
 import { useEffect, useState } from "react";
 import {
-  getSubscriberCount,
-  getHealingPathUsage,
-  getEditorActivity,
   getActiveSubscriptionsCount,
+  getEditorActivity,
   getEditorPublishingActivity,
+  getHealingPathUsage,
   getRecentPublishedPosts,
-  getTotalUsers,
+  getSubscriberCount,
   getSubscriptionGrowth,
+  getTotalUsers,
 } from "@/services/supabase/analytics.service";
 
 import type {
-  HealingPathUsage,
-  EditorActivity,
-  EditorPublishingStat,
-  RecentPost,
   AdminAnalyticsData,
-  SubscriptionGrowth,
   AnalyticsTimeRange,
+  EditorPublishingStat,
+  HealingPathUsage,
+  RecentPost,
+  SubscriptionGrowth,
 } from "@/shared/types/analytics.types";
 
 const analyticsCache: Record<string, AdminAnalyticsData> = {};
@@ -36,7 +35,7 @@ export const useAdminAnalytics = (
     SubscriptionGrowth[]
   >([]);
   const [healingPaths, setHealingPaths] = useState<HealingPathUsage[]>([]);
-  const [editorActivity, setEditorActivity] = useState<EditorActivity[]>([]);
+  const [editorActivity, setEditorActivity] = useState<number | null>(null);
   const [editorPublishing, setEditorPublishing] = useState<
     EditorPublishingStat[]
   >([]);
@@ -105,7 +104,7 @@ export const useAdminAnalytics = (
 
       setSubscriberCount(subs);
       setHealingPaths(paths);
-      setEditorActivity(activity ?? []);
+      setEditorActivity(activity);
       setActiveSubscriptions(activeSubs);
       setEditorPublishing(publishingStats);
       setRecentPosts(posts);
@@ -117,7 +116,7 @@ export const useAdminAnalytics = (
         totalUsers: usersCount,
         activeSubscriptions: activeSubs,
         healingPaths: paths,
-        editorActivity: activity ?? [],
+        editorActivity: activity,
         editorPublishing: publishingStats,
         recentPosts: posts,
         subscriptionGrowth: growth,

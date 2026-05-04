@@ -1,8 +1,8 @@
 import HealingCard from "./HealingCard";
-import type { HealingPath } from "../types/healing.types";
+import type { HealingPathVideo } from "../types/healing.types";
 
 interface HealingGridProps {
-  items: HealingPath[];
+  items: HealingPathVideo[];
 }
 
 export default function HealingGrid({ items }: HealingGridProps) {

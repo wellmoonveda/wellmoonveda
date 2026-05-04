@@ -6,6 +6,7 @@ interface Subscription {
   user_id: string;
   status: string;
   plan: string;
+  renewal_date?: string | null;
 }
 
 export function useSubscription(userId?: string) {

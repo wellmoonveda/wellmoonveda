@@ -33,7 +33,7 @@ export interface AdminAnalyticsData {
   totalUsers: number | null;
   activeSubscriptions: number | null;
   healingPaths: HealingPathUsage[];
-  editorActivity: EditorActivity[];
+  editorActivity: number | null;
   editorPublishing: EditorPublishingStat[];
   recentPosts: RecentPost[];
   subscriptionGrowth: SubscriptionGrowth[];

@@ -35,7 +35,14 @@ export default function UserHealingPathsPage() {
         ) : (
           <div className="grid grid-cols-3 gap-6">
             {posts.map((post) => (
-              <RecentBlogCard key={post.id} post={post} />
+              <RecentBlogCard
+                key={post.id}
+                post={{
+                  title: post.title,
+                  featured_image: post.featured_image ?? null,
+                  created_at: post.created_at,
+                }}
+              />
             ))}
           </div>
         )}

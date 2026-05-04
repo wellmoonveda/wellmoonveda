@@ -14,6 +14,9 @@ const PostStatusBadge = ({ status }: Props) => {
     approved: "bg-blue-100 text-blue-700",
     published: "bg-green-100 text-green-700",
     rejected: "bg-red-100 text-red-700",
+
+    request_revision: "bg-orange-100 text-orange-700",
+    needs_revision: "bg-orange-200 text-orange-800",
   };
 
   const label = status.replace("_", " ");

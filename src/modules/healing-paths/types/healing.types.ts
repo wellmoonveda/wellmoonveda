@@ -49,4 +49,7 @@ export type HealingPath = {
   thumbnail: string;
   slug: string;
   created_at: string;
+  intro_content: {
+    text: string;
+  } | null;
 };

@@ -4,14 +4,7 @@ import {
   getMedia,
   uploadMedia,
 } from "@/services/supabase/media.service";
-
-type MediaItem = {
-  id: string;
-  title: string;
-  url: string;
-  category: string;
-  created_at: string;
-};
+import type { MediaItem } from "../../media/types/media.types";
 
 export const useMediaLibrary = () => {
   const [media, setMedia] = useState<MediaItem[]>([]);

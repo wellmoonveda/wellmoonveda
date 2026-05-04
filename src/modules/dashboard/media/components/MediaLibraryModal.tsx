@@ -1,20 +1,13 @@
 import { useEffect, useState } from "react";
 import { getMedia } from "@/services/supabase/media.service";
 import toast from "react-hot-toast";
+import type { MediaItem } from "../types/media.types";
 
 interface Props {
   open: boolean;
   onClose: () => void;
   onSelect: (url: string) => void;
 }
-
-type MediaItem = {
-  id: string;
-  title: string;
-  url: string;
-  category: string;
-  created_at: string;
-};
 
 const MediaLibraryModal = ({ open, onClose, onSelect }: Props) => {
   const [media, setMedia] = useState<MediaItem[]>([]);

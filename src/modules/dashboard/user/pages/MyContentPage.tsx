@@ -29,13 +29,15 @@ export default function MyContentPage() {
           <div className="text-muted">No healing paths started yet.</div>
         ) : (
           <div className="grid grid-cols-3 gap-6">
-            {healingPaths.map((item) => (
-              <ResumePathCard
-                key={item.content_id}
-                path={item.path}
-                lastAccessed={item.last_accessed}
-              />
-            ))}
+            {healingPaths.map((item) =>
+              item.path ? (
+                <ResumePathCard
+                  key={item.content_id}
+                  path={item.path}
+                  lastAccessed={item.last_accessed}
+                />
+              ) : null,
+            )}
           </div>
         )}
       </section>
@@ -50,13 +52,15 @@ export default function MyContentPage() {
           <div className="text-muted">No blog activity yet.</div>
         ) : (
           <div className="grid grid-cols-3 gap-6">
-            {blogPosts.map((item) => (
-              <RecentBlogActivity
-                key={item.content_id}
-                post={item.post}
-                lastAccessed={item.last_accessed}
-              />
-            ))}
+            {blogPosts.map((item) =>
+              item.post ? (
+                <RecentBlogActivity
+                  key={item.content_id}
+                  post={item.post}
+                  lastAccessed={item.last_accessed}
+                />
+              ) : null,
+            )}
           </div>
         )}
       </section>

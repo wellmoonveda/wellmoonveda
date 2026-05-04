@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import type { HealingPath } from "@/services/supabase/healingPathService";
-import LockedContentGate from "@/modules/healing-paths/components/LockedContentGate";
 
 interface Props {
   healingPaths: HealingPath[];

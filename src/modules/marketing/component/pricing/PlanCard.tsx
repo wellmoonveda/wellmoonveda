@@ -21,7 +21,6 @@ export default function PlanCard({
   plan,
   region,
   interval,
-  variant,
   onSelect,
 }: PlanCardProps) {
   const price = getPlanPrice(plan, region, interval);

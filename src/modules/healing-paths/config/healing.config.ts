@@ -1,6 +1,6 @@
-import type { HealingPath } from "../types/healing.types";
+import type { HealingPathVideo } from "../types/healing.types";
 
-export const healingPaths: HealingPath[] = [
+export const healingPaths: HealingPathVideo[] = [
   {
     slug: "aura-healing",
     title: "Aura Healing",

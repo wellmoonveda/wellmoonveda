@@ -106,7 +106,7 @@ export class ImageNode extends DecoratorNode<ReactNode> {
   // 1. Tell Lexical which HTML tags to look for
   static importDOM(): DOMConversionMap | null {
     return {
-      img: (node: Node) => ({
+      img: (_node: Node) => ({
         conversion: $convertImageElement,
         priority: 0,
       }),
@@ -165,7 +165,7 @@ export function $isImageNode(
 
 function $convertImageElement(domNode: Node): DOMConversionOutput | null {
   if (domNode instanceof HTMLImageElement) {
-    const { src, alt, width } = domNode;
+    const { src, alt } = domNode;
     const node = $createImageNode({
       src,
       alt,

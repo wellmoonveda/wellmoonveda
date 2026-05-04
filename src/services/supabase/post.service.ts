@@ -4,6 +4,7 @@ import type {
   AdminPostListItem,
   PostStatus,
 } from "@/modules/dashboard/post/types/post.types";
+import { extractExcerpt } from "@/modules/search/utils/extractExcerpt";
 
 // REVIEW QUEUE FUNCTIONS
 
@@ -414,7 +415,7 @@ export const softDeletePost = async (postId: string) => {
 
 export interface SearchPostResult {
   title: string;
-  content: unknown;
+  excerpt: string;
   slug: string;
 }
 
@@ -431,5 +432,13 @@ export const searchBlogPosts = async (
 
   if (error) throw error;
 
-  return data ?? [];
+  if (!data) return [];
+
+  return data.map((item) => {
+    return {
+      title: item.title,
+      slug: item.slug,
+      excerpt: extractExcerpt(item.content), // or use your extractExcerpt()
+    };
+  });
 };

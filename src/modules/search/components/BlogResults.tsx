@@ -22,7 +22,7 @@ const BlogResults = ({ blogPosts }: Props) => {
             className="p-4 border rounded-md cursor-pointer hover:bg-gray-50"
           >
             <h3 className="font-medium">{post.title}</h3>
-            <p className="text-sm text-gray-600 line-clamp-2">{post.content}</p>
+            <p className="text-sm text-gray-600 line-clamp-2">{post.excerpt}</p>
           </div>
         ))}
       </div>

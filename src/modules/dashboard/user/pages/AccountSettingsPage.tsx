@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { DeleteAccountSection } from "../components/DeleteAccountSection";
 
 export default function AccountSettingsPage() {
-  const { profile, updateProfile, updatePassword, deleteAccount, loading } =
+  const { profile, updateProfile, updatePassword, loading } =
     useAccountSettings();
 
   const [name, setName] = useState("");

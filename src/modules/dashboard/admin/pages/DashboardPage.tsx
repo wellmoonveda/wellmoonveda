@@ -38,13 +38,7 @@ export default function DashboardPage() {
             <div className="h-4 bg-soft rounded"></div>
           </div>
         ) : (
-          <ul className="space-y-2">
-            {editorActivity.map((item, index) => (
-              <li key={index} className="text-sub">
-                {item.title}
-              </li>
-            ))}
-          </ul>
+          <p className="text-3xl font-bold text-main">{editorActivity ?? 0}</p>
         )}
       </div>
 
