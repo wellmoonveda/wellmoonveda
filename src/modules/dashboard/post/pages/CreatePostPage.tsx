@@ -287,30 +287,49 @@ const CreatePostPage = () => {
 
     if (!backup) return;
 
-    const restore = confirm(
-      "We found unsaved content from your previous session. Restore draft?",
+    toast(
+      (t) => (
+        <div className="flex flex-col gap-2">
+          <p className="text-sm">
+            Unsaved draft found. Do you want to restore it?
+          </p>
+
+          <div className="flex gap-2">
+            <button
+              className="btn-primary px-3 py-1 text-white rounded"
+              onClick={() => {
+                setTitle(backup.title || "");
+                setContentState(backup.content ?? "");
+                setPreviewHtml(backup.html || "");
+                setFeaturedImage(backup.featuredImage || null);
+                setTags(backup.tags || []);
+                setCategoryId(backup.categoryId);
+                setMetaTitle(backup.metaTitle || "");
+                setMetaDescription(backup.metaDescription || "");
+                setSlug(backup.slug || "");
+
+                toast.dismiss(t.id);
+                toast.success("Draft restored");
+              }}
+            >
+              Restore
+            </button>
+
+            <button
+              className="btn-secondary px-3 py-1 text-white rounded"
+              onClick={() => {
+                clearDraftBackup();
+                toast.dismiss(t.id);
+                toast("Draft discarded");
+              }}
+            >
+              Discard
+            </button>
+          </div>
+        </div>
+      ),
+      { duration: Infinity }, // stays until user clicks
     );
-
-    if (restore) {
-      setTitle(backup.title || "");
-      setContentState(backup.content ?? "");
-      setPreviewHtml(backup.html || "");
-      setFeaturedImage(backup.featuredImage || null);
-      setTags(backup.tags || []);
-      setCategoryId(backup.categoryId);
-      setMetaTitle(backup.metaTitle || "");
-      setMetaDescription(backup.metaDescription || "");
-      setSlug(backup.slug || "");
-    }
-
-    clearDraftBackup();
-  }, []);
-
-  useEffect(() => {
-    console.log("ENV CHECK:", {
-      url: import.meta.env.VITE_SUPABASE_URL,
-      key: import.meta.env.VITE_SUPABASE_ANON_KEY,
-    });
   }, []);
 
   return (
