@@ -13,6 +13,7 @@ import { ActionButton } from "@/shared/components/ui/ActionButton";
 import { getPostActions } from "../utils/postActions.util";
 import { FeedbackModal } from "../components/FeedbackModal";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function AdminPostsPage() {
   const {
@@ -124,13 +125,41 @@ export default function AdminPostsPage() {
                             onClick={() => {
                               switch (action) {
                                 case "delete":
-                                  if (
-                                    window.confirm(
-                                      "Are you sure you want to move this post to Trash?",
-                                    )
-                                  ) {
-                                    handleDelete(post.id);
-                                  }
+                                  toast(
+                                    (t) => (
+                                      <div className="flex flex-col gap-2">
+                                        <p className="text-sm">
+                                          Are you sure you want to move this
+                                          post to Trash?
+                                        </p>
+
+                                        <div className="flex gap-2">
+                                          <button
+                                            className="bg-accent px-3 py-1 text-white rounded"
+                                            onClick={() => {
+                                              handleDelete(post.id);
+                                              toast.dismiss(t.id);
+                                              toast.success(
+                                                "Post moved to trash",
+                                              );
+                                            }}
+                                          >
+                                            Confirm
+                                          </button>
+
+                                          <button
+                                            className="bg-accent px-3 py-1 text-white rounded"
+                                            onClick={() => {
+                                              toast.dismiss(t.id);
+                                            }}
+                                          >
+                                            Cancel
+                                          </button>
+                                        </div>
+                                      </div>
+                                    ),
+                                    { duration: Infinity },
+                                  );
                                   break;
 
                                 case "approve":
