@@ -1,3 +1,9 @@
+export interface HealingSection {
+  title: string;
+  content?: string;
+  points?: string[];
+}
+
 export interface HealingPathVideo {
   slug: string;
   title: string;
@@ -5,8 +11,7 @@ export interface HealingPathVideo {
   videoSrc: string;
 
   intro: string;
-  dos: string[];
-  donts: string[];
+  sections: HealingSection[];
 }
 
 export interface Condition {

@@ -60,12 +60,29 @@ export default function HealingPathPage() {
       </section>
 
       {/* INTRO */}
-      {path.intro_content && (
+      {path.intro && (
         <section className="card">
           <h2 className="font-semibold mb-2">Introduction</h2>
-          <p>{path.intro_content?.text}</p>
+          <p>{path.intro}</p>
         </section>
       )}
+
+      {/* SECTIONS */}
+      {path.sections?.map((section, index) => (
+        <section key={index} className="card">
+          <h2 className="font-semibold mb-2">{section.title}</h2>
+
+          {section.content && <p className="mb-2">{section.content}</p>}
+
+          {section.points && (
+            <ul className="list-disc pl-5 space-y-1">
+              {section.points.map((point, i) => (
+                <li key={i}>{point}</li>
+              ))}
+            </ul>
+          )}
+        </section>
+      ))}
 
       {/* PREMIUM CONTENT */}
       <section>
@@ -81,7 +98,7 @@ export default function HealingPathPage() {
           </LockedContentGate>
         ) : (
           <p className="mt-4 text-base italic text-muted text-center rounded-lg border border-2 border-accent bg-white p-4">
-            Content for {path.title} coming soon...
+            Session content for {path.title} coming soon...
           </p>
         )}
       </section>

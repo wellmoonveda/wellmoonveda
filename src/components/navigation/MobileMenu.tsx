@@ -37,39 +37,59 @@ function MobileMenu({ isOpen, onClose }: Props) {
         {healingOpen && (
           <div className="ml-4 mt-2 flex flex-col space-y-2">
             <Link
-              to="/healing/wellness-yoga"
+              to="/healing-path/aura-healing-biofield-alignment"
               onClick={onClose}
-              className="hover:bg-card-sand hover:!text-primary-dark w-fit p-1 p rounded-lg"
+              className="hover:bg-card-sand hover:!text-primary-dark w-fit p-1 rounded-lg"
             >
-              Wellness Yoga
+              Aura Healing & Biofield Alignment
             </Link>
+
             <Link
-              to="/healing/mudra-healing"
+              to="/healing-path/cognitive-balance-practice"
               onClick={onClose}
-              className="hover:bg-card-sand hover:!text-primary-dark w-fit p-1 p rounded-lg"
+              className="hover:bg-card-sand hover:!text-primary-dark w-fit p-1 rounded-lg"
+            >
+              Cognitive Balance Practice
+            </Link>
+
+            <Link
+              to="/healing-path/mudra-healing"
+              onClick={onClose}
+              className="hover:bg-card-sand hover:!text-primary-dark w-fit p-1 rounded-lg"
             >
               Mudra Healing
             </Link>
+
             <Link
-              to="/healing/aura-healing"
+              to="/healing-path/sound-healing"
               onClick={onClose}
-              className="hover:bg-card-sand hover:!text-primary-dark w-fit p-1 p rounded-lg"
+              className="hover:bg-card-sand hover:!text-primary-dark w-fit p-1 rounded-lg"
             >
-              Aura Healing
+              Sound Healing
             </Link>
+
             <Link
-              to="/healing/virtual-nature-healing"
+              to="/healing-path/virtual-nature-healing"
               onClick={onClose}
-              className="hover:bg-card-sand hover:!text-primary-dark w-fit p-1 p rounded-lg"
+              className="hover:bg-card-sand hover:!text-primary-dark w-fit p-1 rounded-lg"
             >
               Virtual Nature Healing
             </Link>
+
             <Link
-              to="/healing/sound-healing"
+              to="/healing-path/visual-wellness-eye-exercises"
               onClick={onClose}
-              className="hover:bg-card-sand hover:!text-primary-dark w-fit p-1 p rounded-lg"
+              className="hover:bg-card-sand hover:!text-primary-dark w-fit p-1 rounded-lg"
             >
-              Sound Healing
+              Visual Wellness Practice
+            </Link>
+
+            <Link
+              to="/healing-path/wellness-yoga"
+              onClick={onClose}
+              className="hover:bg-card-sand hover:!text-primary-dark w-fit p-1 rounded-lg"
+            >
+              Wellness Yoga
             </Link>
           </div>
         )}

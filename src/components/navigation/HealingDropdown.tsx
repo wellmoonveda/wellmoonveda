@@ -2,12 +2,23 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const healingPaths = [
-  { name: "Aura Healing", to: "/healing-path/aura-healing" },
+  {
+    name: "Aura Healing & Biofield Alignment",
+    to: "/healing-path/aura-healing-biofield-alignment",
+  },
+  {
+    name: "Cognitive Balance Practice",
+    to: "/healing-path/cognitive-balance-practice",
+  },
   { name: "Mudra Healing", to: "/healing-path/mudra-healing" },
   { name: "Sound Healing", to: "/healing-path/sound-healing" },
   {
     name: "Virtual Nature Healing",
     to: "/healing-path/virtual-nature-healing",
+  },
+  {
+    name: "Visual Wellness Practice",
+    to: "/healing-path/visual-wellness-eye-exercises",
   },
   { name: "Wellness Yoga", to: "/healing-path/wellness-yoga" },
 ];
