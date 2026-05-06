@@ -62,7 +62,7 @@ export default function HealingPathPage() {
       {/* INTRO */}
       {path.intro && (
         <section className="card">
-          <h2 className="font-semibold mb-2">Introduction</h2>
+          <h2 className="font-semibold mb-2 text-lg">Introduction</h2>
           <p>{path.intro}</p>
         </section>
       )}
@@ -70,7 +70,7 @@ export default function HealingPathPage() {
       {/* SECTIONS */}
       {path.sections?.map((section, index) => (
         <section key={index} className="card">
-          <h2 className="font-semibold mb-2">{section.title}</h2>
+          <h2 className="font-semibold text-lg mb-2">{section.title}</h2>
 
           {section.content && <p className="mb-2">{section.content}</p>}
 
