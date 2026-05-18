@@ -7,7 +7,19 @@ export const healingPaths: HealingPathVideo[] = [
     shortDescription:
       "Aura Healing & Energy Field Balancing for Holistic Wellbeing",
     videoSrc: "/videos/healing-path/aurahealing_.webm",
-    pageBackground: "/images/healingpath/aura/aurapgbg.png",
+
+    theme: {
+      colors: {
+        heading: "#8F6A4C",
+        body: "#5F5145",
+        accent: "#D6B98C",
+        muted: "#8A8176",
+      },
+      background: {
+        type: "video",
+        src: "/videos/healing-path/aura/aurapagebgvideo.mp4",
+      },
+    },
 
     intro:
       "Aura Healing & Energy Field Balancing for Holistic Wellbeing. When the energy field is clear, the mind settles, emotions soften, and life regains its natural rhythm.",
@@ -30,10 +42,22 @@ export const healingPaths: HealingPathVideo[] = [
         variant: "floating-points",
         content: "The Wellmoon Method is a guided process of:",
         points: [
-          "Experiencing and sensing the energy field",
-          "Cleansing energetic stagnation",
-          "Balancing and aligning subtle energy layers",
-          "Strengthening and recharging the biofield",
+          {
+            text: "Experiencing and sensing the energy field",
+            icon: "/images/healingpath/aura/biofield.svg",
+          },
+          {
+            text: "Cleansing energetic stagnation",
+            icon: "/images/healingpath/aura/biofield.svg",
+          },
+          {
+            text: "Balancing and aligning subtle energy layers",
+            icon: "/images/healingpath/aura/biofield.svg",
+          },
+          {
+            text: "Strengthening and recharging the biofield",
+            icon: "/images/healingpath/aura/biofield.svg",
+          },
         ],
       },
       {
@@ -42,11 +66,26 @@ export const healingPaths: HealingPathVideo[] = [
         content:
           "A unique integration of traditional wisdom and modern wellness:",
         points: [
-          "Nature-based awareness (inspired by forest therapy)",
-          "Breathwork and meditative grounding",
-          "Mudra-based energy alignment",
-          "Subtle sound and vibrational support",
-          "Intentional energy awareness practices",
+          {
+            text: "Nature-based awareness (inspired by forest therapy)",
+            icon: "/images/healingpath/aura/forest.svg",
+          },
+          {
+            text: "Breathwork and meditative grounding",
+            icon: "/images/healingpath/aura/meditation.svg",
+          },
+          {
+            text: "Mudra-based energy alignment",
+            icon: "/images/healingpath/aura/mudra.svg",
+          },
+          {
+            text: "Subtle sound and vibrational support",
+            icon: "/images/healingpath/aura/sound.svg",
+          },
+          {
+            text: "Intentional energy awareness practices",
+            icon: "/images/healingpath/aura/energy.svg",
+          },
         ],
       },
       {
@@ -77,22 +116,55 @@ export const healingPaths: HealingPathVideo[] = [
         variant: "floating-points",
         content: "This practice is suitable for:",
         points: [
-          "Students experiencing stress or lack of focus",
-          "Professionals facing burnout or mental overload",
-          "Individuals seeking emotional balance",
-          "Those exploring holistic and energy-based wellness",
-          "People sensitive to environments or emotional energies",
+          {
+            text: "Students experiencing stress or lack of focus",
+            icon: "/images/healingpath/aura/student.svg",
+          },
+          {
+            text: "Professionals facing burnout or mental overload",
+            icon: "/images/healingpath/aura/professional.svg",
+          },
+          {
+            text: "Individuals seeking emotional balance",
+            icon: "/images/healingpath/aura/emotionalbalance.svg",
+          },
+
+          {
+            text: "Those exploring holistic and energy-based wellness",
+            icon: "/images/healingpath/aura/holisticliving.svg",
+          },
+
+          {
+            text: "People sensitive to environments or emotional energies",
+            icon: "/images/healingpath/aura/sensitive.svg",
+          },
         ],
       },
       {
         title: "When to Consider Biofield & Aura Alignment",
+        content: "When to consider",
         variant: "floating-points",
         points: [
-          "Feeling drained without a clear reason",
-          "Emotional heaviness or overwhelm",
-          "Difficulty concentrating or staying centered",
-          "After prolonged stress",
-          "During personal growth or healing phases",
+          {
+            text: "Feeling drained without a clear reason",
+            icon: "/images/healingpath/aura/energy-drained.svg",
+          },
+          {
+            text: "Emotional heaviness or overwhelm",
+            icon: "/images/healingpath/aura/emotional-heaviness.svg",
+          },
+          {
+            text: "Difficulty concentrating or staying centered",
+            icon: "/images/healingpath/aura/difficult-concentration.svg",
+          },
+          {
+            text: "After prolonged stress",
+            icon: "/images/healingpath/aura/prolonged-stress.svg",
+          },
+          {
+            text: "During personal growth or healing phases",
+            icon: "/images/healingpath/aura/personal-growth.svg",
+          },
         ],
       },
       {
@@ -167,6 +239,18 @@ export const healingPaths: HealingPathVideo[] = [
     shortDescription:
       "Brain Integration, Focus & Creative Awareness through Guided Exercises",
     videoSrc: "/videos/healing-path/cognitive-balance-practice.webm",
+    theme: {
+      colors: {
+        heading: "#8F6A4C",
+        body: "#5F5145",
+        accent: "#D6B98C",
+        muted: "#8A8176",
+      },
+      background: {
+        type: "video",
+        src: "/videos/healing-path/cognitive/cognitivepagebgvideo.mp4",
+      },
+    },
 
     intro:
       "Brain Integration, Focus & Creative Awareness through Guided Exercises. When both sides of the brain begin to work in harmony, thinking becomes clearer, attention deepens, and creativity flows naturally.",

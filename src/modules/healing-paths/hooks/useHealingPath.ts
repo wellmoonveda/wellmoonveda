@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import { getHealingPathBySlug } from "@/services/supabase/healingPath.service";
-import type { HealingPath, HealingSection } from "../types/healing.types";
+import type {
+  HealingPath,
+  HealingSection,
+  HealingTheme,
+} from "../types/healing.types";
 import { healingPaths } from "../config/healing.config";
 
 type EnrichedHealingPath = HealingPath & {
   intro: string;
-  pageBackground?: string;
+  theme?: HealingTheme;
   sections: HealingSection[];
 };
 
@@ -33,7 +37,7 @@ export function useHealingPath(slug: string) {
         const enrichedPath: EnrichedHealingPath = {
           ...data,
           intro: staticContent?.intro ?? "",
-          pageBackground: staticContent?.pageBackground,
+          theme: staticContent?.theme,
           sections: staticContent?.sections ?? [],
         };
 

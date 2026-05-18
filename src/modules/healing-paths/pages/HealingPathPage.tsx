@@ -53,48 +53,102 @@ export default function HealingPathPage() {
   const hasLockedContent = hasMudras || hasSessions;
 
   return (
-    <div
-      className="relative overflow-hidden bg-cover bg-center bg-fixed"
-      style={{ backgroundImage: `url('${path.pageBackground}')` }}
-    >
-      {/* HERO */}
-      <section className="text-center tracking-wide leading-tight min-h-[40vh] flex flex-col items-center justify-center">
-        <h1 className="text-7xl font-light">{path.title}</h1>
-        <p className="text-lg mt-2">{path.description}</p>
-      </section>
+    <div className="overflow-hidden">
+      {/* BACKGROUND */}
+      {path.theme?.background?.type === "video" ? (
+        <video
+          ref={(video) => {
+            if (video) {
+              video.playbackRate = 0.35;
+            }
+          }}
+          className="
+        fixed
+        inset-0
+        h-screen
+        w-screen
+        object-cover
+        pointer-events-none
+        z-0
+        "
+          autoPlay
+          muted
+          loop
+          playsInline
+        >
+          <source src={path.theme.background.src} />
+        </video>
+      ) : (
+        <div
+          className="
+        fixed
+        inset-0
+        bg-cover
+        bg-center
+        pointer-events-none
+        z-0
+        "
+          style={{
+            backgroundImage: `url('${path.theme?.background?.src}')`,
+          }}
+        />
+      )}
 
-      <div className="max-w-4xl mx-auto space-y-10 py-36 ">
-        {/* INTRO */}
-        {path.intro && (
-          <section className="card text-center tracking-wide leading-tight">
-            <h2 className="font-light mb-2 text-4xl">Introduction</h2>
-            <p className="text-lg">{path.intro}</p>
-          </section>
-        )}
+      {/* ATMOSPHERE OVERLAY */}
+      <div
+        className="
+      fixed
+      inset-0
+      bg-[#ffffff]/70
+      backdrop-blur-[1px]
+      pointer-events-none
+      z-10
+      "
+      />
 
-        {/* SECTIONS */}
-        {path.sections?.map((section, index) => (
-          <SectionRenderer key={index} section={section} />
-        ))}
+      {/* PAGE */}
+      <div className="relative z-10">
+        {/* HERO */}
+        <section className="text-center tracking-wide leading-tight min-h-[40vh] flex flex-col items-center justify-center">
+          <h1 className="text-7xl font-light">{path.title}</h1>
 
-        {/* PREMIUM CONTENT */}
-        <section>
-          {contentLoading ? (
-            <HealingSkeleton />
-          ) : hasLockedContent ? (
-            <LockedContentGate isUnlocked={isSubscribed}>
-              {isMudraPath ? (
-                <MudraGrid mudras={mudras} />
-              ) : (
-                <VideoSessionList sessions={sessions} />
-              )}
-            </LockedContentGate>
-          ) : (
-            <p className="mt-4 text-base italic text-muted text-center rounded-lg border border-2 border-accent bg-white p-4">
-              Session content for {path.title} coming soon...
-            </p>
-          )}
+          <p className="text-lg mt-2">{path.description}</p>
         </section>
+
+        <div className="max-w-4xl mx-auto space-y-10 py-36">
+          {/* INTRO */}
+          {path.intro && (
+            <section className="card text-center tracking-wide leading-tight">
+              <h2 className="font-light mb-2 text-4xl">Introduction</h2>
+
+              <p className="text-lg">{path.intro}</p>
+            </section>
+          )}
+
+          {/* SECTIONS */}
+          {path.sections?.map((section, index) => (
+            <SectionRenderer key={index} section={section} />
+          ))}
+
+          {/* PREMIUM CONTENT */}
+          <section>
+            {contentLoading ? (
+              <HealingSkeleton />
+            ) : hasLockedContent ? (
+              <LockedContentGate isUnlocked={isSubscribed}>
+                {isMudraPath ? (
+                  <MudraGrid mudras={mudras} />
+                ) : (
+                  <VideoSessionList sessions={sessions} />
+                )}
+              </LockedContentGate>
+            ) : (
+              <p className="mt-4 text-base italic text-muted text-center rounded-lg border border-2 border-accent bg-white p-4">
+                Session content for {path.title} coming soon...
+              </p>
+            )}
+          </section>
+        </div>
       </div>
     </div>
   );

@@ -7,14 +7,35 @@ export type SectionVariant =
   | "gentle-note"
   | "journey";
 
+export type HealingPoint =
+  | string
+  | {
+    text: string;
+    icon?: string;
+  };
+
 export interface HealingSection {
   title: string;
   content?: string;
-  points?: string[];
+  points?: HealingPoint[];
   variant?: SectionVariant;
 
   media?: {
     type: "video";
+    src: string;
+  };
+}
+
+export interface HealingTheme {
+  colors: {
+    heading: string;
+    body: string;
+    accent: string;
+    muted: string;
+  };
+
+  background: {
+    type: "image" | "video";
     src: string;
   };
 }
@@ -25,7 +46,7 @@ export interface HealingPathVideo {
   shortDescription: string;
   videoSrc: string;
 
-  pageBackground?: string;
+  theme?: HealingTheme;
 
   intro: string;
   sections: HealingSection[];

@@ -35,7 +35,7 @@ export default function ImmersiveSection({ section }: ImmersiveSectionProps) {
         </div>
 
         {section.points && (
-          <div className="mx-auto mt-16 max-w-3xl space-y-6 grid grid-cols-2 gap-6 ">
+          <div className="mx-auto mt-16 max-w-3xl space-y-6 grid gap-6 md:grid-cols-2 ">
             {section.points.map((point, index) => (
               <div
                 key={index}
