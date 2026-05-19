@@ -1320,6 +1320,20 @@ export const healingPaths: HealingPathVideo[] = [
       "Integrative Yoga for Balance, Awareness & Positive Health",
     videoSrc: "/videos/healing-path/wellnessyoga.webm",
 
+    theme: {
+      colors: {
+        heading: "#7A644B",
+        body: "#61584F",
+        accent: "#D6B98C",
+        muted: "#94897E",
+      },
+
+      background: {
+        type: "video",
+        src: "/videos/healing-path/wellnessyoga/wellnessyogapagebgvideo.mp4",
+      },
+    },
+
     intro:
       "Integrative Yoga for Balance, Awareness & Positive Health. Yoga is not about performance—it is about returning to balance, awareness, and natural ease.",
 
@@ -1340,10 +1354,22 @@ export const healingPaths: HealingPathVideo[] = [
         content:
           "The Wellmoon Method offers a structured yet gentle practice combining:",
         points: [
-          "Simple and accessible yoga postures",
-          "Breath awareness (pranayama)",
-          "Mindful movement and stillness",
-          "Relaxation and inner observation",
+          {
+            text: "Simple and accessible yoga postures",
+            icon: "/images/healingpath/wellnessyoga/simpleyogaposture.svg",
+          },
+          {
+            text: "Breath awareness (pranayama)",
+            icon: "/images/healingpath/wellnessyoga/pranayama.svg",
+          },
+          {
+            text: "Mindful movement and stillness",
+            icon: "/images/healingpath/wellnessyoga/mindfulmovement.svg",
+          },
+          {
+            text: "Relaxation and inner observation",
+            icon: "/images/healingpath/wellnessyoga/relaxation.svg",
+          },
         ],
       },
       {
@@ -1351,11 +1377,26 @@ export const healingPaths: HealingPathVideo[] = [
         variant: "floating-points",
         content: "Wellness Yoga is integrated with:",
         points: [
-          "Nature-based awareness (when possible)",
-          "Breath-led movement and stillness",
-          "Mudra integration for subtle energy balance",
-          "Optional sound and relaxation support",
-          "Awareness-based practice and reflection",
+          {
+            text: "Nature-based awareness (when possible)",
+            icon: "/images/healingpath/mudra/sensoryconnection.svg",
+          },
+          {
+            text: "Breath-led movement and stillness",
+            icon: "/images/healingpath/sound/breathsync.svg",
+          },
+          {
+            text: "Mudra integration for subtle energy balance",
+            icon: "/images/healingpath/mudra/handposition.svg",
+          },
+          {
+            text: "Optional sound and relaxation support",
+            icon: "/images/healingpath/sound/vibrationalimmersion.svg",
+          },
+          {
+            text: "Awareness-based practice and reflection",
+            icon: "/images/healingpath/mudra/mindfulattention.svg",
+          },
         ],
       },
       {
@@ -1386,22 +1427,52 @@ export const healingPaths: HealingPathVideo[] = [
         variant: "floating-points",
         content: "Wellness Yoga is suitable for:",
         points: [
-          "Beginners and those new to yoga",
-          "Students needing focus and mental clarity",
-          "Professionals managing stress and sedentary routines",
-          "Individuals recovering from fatigue or imbalance",
-          "Anyone seeking a gentle, holistic yoga practice",
+          {
+            text: "Beginners and those new to yoga",
+            icon: "/images/healingpath/mudra/beginner.svg",
+          },
+          {
+            text: "Students needing focus and mental clarity",
+            icon: "/images/healingpath/aura/student.svg",
+          },
+          {
+            text: "Professionals managing stress and sedentary routines",
+            icon: "/images/healingpath/aura/professional.svg",
+          },
+          {
+            text: "Individuals recovering from fatigue or imbalance",
+            icon: "/images/healingpath/aura/energy-drained.svg",
+          },
+          {
+            text: "Anyone seeking a gentle, holistic yoga practice",
+            icon: "/images/healingpath/aura/holisticliving.svg",
+          },
         ],
       },
       {
         title: "When to Practice Wellness Yoga",
         variant: "floating-points",
         points: [
-          "In the morning to start the day with clarity",
-          "During breaks to release tension",
-          "In the evening for relaxation",
-          "As part of a daily wellness routine",
-          "Alongside meditation and breathwork practices",
+          {
+            text: "In the morning to start the day with clarity",
+            icon: "/images/healingpath/wellnessyoga/morning.svg",
+          },
+          {
+            text: "During breaks to release tension",
+            icon: "/images/healingpath/cognitive/breaktime.svg",
+          },
+          {
+            text: "In the evening for relaxation",
+            icon: "/images/healingpath/wellnessyoga/evening.svg",
+          },
+          {
+            text: "As part of a daily wellness routine",
+            icon: "/images/healingpath/mudra/wellnessroutine.svg",
+          },
+          {
+            text: "Alongside meditation and breathwork practices",
+            icon: "/images/healingpath/cognitive/meditation.svg",
+          },
         ],
       },
       {
@@ -1429,6 +1500,7 @@ export const healingPaths: HealingPathVideo[] = [
       {
         title: "A Simple Wellness Yoga Practice",
         variant: "immersive",
+
         content: "Try this:",
         points: [
           "Sit or stand comfortably",
