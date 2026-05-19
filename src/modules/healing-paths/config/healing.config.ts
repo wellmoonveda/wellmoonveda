@@ -665,6 +665,18 @@ export const healingPaths: HealingPathVideo[] = [
     shortDescription:
       "Vibrational Therapy for Deep Relaxation, Balance & Inner Resonance",
     videoSrc: "/videos/healing-path/soundhealing.webm",
+    theme: {
+      colors: {
+        heading: "#6A5E7B",
+        body: "#5B6170",
+        accent: "#B7A4D6",
+        muted: "#9096A5",
+      },
+      background: {
+        type: "video",
+        src: "/videos/healing-path/sound/soundpagebgvideo.mp4",
+      },
+    },
 
     intro:
       "Vibrational Therapy for Deep Relaxation, Balance & Inner Resonance. When sound is experienced with awareness, the body relaxes, the mind quiets, and inner harmony begins to emerge.",
@@ -686,10 +698,23 @@ export const healingPaths: HealingPathVideo[] = [
         variant: "floating-points",
         content: "The Wellmoon Method offers a guided experience using:",
         points: [
-          "Therapeutic sound instruments (e.g., singing bowls, chimes, gentle tones)",
-          "Awareness-based listening",
-          "Breath synchronization with sound",
-          "Subtle vibrational immersion",
+          {
+            text:
+              "Therapeutic sound instruments (e.g., singing bowls, chimes, gentle tones)",
+            icon: "/images/healingpath/sound/singingbowl.svg",
+          },
+          {
+            text: "Awareness-based listening",
+            icon: "/images/healingpath/sound/awarenesslistening.svg",
+          },
+          {
+            text: "Breath synchronization with sound",
+            icon: "/images/healingpath/sound/breathsync.svg",
+          },
+          {
+            text: "Subtle vibrational immersion",
+            icon: "/images/healingpath/sound/vibrationalimmersion.svg",
+          },
         ],
       },
       {
@@ -697,11 +722,26 @@ export const healingPaths: HealingPathVideo[] = [
         variant: "floating-points",
         content: "Sound Healing is integrated with:",
         points: [
-          "Nature-based sensory awareness",
-          "Breath and meditative grounding",
-          "Gentle energy alignment practices",
-          "Layered sound frequencies and silence",
-          "Intentional listening and inner awareness",
+          {
+            text: "Nature-based sensory awareness",
+            icon: "/images/healingpath/mudra/sensoryconnection.svg",
+          },
+          {
+            text: "Breath and meditative grounding",
+            icon: "/images/healingpath/cognitive/meditation.svg",
+          },
+          {
+            text: "Gentle energy alignment practices",
+            icon: "/images/healingpath/mudra/elementalenergy.svg",
+          },
+          {
+            text: "Layered sound frequencies and silence",
+            icon: "/images/healingpath/sound/layeredsound.svg",
+          },
+          {
+            text: "Intentional listening and inner awareness",
+            icon: "/images/healingpath/sound/awarenesslistening.svg",
+          },
         ],
       },
       {
@@ -732,22 +772,54 @@ export const healingPaths: HealingPathVideo[] = [
         variant: "floating-points",
         content: "Sound Healing is suitable for:",
         points: [
-          "Individuals experiencing stress or anxiety",
-          "Professionals with mental fatigue",
-          "Students needing relaxation and focus",
-          "Those exploring meditation and inner awareness",
-          "Anyone seeking a gentle, non-invasive wellness practice",
+          {
+            text: "Individuals experiencing stress or anxiety",
+            icon: "/images/healingpath/aura/prolonged-stress.svg",
+          },
+          {
+            text: "Professionals with mental fatigue",
+            icon: "/images/healingpath/aura/professional.svg",
+          },
+          {
+            text: "Students needing relaxation and focus",
+            icon: "/images/healingpath/aura/student.svg",
+          },
+          {
+            text: "Those exploring meditation and inner awareness",
+            icon: "/images/healingpath/cognitive/meditation.svg",
+          },
+          {
+            text: "Anyone seeking a gentle, non-invasive wellness practice",
+            icon: "/images/healingpath/aura/holisticliving.svg",
+          },
         ],
       },
       {
         title: "When to Experience Sound Healing",
         variant: "floating-points",
         points: [
-          "During periods of stress or overwhelm",
-          "Before sleep or for deep relaxation",
-          "After intense work or mental activity",
-          "During emotional processing",
-          "As part of a regular wellness routine",
+          {
+            text: "During periods of stress or overwhelm",
+            icon: "/images/healingpath/sound/duringperiods.svg",
+          },
+
+          {
+            text: "Before sleep or for deep relaxation",
+            icon: "/images/healingpath/sound/beforesleep.svg",
+          },
+
+          {
+            text: "After intense work or mental activity",
+            icon: "/images/healingpath/sound/mentalactivity.svg",
+          },
+          {
+            text: "During emotional processing",
+            icon: "/images/healingpath/sound/emotionalprocessing.svg",
+          },
+          {
+            text: "As part of a regular wellness routine",
+            icon: "/images/healingpath/mudra/wellnessroutine.svg",
+          },
         ],
       },
       {
@@ -774,6 +846,11 @@ export const healingPaths: HealingPathVideo[] = [
       {
         title: "A Simple Sound Awareness Practice",
         variant: "immersive",
+        media: {
+          type: "video",
+          src: "/videos/healing-path/sound/soundsession.mp4",
+        },
+
         content: "Try this:",
         points: [
           "Sit quietly in a calm space",
