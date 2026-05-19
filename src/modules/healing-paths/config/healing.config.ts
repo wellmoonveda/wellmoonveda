@@ -1,4 +1,3 @@
-import { icons } from "lucide-react";
 import type { HealingPathVideo } from "../types/healing.types";
 
 export const healingPaths: HealingPathVideo[] = [
@@ -1116,6 +1115,18 @@ export const healingPaths: HealingPathVideo[] = [
     shortDescription:
       "Eye relaxation techniques to reduce strain and improve focus.",
     videoSrc: "/videos/healing-path/visual-wellness.webm",
+    theme: {
+      colors: {
+        heading: "#5E7386",
+        body: "#58656E",
+        accent: "#A9C9D7",
+        muted: "#97A4AD",
+      },
+      background: {
+        type: "video",
+        src: "",
+      },
+    },
 
     intro:
       "Eye Relaxation, Focus & Screen Balance for Modern Lifestyles. When the eyes relax, the mind follows.",
