@@ -57,37 +57,38 @@ export default function HealingPathPage() {
       {/* BACKGROUND */}
       {path.theme?.background?.type === "video" ? (
         <video
+          key={path.theme.background.src}
           ref={(video) => {
             if (video) {
               video.playbackRate = 0.35;
             }
           }}
           className="
-        fixed
-        inset-0
-        h-screen
-        w-screen
-        object-cover
-        pointer-events-none
-        z-0
-        "
+      fixed
+      inset-0
+      h-screen
+      w-screen
+      object-cover
+      pointer-events-none
+      z-0
+    "
           autoPlay
           muted
           loop
           playsInline
         >
-          <source src={path.theme.background.src} />
+          <source src={path.theme.background.src} type="video/mp4" />
         </video>
       ) : (
         <div
           className="
-        fixed
-        inset-0
-        bg-cover
-        bg-center
-        pointer-events-none
-        z-0
-        "
+      fixed
+      inset-0
+      bg-cover
+      bg-center
+      pointer-events-none
+      z-0
+    "
           style={{
             backgroundImage: `url('${path.theme?.background?.src}')`,
           }}
@@ -99,7 +100,7 @@ export default function HealingPathPage() {
         className="
       fixed
       inset-0
-      bg-[#ffffff]/70
+      bg-[#ffffff]/60
       backdrop-blur-[1px]
       pointer-events-none
       z-10
