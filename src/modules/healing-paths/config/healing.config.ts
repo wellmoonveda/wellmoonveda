@@ -445,6 +445,18 @@ export const healingPaths: HealingPathVideo[] = [
     title: "Mudra Healing",
     shortDescription: "Hand Gestures for Energy Balance, Focus & Inner Harmony",
     videoSrc: "/videos/healing-path/mudrahealing.webm",
+    theme: {
+      colors: {
+        heading: "#6F6257",
+        body: "#5E5B56",
+        accent: "#BFA88D",
+        muted: "#8F9487",
+      },
+      background: {
+        type: "video",
+        src: "/videos/healing-path/mudra/mudrapagebgvideo.mp4",
+      },
+    },
 
     intro:
       "Hand Gestures for Energy Balance, Focus & Inner Harmony. When the body becomes aware, the breath deepens, and energy begins to flow with intention.",
@@ -463,10 +475,22 @@ export const healingPaths: HealingPathVideo[] = [
         content:
           "The Wellmoon Method applies mudras as a guided, experiential practice:",
         points: [
-          "Awareness of hand positions and subtle sensations",
-          "Activation of specific energy pathways",
-          "Balancing elemental energies in the body",
-          "Integration with breath and mindful attention",
+          {
+            text: "Awareness of hand positions and subtle sensations",
+            icon: "/images/healingpath/mudra/handposition.svg",
+          },
+          {
+            text: "Activation of specific energy pathways",
+            icon: "/images/healingpath/mudra/energypathways.svg",
+          },
+          {
+            text: "Balancing elemental energies in the body",
+            icon: "/images/healingpath/mudra/elementalenergy.svg",
+          },
+          {
+            text: "Integration with breath and mindful attention",
+            icon: "/images/healingpath/mudra/mindfulattention.svg",
+          },
         ],
       },
       {
@@ -474,11 +498,26 @@ export const healingPaths: HealingPathVideo[] = [
         variant: "floating-points",
         content: "Mudra Healing is combined with:",
         points: [
-          "Nature-based awareness (grounding and sensory connection)",
-          "Breathwork and meditative focus",
-          "Structured mudra sequences for balance",
-          "Optional sound and vibration support",
-          "Intention-based awareness practices",
+          {
+            text: "Nature-based awareness (grounding and sensory connection)",
+            icon: "/images/healingpath/mudra/sensoryconnection.svg",
+          },
+          {
+            text: "Breathwork and meditative focus",
+            icon: "/images/healingpath/aura/meditation.svg",
+          },
+          {
+            text: "Structured mudra sequences for balance",
+            icon: "/images/healingpath/mudra/bodybalance.svg",
+          },
+          {
+            text: "Optional sound and vibration support",
+            icon: "/images/healingpath/mudra/soundandvibration.svg",
+          },
+          {
+            text: "Intention-based awareness practices",
+            icon: "/images/healingpath/cognitive/awarenessobservation.svg",
+          },
         ],
       },
       {
@@ -509,22 +548,52 @@ export const healingPaths: HealingPathVideo[] = [
         variant: "floating-points",
         content: "Mudra Healing is suitable for:",
         points: [
-          "Students seeking better concentration and memory",
-          "Professionals managing stress and mental fatigue",
-          "Individuals exploring holistic wellness practices",
-          "Beginners looking for simple daily techniques",
-          "Anyone seeking natural methods for balance",
+          {
+            text: "Students seeking better concentration and memory",
+            icon: "/images/healingpath/aura/student.svg",
+          },
+          {
+            text: "Professionals managing stress and mental fatigue",
+            icon: "/images/healingpath/aura/professional.svg",
+          },
+          {
+            text: "Individuals exploring holistic wellness practices",
+            icon: "/images/healingpath/aura/holisticliving.svg",
+          },
+          {
+            text: "Beginners looking for simple daily techniques",
+            icon: "/images/healingpath/mudra/beginner.svg",
+          },
+          {
+            text: "Anyone seeking natural methods for balance",
+            icon: "/images/healingpath/mudra/naturalmethod.svg",
+          },
         ],
       },
       {
         title: "When to Practice Mudras",
         variant: "floating-points",
         points: [
-          "During stress or mental overload",
-          "Before meditation or yoga",
-          "While sitting quietly or during travel",
-          "As part of daily wellness routine",
-          "When seeking emotional grounding or clarity",
+          {
+            text: "During stress or mental overload",
+            icon: "/images/healingpath/aura/emotional-heaviness.svg",
+          },
+          {
+            text: "Before meditation or yoga",
+            icon: "/images/healingpath/aura/meditation.svg",
+          },
+          {
+            text: "While sitting quietly or during travel",
+            icon: "/images/healingpath/mudra/sittingortravelling.svg",
+          },
+          {
+            text: "As part of daily wellness routine",
+            icon: "/images/healingpath/mudra/wellnessroutine.svg",
+          },
+          {
+            text: "When seeking emotional grounding or clarity",
+            icon: "/images/healingpath/aura/emotionalbalance.svg",
+          },
         ],
       },
       {
@@ -551,6 +620,11 @@ export const healingPaths: HealingPathVideo[] = [
       {
         title: "A Simple Mudra Practice",
         variant: "immersive",
+        media: {
+          type: "video",
+          src: "/videos/healing-path/mudra/mudrasession.mp4",
+        },
+
         content: "Try this:",
         points: [
           "Sit comfortably",

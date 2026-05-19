@@ -1,7 +1,19 @@
-import type { HealingSection } from "@/modules/healing-paths/types/healing.types";
+import type {
+  HealingSection,
+  HealingPoint,
+} from "@/modules/healing-paths/types/healing.types";
 
 interface TimelineSectionProps {
   section: HealingSection;
+}
+
+function getPointData(point: HealingPoint) {
+  if (typeof point === "string") {
+    return {
+      text: point,
+    };
+  }
+  return point;
 }
 
 export default function TimelineSection({ section }: TimelineSectionProps) {
@@ -24,17 +36,20 @@ export default function TimelineSection({ section }: TimelineSectionProps) {
           <div className="relative space-y-12">
             <div className="absolute left-5 top-0 h-full w-px bg-[#D6B98C]/30" />
 
-            {section.points.map((point, index) => (
-              <div key={index} className="relative flex items-center gap-6">
-                <div className="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#D6B98C]/40 bg-[#F7F3EE]">
-                  <div className="h-2 w-2 rounded-full bg-[#D6B98C]" />
-                </div>
+            {section.points.map((point, index) => {
+              const item = getPointData(point);
+              return (
+                <div key={index} className="relative flex items-center gap-6">
+                  <div className="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#D6B98C]/40 bg-[#F7F3EE]">
+                    <div className="h-2 w-2 rounded-full bg-[#D6B98C]" />
+                  </div>
 
-                <div className="rounded-3xl border border-white/20 bg-white/70 px-6 py-5 backdrop-blur-sm">
-                  <p className="text-lg leading-8 ">{point}</p>
+                  <div className="rounded-3xl border border-white/20 bg-white/70 px-6 py-5 backdrop-blur-sm">
+                    <p className="text-lg leading-8 ">{item.text}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
