@@ -1,7 +1,19 @@
-import type { HealingSection } from "@/modules/healing-paths/types/healing.types";
+import type {
+  HealingSection,
+  HealingPoint,
+} from "@/modules/healing-paths/types/healing.types";
 
 interface ImmersiveSectionProps {
   section: HealingSection;
+}
+function getPointData(point: HealingPoint) {
+  if (typeof point === "string") {
+    return {
+      text: point,
+    };
+  }
+
+  return point;
 }
 
 export default function ImmersiveSection({ section }: ImmersiveSectionProps) {
@@ -36,36 +48,25 @@ export default function ImmersiveSection({ section }: ImmersiveSectionProps) {
 
         {section.points && (
           <div className="mx-auto mt-16 max-w-3xl space-y-6 grid gap-6 md:grid-cols-2 ">
-            {section.points.map((point, index) => (
-              <div
-                key={index}
-                className=" flex gap-6 items-center
-          rounded-[28px]
-          border border-white/20
-          bg-white/70
-          px-8 py-4
-          backdrop-blur-sm h-full 
-        "
-              >
-                {/* NUMBER */}
+            {section.points.map((point, index) => {
+              const item = getPointData(point);
+              return (
                 <div
-                  className="
-            flex h-12 w-12 shrink-0
-            items-center justify-center
-            rounded-full
-            border border-[#D6B98C]
-            bg-[#F7F3EE]/20
-            text-lg font-light
-            shadow-[0_0_30px_rgba(214,185,140,0.15)]
-          "
+                  key={index}
+                  className=" flex gap-6 items-center rounded-[28px] border border-white/20 bg-white/70 px-8 py-4 backdrop-blur-sm h-full "
                 >
-                  {index + 1}
-                </div>
+                  {/* NUMBER */}
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[#D6B98C] bg-[#F7F3EE]/20 text-lg font-light shadow-[0_0_30px_rgba(214,185,140,0.15)] ">
+                    {index + 1}
+                  </div>
 
-                {/* STEP TEXT */}
-                <p className="pt-1 text-left text-lg leading-8 ">{point}</p>
-              </div>
-            ))}
+                  {/* STEP TEXT */}
+                  <p className="pt-1 text-left text-lg leading-8 ">
+                    {item.text}
+                  </p>
+                </div>
+              );
+            })}
           </div>
         )}
       </div>

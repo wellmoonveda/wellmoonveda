@@ -222,10 +222,6 @@ export const healingPaths: HealingPathVideo[] = [
       },
       {
         title: "Begin Your Journey",
-        media: {
-          type: "video",
-          src: "/videos/healing-path/aura/aurajourney.mp4",
-        },
         variant: "journey",
         content:
           "Experience energy not as something abstract, but as a felt shift in awareness, balance, and presence.Step into the Wellmoon Method and explore Biofield & Aura Alignment for positive health.",
@@ -241,10 +237,10 @@ export const healingPaths: HealingPathVideo[] = [
     videoSrc: "/videos/healing-path/cognitive-balance-practice.webm",
     theme: {
       colors: {
-        heading: "#8F6A4C",
-        body: "#5F5145",
-        accent: "#D6B98C",
-        muted: "#8A8176",
+        heading: "#5C6B68",
+        body: "#4E5A5C",
+        accent: "#9FB5B0",
+        muted: "#8A9696",
       },
       background: {
         type: "video",
@@ -270,10 +266,22 @@ export const healingPaths: HealingPathVideo[] = [
         variant: "floating-points",
         content: "The Wellmoon Method uses guided exercises to:",
         points: [
-          "Activate non-dominant hand usage",
-          "Improve hand-brain coordination",
-          "Enhance neural engagement and awareness",
-          "Develop attention and cognitive flexibility",
+          {
+            text: "Activate non-dominant hand usage",
+            icon: "/images/healingpath/cognitive/cognitivemethod.svg",
+          },
+          {
+            text: "Improve hand-brain coordination",
+            icon: "/images/healingpath/cognitive/cognitivemethod.svg",
+          },
+          {
+            text: "Enhance neural engagement and awareness",
+            icon: "/images/healingpath/cognitive/cognitivemethod.svg",
+          },
+          {
+            text: "Develop attention and cognitive flexibility",
+            icon: "/images/healingpath/cognitive/cognitivemethod.svg",
+          },
         ],
       },
       {
@@ -281,11 +289,26 @@ export const healingPaths: HealingPathVideo[] = [
         variant: "floating-points",
         content: "Cognitive Practice is integrated with:",
         points: [
-          "Calm, distraction-free environment",
-          "Breath awareness for grounding",
-          "Structured brain coordination exercises",
-          "Left-hand colouring and pattern tracing",
-          "Awareness-based observation",
+          {
+            text: "Calm, distraction-free environment",
+            icon: "/images/healingpath/cognitive/distractionfree.svg",
+          },
+          {
+            text: "Breath awareness for grounding",
+            icon: "/images/healingpath/cognitive/breathawareness.svg",
+          },
+          {
+            text: "Structured brain coordination exercises",
+            icon: "/images/healingpath/cognitive/brainexercise.svg",
+          },
+          {
+            text: "Left-hand colouring and pattern tracing",
+            icon: "/images/healingpath/cognitive/coloring.svg",
+          },
+          {
+            text: "Awareness-based observation",
+            icon: "/images/healingpath/cognitive/awarenessobservation.svg",
+          },
         ],
       },
       {
@@ -315,20 +338,44 @@ export const healingPaths: HealingPathVideo[] = [
         variant: "floating-points",
         content: "This practice is ideal for:",
         points: [
-          "Students",
-          "Professionals",
-          "Children",
-          "Anyone seeking mental clarity",
+          {
+            text: "Students",
+            icon: "/images/healingpath/aura/student.svg",
+          },
+          {
+            text: "Professionals",
+            icon: "/images/healingpath/aura/professional.svg",
+          },
+          {
+            text: "Children",
+            icon: "/images/healingpath/cognitive/children.svg",
+          },
+          {
+            text: "Anyone seeking mental clarity",
+            icon: "/images/healingpath/cognitive/mentalclarity.svg",
+          },
         ],
       },
       {
         title: "When to Practice",
         variant: "floating-points",
         points: [
-          "Before study or work",
-          "During breaks",
-          "Daily cognitive training",
-          "Alongside meditation",
+          {
+            text: "Before study or work",
+            icon: "/images/healingpath/cognitive/beforestudy.svg",
+          },
+          {
+            text: "During breaks",
+            icon: "/images/healingpath/cognitive/breaktime.svg",
+          },
+          {
+            text: "Daily cognitive training",
+            icon: "/images/healingpath/cognitive/cognitivetraining.svg",
+          },
+          {
+            text: "Alongside meditation",
+            icon: "/images/healingpath/cognitive/meditation.svg",
+          },
         ],
       },
       {
@@ -355,6 +402,11 @@ export const healingPaths: HealingPathVideo[] = [
       {
         title: "A Simple Cognitive Practice",
         variant: "immersive",
+        media: {
+          type: "video",
+          src: "/videos/healing-path/cognitive/cognitivepractice.mp4",
+        },
+
         content: "Try this:",
         points: [
           "Use your non-dominant hand",

@@ -1,4 +1,5 @@
 import type { HealingSection } from "@/modules/healing-paths/types/healing.types";
+import videoBg from "../../../public/videos/healing-path/jounrneybg.mp4";
 
 interface JourneySectionProps {
   section: HealingSection;
@@ -8,17 +9,15 @@ export default function JourneySection({ section }: JourneySectionProps) {
   return (
     <section className="relative left-1/2 right-1/2 w-screen -translate-x-1/2 overflow-hidden py-30">
       {/* BACKGROUND VIDEO */}
-      {section.media?.type === "video" && (
-        <video
-          className="absolute inset-0 h-full w-full object-cover "
-          autoPlay
-          muted
-          loop
-          playsInline
-        >
-          <source src={section.media.src} />
-        </video>
-      )}
+
+      <video
+        src={videoBg}
+        className="absolute inset-0 h-full w-full object-cover "
+        autoPlay
+        muted
+        loop
+        playsInline
+      />
 
       {/* ATMOSPHERIC OVERLAY */}
       <div className="absolute inset-0 bg-[#F7F3EE]/50 backdrop-blur-[2px]" />
