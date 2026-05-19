@@ -1124,7 +1124,8 @@ export const healingPaths: HealingPathVideo[] = [
       },
       background: {
         type: "video",
-        src: "",
+        src:
+          "/videos/healing-path/visualwellness/visualwellnesspagebgvideo.mp4",
       },
     },
 
@@ -1149,10 +1150,22 @@ export const healingPaths: HealingPathVideo[] = [
         variant: "floating-points",
         content: "The Wellmoon Method uses guided techniques to:",
         points: [
-          "Relax eye muscles",
-          "Improve visual awareness",
-          "Support focus",
-          "Balance visual input",
+          {
+            text: "Relax eye muscles",
+            icon: "/images/healingpath/visualwellness/visualmethod.svg",
+          },
+          {
+            text: "Improve visual awareness",
+            icon: "/images/healingpath/visualwellness/visualmethod.svg",
+          },
+          {
+            text: "Support focus",
+            icon: "/images/healingpath/visualwellness/visualmethod.svg",
+          },
+          {
+            text: "Balance visual input",
+            icon: "/images/healingpath/visualwellness/visualmethod.svg",
+          },
         ],
       },
       {
@@ -1160,11 +1173,26 @@ export const healingPaths: HealingPathVideo[] = [
         variant: "floating-points",
         content: "Visual Wellness is integrated with:",
         points: [
-          "Nature-based viewing",
-          "Breath techniques",
-          "Eye exercises",
-          "Focus shifting",
-          "Soft gaze practices",
+          {
+            text: "Nature-based viewing",
+            icon: "/images/healingpath/visualwellness/naturebasedviewing.svg",
+          },
+          {
+            text: "Breath techniques",
+            icon: "/images/healingpath/visualwellness/breathtechnique.svg",
+          },
+          {
+            text: "Eye exercises",
+            icon: "/images/healingpath/visualwellness/eyeexercise.svg",
+          },
+          {
+            text: "Focus shifting",
+            icon: "/images/healingpath/visualwellness/focusshifting.svg",
+          },
+          {
+            text: "Soft gaze practices",
+            icon: "/images/healingpath/visualwellness/softgaze.svg",
+          },
         ],
       },
       {
@@ -1192,19 +1220,40 @@ export const healingPaths: HealingPathVideo[] = [
         variant: "floating-points",
         content: "This practice is ideal for:",
         points: [
-          "Students",
-          "Professionals",
-          "Screen users",
-          "Anyone with eye fatigue",
+          {
+            text: "Students",
+            icon: "/images/healingpath/aura/student.svg",
+          },
+          {
+            text: "Professionals",
+            icon: "/images/healingpath/aura/professional.svg",
+          },
+          {
+            text: "Screen users",
+            icon: "/images/healingpath/visualwellness/screenusers.svg",
+          },
+          {
+            text: "Anyone with eye fatigue",
+            icon: "/images/healingpath/visualwellness/eyefatique.svg",
+          },
         ],
       },
       {
         title: "When to Practice",
         variant: "floating-points",
         points: [
-          "During screen breaks",
-          "After device use",
-          "Before sleep",
+          {
+            text: "During screen breaks",
+            icon: "/images/healingpath/visualwellness/screenbreak.svg",
+          },
+          {
+            text: "After device use",
+            icon: "/images/healingpath/visualwellness/afterscreen.svg",
+          },
+          {
+            text: "Before sleep",
+            icon: "/images/healingpath/sound/beforesleep.svg",
+          },
         ],
       },
       {
@@ -1229,6 +1278,10 @@ export const healingPaths: HealingPathVideo[] = [
       {
         title: "A Simple Eye Relaxation Practice",
         variant: "immersive",
+        media: {
+          type: "video",
+          src: "/videos/healing-path/visualwellness/visualwellnesssession.mp4",
+        },
         content: "Try this:",
         points: [
           "Rub palms",
