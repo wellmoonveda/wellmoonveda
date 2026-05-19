@@ -1,3 +1,4 @@
+import { icons } from "lucide-react";
 import type { HealingPathVideo } from "../types/healing.types";
 
 export const healingPaths: HealingPathVideo[] = [
@@ -886,6 +887,230 @@ export const healingPaths: HealingPathVideo[] = [
   },
 
   {
+    slug: "virtual-nature-healing",
+    title: "Virtual Nature Healing",
+    shortDescription: "Guided Nature-Based Healing Experiences from Anywhere",
+    videoSrc: "/videos/healing-path/naturehealing.webm",
+
+    theme: {
+      colors: {
+        heading: "#5E7361",
+        body: "#58635C",
+        accent: "#A8C7A0",
+        muted: "#8B998F",
+      },
+      background: {
+        type: "video",
+        src: "/videos/healing-path/virtualnature/virtualnaturepagebgvideo.mp4",
+      },
+    },
+
+    intro:
+      "Guided Nature-Based Healing Experiences from Anywhere. Even when physically distant, nature can be experienced through awareness, attention, and guided connection.",
+
+    sections: [
+      {
+        title: "What is Virtual Nature Healing & Why It Matters",
+        variant: "minimal",
+        content:
+          "Human wellbeing is deeply connected to nature. Time in natural environments is known to support:",
+        points: [
+          "Reduced stress and mental fatigue",
+          "Improved mood and emotional balance",
+          "Enhanced focus and cognitive clarity",
+        ],
+      },
+      {
+        title: "What is Virtual Nature Healing (Wellmoon Method)",
+        variant: "floating-points",
+        content:
+          "The Wellmoon Method creates a guided, experiential journey using:",
+        points: [
+          {
+            text: "Curated natural visuals and soundscapes",
+            icon: "/images/healingpath/aura/forest.svg",
+          },
+          {
+            text: "Breath awareness and sensory engagement",
+            icon: "/images/healingpath/cognitive/breathawareness.svg",
+          },
+          {
+            text: "Mindful observation and presence",
+            icon: "/images/healingpath/mudra/mindfulattention.svg",
+          },
+          {
+            text: "Structured pauses for internal reflection",
+            icon: "/images/healingpath/virtualnature/internalreflection.svg",
+          },
+        ],
+      },
+      {
+        title: "The Wellmoon Approach",
+        variant: "floating-points",
+        content: "Virtual Nature Healing is integrated with:",
+        points: [
+          {
+            text: "Forest Therapy principles",
+            icon: "/images/healingpath/aura/forest.svg",
+          },
+          {
+            text: "Breath and meditative awareness",
+            icon: "/images/healingpath/cognitive/breathawareness.svg",
+          },
+          {
+            text: "Gentle body and sensory awareness practices",
+            icon: "/images/healingpath/mudra/sensoryconnection.svg",
+          },
+          {
+            text: "Natural soundscapes and silence",
+            icon: "/images/healingpath/virtualnature/naturalsoundscapes.svg",
+          },
+          {
+            text: "Intention-based attention and presence",
+            icon: "/images/healingpath/cognitive/awarenessobservation.svg",
+          },
+        ],
+      },
+      {
+        title: "What Makes the Wellmoon Method Unique",
+        variant: "minimal",
+        points: [
+          "Translates forest therapy into an accessible online format",
+          "Focuses on guided awareness, not screen consumption",
+          "Combines nature, breath, and observation",
+          "Designed for urban lifestyles",
+        ],
+      },
+      {
+        title: "Benefits of Virtual Nature Healing",
+        variant: "energy-grid",
+        content: "Regular sessions may support:",
+        points: [
+          "Reduced stress and mental fatigue",
+          "Emotional balance and calmness",
+          "Improved focus and attention",
+          "Nervous system relaxation",
+          "A sense of connection and grounding",
+          "Mental clarity and creative thinking",
+        ],
+      },
+      {
+        title: "Who Can Benefit",
+        variant: "floating-points",
+        content: "This practice is ideal for:",
+        points: [
+          {
+            text: "Students experiencing digital fatigue",
+            icon: "/images/healingpath/aura/student.svg",
+          },
+          {
+            text: "Professionals in high-stress environments",
+            icon: "/images/healingpath/aura/prolonged-stress.svg",
+          },
+          {
+            text: "Individuals with limited access to nature",
+            icon: "/images/healingpath/virtualnature/limitednatureaccess.svg",
+          },
+          {
+            text: "Those seeking guided relaxation",
+            icon: "/images/healingpath/virtualnature/guidedrelaxation.svg",
+          },
+          {
+            text: "Anyone exploring nature-based wellness",
+            icon: "/images/healingpath/aura/holisticliving.svg",
+          },
+        ],
+      },
+      {
+        title: "When to Practice Virtual Nature Healing",
+        variant: "floating-points",
+        points: [
+          {
+            text: "During work breaks",
+            icon: "/images/healingpath/cognitive/breaktime.svg",
+          },
+          {
+            text: "After long screen exposure",
+            icon: "/images/healingpath/virtualnature/screenexposure.svg",
+          },
+          {
+            text: "During stress or overload",
+            icon: "/images/healingpath/aura/prolonged-stress.svg",
+          },
+          {
+            text: "Before sleep",
+            icon: "/images/healingpath/sound/beforesleep.svg",
+          },
+          {
+            text: "As part of daily routine",
+            icon: "/images/healingpath/mudra/wellnessroutine.svg",
+          },
+        ],
+      },
+      {
+        title: "How a Virtual Nature Healing Session Works",
+        variant: "timeline",
+        content: "A typical session includes:",
+        points: [
+          "Grounding and breath awareness",
+          "Guided nature immersion",
+          "Sensory awareness and observation",
+          "Reflection and integration",
+          "Gentle closing",
+        ],
+      },
+      {
+        title: "Scientific & Integrative Perspective",
+        variant: "minimal",
+        points: [
+          "Inspired by nature therapy research",
+          "Supports mental relaxation and recovery",
+          "Helps regulate stress response",
+          "Complements Meditation, Breathwork, Mindfulness",
+        ],
+      },
+      {
+        title: "A Simple Nature Awareness Practice",
+        variant: "immersive",
+        media: {
+          type: "video",
+          src: "/videos/healing-path/virtualnature/virtualnaturesession.mp4",
+        },
+        content: "Try this:",
+        points: [
+          "Look at a natural element",
+          "Breathe slowly",
+          "Observe details without analysis",
+          "Allow attention to settle",
+        ],
+      },
+      {
+        title: "Experience & Outcomes",
+        variant: "energy-grid",
+        content: "Participants often report:",
+        points: [
+          "Calmness and mental refreshment",
+          "Reduced fatigue",
+          "Improved clarity",
+          "Feeling grounded",
+        ],
+      },
+      {
+        title: "Gentle Note",
+        variant: "gentle-note",
+        content:
+          "Virtual Nature Healing is a complementary wellness practice and does not replace medical or psychological treatment. It supports natural relaxation and wellbeing.",
+      },
+      {
+        title: "Begin Your Experience",
+        variant: "journey",
+        content:
+          "Reconnect with nature anytime through guided awareness and intentional presence. Explore Virtual Nature Healing with the Wellmoon Method.",
+      },
+    ],
+  },
+
+  {
     slug: "visual-wellness-eye-exercises",
     title: "Visual Wellness Practice",
     shortDescription:
@@ -1020,156 +1245,6 @@ export const healingPaths: HealingPathVideo[] = [
         title: "Begin Your Practice",
         variant: "journey",
         content: "Restore comfort and clarity through guided visual practices.",
-      },
-    ],
-  },
-
-  {
-    slug: "virtual-nature-healing",
-    title: "Virtual Nature Healing",
-    shortDescription: "Guided Nature-Based Healing Experiences from Anywhere",
-    videoSrc: "/videos/healing-path/naturehealing.webm",
-
-    intro:
-      "Guided Nature-Based Healing Experiences from Anywhere. Even when physically distant, nature can be experienced through awareness, attention, and guided connection.",
-
-    sections: [
-      {
-        title: "What is Virtual Nature Healing & Why It Matters",
-        variant: "minimal",
-        content:
-          "Human wellbeing is deeply connected to nature. Time in natural environments is known to support:",
-        points: [
-          "Reduced stress and mental fatigue",
-          "Improved mood and emotional balance",
-          "Enhanced focus and cognitive clarity",
-        ],
-      },
-      {
-        title: "What is Virtual Nature Healing (Wellmoon Method)",
-        variant: "floating-points",
-        content:
-          "The Wellmoon Method creates a guided, experiential journey using:",
-        points: [
-          "Curated natural visuals and soundscapes",
-          "Breath awareness and sensory engagement",
-          "Mindful observation and presence",
-          "Structured pauses for internal reflection",
-        ],
-      },
-      {
-        title: "The Wellmoon Approach",
-        variant: "floating-points",
-        content: "Virtual Nature Healing is integrated with:",
-        points: [
-          "Forest Therapy principles",
-          "Breath and meditative awareness",
-          "Gentle body and sensory awareness practices",
-          "Natural soundscapes and silence",
-          "Intention-based attention and presence",
-        ],
-      },
-      {
-        title: "What Makes the Wellmoon Method Unique",
-        variant: "minimal",
-        points: [
-          "Translates forest therapy into an accessible online format",
-          "Focuses on guided awareness, not screen consumption",
-          "Combines nature, breath, and observation",
-          "Designed for urban lifestyles",
-        ],
-      },
-      {
-        title: "Benefits of Virtual Nature Healing",
-        variant: "energy-grid",
-        content: "Regular sessions may support:",
-        points: [
-          "Reduced stress and mental fatigue",
-          "Emotional balance and calmness",
-          "Improved focus and attention",
-          "Nervous system relaxation",
-          "A sense of connection and grounding",
-          "Mental clarity and creative thinking",
-        ],
-      },
-      {
-        title: "Who Can Benefit",
-        variant: "floating-points",
-        content: "This practice is ideal for:",
-        points: [
-          "Students experiencing digital fatigue",
-          "Professionals in high-stress environments",
-          "Individuals with limited access to nature",
-          "Those seeking guided relaxation",
-          "Anyone exploring nature-based wellness",
-        ],
-      },
-      {
-        title: "When to Practice Virtual Nature Healing",
-        variant: "floating-points",
-        points: [
-          "During work breaks",
-          "After long screen exposure",
-          "During stress or overload",
-          "Before sleep",
-          "As part of daily routine",
-        ],
-      },
-      {
-        title: "How a Virtual Nature Healing Session Works",
-        variant: "timeline",
-        content: "A typical session includes:",
-        points: [
-          "Grounding and breath awareness",
-          "Guided nature immersion",
-          "Sensory awareness and observation",
-          "Reflection and integration",
-          "Gentle closing",
-        ],
-      },
-      {
-        title: "Scientific & Integrative Perspective",
-        variant: "minimal",
-        points: [
-          "Inspired by nature therapy research",
-          "Supports mental relaxation and recovery",
-          "Helps regulate stress response",
-          "Complements Meditation, Breathwork, Mindfulness",
-        ],
-      },
-      {
-        title: "A Simple Nature Awareness Practice",
-        variant: "immersive",
-        content: "Try this:",
-        points: [
-          "Look at a natural element",
-          "Breathe slowly",
-          "Observe details without analysis",
-          "Allow attention to settle",
-        ],
-      },
-      {
-        title: "Experience & Outcomes",
-        variant: "energy-grid",
-        content: "Participants often report:",
-        points: [
-          "Calmness and mental refreshment",
-          "Reduced fatigue",
-          "Improved clarity",
-          "Feeling grounded",
-        ],
-      },
-      {
-        title: "Gentle Note",
-        variant: "gentle-note",
-        content:
-          "Virtual Nature Healing is a complementary wellness practice and does not replace medical or psychological treatment. It supports natural relaxation and wellbeing.",
-      },
-      {
-        title: "Begin Your Experience",
-        variant: "journey",
-        content:
-          "Reconnect with nature anytime through guided awareness and intentional presence. Explore Virtual Nature Healing with the Wellmoon Method.",
       },
     ],
   },
